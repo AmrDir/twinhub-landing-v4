@@ -1,0 +1,10 @@
+# https://www.robotstxt.org/robotstxt.html
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://www.twinhub.net/sitemap.xml
+
+# Block crawling of internal assets
+Disallow: /assets/
+Disallow: /*.json$
