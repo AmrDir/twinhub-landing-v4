@@ -1,126 +1,70 @@
-
-
-// جلب جميع أسماء الصور من المسار
-const clientImages = [
-	'05551b48361291.5895ec5ca8529.jpg',
-	'1.jpg',
-	'1.png',
-	'10.jpg',
-	'11.jpg',
-	'12-76816d4.jpg',
-	'13.jpg',
-	'17.jpg',
-	'18.jpeg',
-	'2.jpg',
-	'2.png',
-	'3.jpg',
-	'3.png',
-	'5.jpg',
-	'5.png',
-	'6.jpg',
-	'7.jpg',
-	'8.jpg',
-	'9.jpg',
-	'Logo1.png',
-	'RED SEA LOGO.png',
-	'avatars-000511228836-pmthbo-t500x500 (1).jpg',
-	'blob-04ea318.png',
-	'blob-3cd870b.png',
-	'blob-af8c579.png',
-	'logo royal company-02-01.png',
-	'logo الكنافة السورى-01.png',
-	'logo-fb6edbc.jpg',
-	'logo.jpg',
-	'logo.png',
-];
+import { CLIENTS_CONTENT } from '../../config/site.config';
 
 interface ClientsSectionProps {
-	language: string;
+  language: string;
 }
 
 export default function ClientsSection({ language }: ClientsSectionProps) {
-	const content = {
-		en: {
-			title: 'Clients & Success Partners',
-			subtitle: 'Trusted by leading brands across industries',
-			description:
-				"We've had the privilege of working with amazing clients who trust us to bring their visions to life.",
-			stats: {
-				projects: 'Projects Completed',
-				clients: 'Happy Clients',
-				experience: 'Years Experience',
-				satisfaction: 'Client Satisfaction',
-			},
-		},
-		ar: {
-			title: 'العملاء وشركاء النجاح',
-			subtitle: 'موثوق من قبل العلامات التجارية الرائدة عبر الصناعات',
-			description: 'لقد حظينا بشرف العمل مع عملاء رائعين يثقون بنا لتحقيق رؤاهم.',
-			stats: {
-				projects: 'مشروع مكتمل',
-				clients: 'عميل سعيد',
-				experience: 'سنة خبرة',
-				satisfaction: 'رضا العملاء',
-			},
-		},
-	};
+  const t = CLIENTS_CONTENT[language as keyof typeof CLIENTS_CONTENT] || CLIENTS_CONTENT.en;
+  
+  // مضاعفة الشعارات لضمان وجود حلقة مستمرة بدون فراغات
+  const doubleLogos = [...CLIENTS_CONTENT.logos, ...CLIENTS_CONTENT.logos];
 
-	const t = content[language as keyof typeof content] || content.en;
+  return (
+    <section id="clients" className="relative py-24 bg-black overflow-hidden border-t border-white/5">
+      {/* Background cinematic depth */}
+      <div className="absolute inset-0 z-0">
+        <div className="absolute inset-0 bg-[#0A0A0A]"></div>
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(220,38,38,0.05)_0%,transparent_70%)]"></div>
+      </div>
 
-	return (
-		<section id="clients" className="py-12 bg-gray-50 relative overflow-hidden">
-			{/* خلفية صورة ثابتة */}
-			<div className="absolute inset-0 z-0">
-				<img
-					src="/backgrounds/clients/twinhub-bg.png"
-					alt="Clients Background"
-					className="w-full h-full object-cover"
-				/>
-				<div className="absolute inset-0 bg-black/60"></div>
-			</div>
-			<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-				{/* Section Header */}
-				<div className="text-center mb-10">
-					<h2 className="text-4xl sm:text-5xl font-extrabold text-white tracking-tight mb-2">
-						<span className="text-red-600">{language === 'ar' ? 'العملاء' : 'Clients'}</span>
-						<span className="mx-2">|</span>
-						{language === 'ar' ? 'شركاء النجاح' : 'Success Partners'}
-					</h2>
-					<p className="text-gray-200 max-w-2xl mx-auto text-lg">
-						{t.description}
-					</p>
-				</div>
-				{/* شريط اللوجو المتحرك */}
-				<div className="overflow-hidden py-8">
-					<div className="flex gap-12 animate-marquee items-center">
-						{clientImages.map((img, idx) => (
-							<div key={img + idx} className="flex flex-col items-center justify-center">
-								<div className="bg-white/80 rounded-xl shadow-lg p-4 transition-transform duration-500 hover:scale-110 hover:shadow-2xl">
-									<img
-										src={`/backgrounds/clients/${img}`}
-										alt={img}
-										className="h-20 w-auto object-contain mb-2"
-										style={{ filter: 'drop-shadow(0 2px 8px rgba(0,0,0,0.15))' }}
-									/>
-								</div>
-								{/* تم حذف اسم الصورة */}
-							</div>
-						))}
-					</div>
-				</div>
-			</div>
-			{/* CSS للماركي */}
-			<style>{`
-      @keyframes marquee {
-        0% { transform: translateX(0); }
-        100% { transform: translateX(-50%); }
-      }
-      .animate-marquee {
-        display: flex;
-        width: max-content;
-        animation: marquee 30s linear infinite;
-      }
-    `}</style>
-		</section>
-	);
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        {/* Section Header */}
+        <div className="text-center mb-16 animate-fade-in">
+          <h2 className="text-3xl sm:text-5xl font-bold text-white mb-4 tracking-tight">
+            {t.title}
+          </h2>
+          <p className="text-lg text-gray-500 font-light max-w-2xl mx-auto leading-relaxed">
+            {t.description}
+          </p>
+        </div>
+
+        {/* Infinite Marquee Section */}
+        <div className="relative py-10 overflow-hidden before:absolute before:left-0 before:top-0 before:z-10 before:h-full before:w-32 before:bg-gradient-to-r before:from-black before:to-transparent after:absolute after:right-0 after:top-0 after:z-10 after:h-full after:w-32 after:bg-gradient-to-l after:from-black after:to-transparent">
+          <div className="flex gap-16 animate-infinite-scroll hover:pause-animation items-center">
+            {doubleLogos.map((img, idx) => (
+              <div 
+                key={`${img}-${idx}`} 
+                className="flex-shrink-0 group relative"
+              >
+                <div className="bg-white/5 border border-white/5 p-6 rounded-2xl transition-all duration-500 group-hover:bg-white/[0.08] group-hover:border-red-500/20 group-hover:scale-110">
+                  <img
+                    src={`/backgrounds/clients/${img}`}
+                    alt="Client Logo"
+                    className="h-14 w-auto object-contain filter grayscale opacity-40 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-500"
+                  />
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Global CSS for Infinite Scroll Performance */}
+      <style>{`
+        @keyframes infinite-scroll {
+          from { transform: translateX(0); }
+          to { transform: translateX(-50%); }
+        }
+        .animate-infinite-scroll {
+          display: flex;
+          width: max-content;
+          animation: infinite-scroll 40s linear infinite;
+        }
+        .pause-animation {
+          animation-play-state: paused;
+        }
+      `}</style>
+    </section>
+  );
 }

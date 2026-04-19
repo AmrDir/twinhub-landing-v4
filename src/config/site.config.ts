@@ -71,6 +71,7 @@ export const SITE_CONFIG = {
     ar: 'توين هب هي شركة رائدة في الإنتاج الإعلامي الإبداعي والذكاء الاصطناعي في مصر.',
   },
 };
+
 // ============================================================
 // محتوى القسم الرئيسي / Hero Section Content
 // ============================================================
@@ -89,4 +90,324 @@ export const HERO_CONTENT = {
     exploreWork: 'استكشف أعمالنا',
     startProject: 'ابدأ مشروعك'
   }
+};
+
+// ============================================================
+// محتوى قسم الخدمات / Services Section Content
+// ============================================================
+export const SERVICES_CONTENT = {
+  en: {
+    title: 'Our Services',
+    subtitle: 'We offer comprehensive creative media production services tailored to bring your vision to life with professional excellence and artistic innovation.',
+    learnMore: 'Learn More',
+    services: [
+      {
+        id: 'ai-center',
+        icon: 'Brain',
+        title: 'Artificial Intelligence Center',
+        description: 'Cutting-edge AI solutions for modern advertising and media production, delivering smart and innovative results.',
+        features: ['AI Content Creation', 'Smart Analytics', 'Automated Production', 'Innovation Solutions']
+      },
+      {
+        id: 'video',
+        icon: 'Video',
+        title: 'Video Production for Business',
+        description: 'Comprehensive video production services from corporate videos to TV commercials and documentaries.',
+        features: ['Corporate Videos', 'TV Commercial Ads', 'Documentary Films', 'Animation Videos']
+      },
+      {
+        id: 'photo',
+        icon: 'Camera',
+        title: 'Photography Production',
+        description: 'Professional photography services capturing your brand essence with artistic excellence and technical precision.',
+        features: ['Fashion Photography', 'Product Photography', 'Event Coverage', 'Corporate Portraits']
+      },
+      {
+        id: 'branding',
+        icon: 'Palette',
+        title: 'Branding & Design',
+        description: 'Complete branding solutions including fashion design, visual identity, and creative marketing materials.',
+        features: ['Brand Identity', 'Fashion Design', 'Logo Design', 'Marketing Materials']
+      },
+      {
+        id: 'events',
+        icon: 'Users',
+        title: 'Exhibition & Events',
+        description: 'Full-service event production and exhibition management with creative execution and flawless delivery.',
+        features: ['Event Planning', 'Exhibition Design', 'Live Production', 'Event Photography']
+      },
+      {
+        id: 'music',
+        icon: 'Award',
+        title: 'Copyright & Music',
+        description: 'Professional music production and copyright services to enhance your media with original soundtracks.',
+        features: ['Original Music', 'Sound Design', 'Copyright Management', 'Audio Production']
+      }
+    ]
+  },
+  ar: {
+    title: 'خدماتنا',
+    subtitle: 'نقدم خدمات إنتاج وسائط إبداعية شاملة مصممة لتحقيق رؤيتك بتميز مهني وابتكار فني.',
+    learnMore: 'اعرف المزيد',
+    services: [
+      {
+        id: 'ai-center',
+        icon: 'Brain',
+        title: 'مركز الذكاء الاصطناعي',
+        description: 'حلول ذكاء اصطناعي متطورة للإعلان الحديث وإنتاج الوسائط، تقدم نتائج ذكية ومبتكرة.',
+        features: ['إنشاء محتوى بالذكاء الاصطناعي', 'تحليلات ذكية', 'إنتاج آلي', 'حلول الابتكار']
+      },
+      {
+        id: 'video',
+        icon: 'Video',
+        title: 'إنتاج الفيديو للأعمال',
+        description: 'خدمات إنتاج فيديو شاملة من الفيديوهات المؤسسية إلى الإعلانات التلفزيونية والأفلام الوثائقية.',
+        features: ['فيديوهات مؤسسية', 'إعلانات تلفزيونية', 'أفلام وثائقية', 'فيديوهات متحركة']
+      },
+      {
+        id: 'photo',
+        icon: 'Camera',
+        title: 'إنتاج التصوير الفوتوغرافي',
+        description: 'خدمات تصوير احترافية تلتقط جوهر علامتك التجارية بتميز فني ودقة تقنية.',
+        features: ['تصوير الأزياء', 'تصوير المنتجات', 'تغطية الأحداث', 'صور مؤسسية']
+      },
+      {
+        id: 'branding',
+        icon: 'Palette',
+        title: 'العلامة التجارية والتصميم',
+        description: 'حلول علامة تجارية كاملة تشمل تصميم الأزياء والهوية البصرية والمواد التسويقية الإبداعية.',
+        features: ['هوية العلامة التجارية', 'تصميم الأزياء', 'تصميم الشعار', 'مواد تسويقية']
+      },
+      {
+        id: 'events',
+        icon: 'Users',
+        title: 'المعارض والفعاليات',
+        description: 'إنتاج فعاليات متكامل وإدارة معارض مع تنفيذ إبداعي وتسليم لا تشوبه شائبة.',
+        features: ['تخطيط الفعاليات', 'تصميم المعارض', 'إنتاج مباشر', 'تصوير الفعاليات']
+      },
+      {
+        id: 'music',
+        icon: 'Award',
+        title: 'حقوق الطبع والموسيقى',
+        description: 'إنتاج موسيقي احترافي وخدمات حقوق الطبع لتعزيز وسائطك بموسيقى تصويرية أصلية.',
+        features: ['موسيقى أصلية', 'تصميم الصوت', 'إدارة حقوق الطبع', 'إنتاج صوتي']
+      }
+    ]
+  }
+};
+
+// ============================================================
+// محتوى قسم التواصل / Contact Section Content
+// ============================================================
+export const CONTACT_SECTION_CONTENT = {
+  en: {
+    title: 'Get In Touch',
+    subtitle: 'Contact us when you choose TwinHub Media & AI Center. We hope you enjoy our site and take a moment to drop us a line.',
+    startConversation: "Let's Start a Conversation",
+    emailUs: 'Email Us',
+    callUs: 'Call Us',
+    whatsappUs: 'WhatsApp Us',
+    visitUs: 'Visit Us',
+    officeHours: 'Office Hours',
+    fullName: 'Full Name',
+    emailAddress: 'Email Address',
+    company: 'Company',
+    serviceNeeded: 'Service Needed',
+    message: 'Message',
+    messagePlaceholder: 'Tell us about your project, goals, timeline...',
+    sendMessage: 'Send Message',
+    selectService: 'Select a service',
+    services: [
+      'AI Solutions',
+      'Smart Applications',
+      'Business Automation',
+      'Video Production',
+      'Photography',
+      'Branding & Design'
+    ],
+    schedule: {
+      weekdays: 'Monday - Friday',
+      weekdaysTime: '9:00 AM - 6:00 PM',
+      saturday: 'Saturday',
+      saturdayTime: '10:00 AM - 4:00 PM',
+      sunday: 'Sunday',
+      sundayTime: 'By Appointment'
+    }
+  },
+  ar: {
+    title: 'تواصل معنا',
+    subtitle: 'تواصل معنا عندما تختار TwinHub Media & AI Center. نأمل أن تستمتع بموقعنا وأن تأخذ لحظة لتراسلنا.',
+    startConversation: 'لنبدأ محادثة',
+    emailUs: 'راسلنا',
+    callUs: 'اتصل بنا',
+    whatsappUs: 'واتساب',
+    visitUs: 'زرنا',
+    officeHours: 'ساعات العمل',
+    fullName: 'الاسم الكامل',
+    emailAddress: 'البريد الإلكتروني',
+    company: 'الشركة',
+    serviceNeeded: 'الخدمة المطلوبة',
+    message: 'الرسالة',
+    messagePlaceholder: 'أخبرنا عن مشروعك، أهدافك، والجدول الزمني...',
+    sendMessage: 'إرسال الرسالة',
+    selectService: 'اختر خدمة',
+    services: [
+      'حلول الذكاء الاصطناعي',
+      'التطبيقات الذكية',
+      'أتمتة الأعمال',
+      'إنتاج الفيديو',
+      'التصوير الفوتوغرافي',
+      'العلامة التجارية والتصميم'
+    ],
+    schedule: {
+      weekdays: 'الاثنين - الجمعة',
+      weekdaysTime: '9:00 ص - 6:00 م',
+      saturday: 'السبت',
+      saturdayTime: '10:00 ص - 4:00 م',
+      sunday: 'الأحد',
+      sundayTime: 'بموعد مسبق'
+    }
+  }
+};
+
+// ============================================================
+// محتوى معرض الأعمال / Gallery Content
+// ============================================================
+export const GALLERY_CONTENT = {
+  en: {
+    title: 'Our',
+    titleHighlight: 'Gallery',
+    subtitle: 'A cinematic showcase of our creative work and productions',
+    filters: {
+      all: 'All Works',
+      video: 'Video',
+      photography: 'Photography',
+      branding: 'Branding',
+      events: 'Events',
+    },
+    loadMore: 'Load More',
+    featured: 'Featured Work',
+    remaining: 'remaining'
+  },
+  ar: {
+    title: 'معرض',
+    titleHighlight: 'أعمالنا',
+    subtitle: 'عرض سينمائي لأعمالنا الإبداعية وإنتاجاتنا',
+    filters: {
+      all: 'جميع الأعمال',
+      video: 'فيديو',
+      photography: 'تصوير',
+      branding: 'هوية بصرية',
+      events: 'فعاليات',
+    },
+    loadMore: 'عرض المزيد',
+    featured: 'أعمال مميزة',
+    remaining: 'متبقي'
+  },
+  items: [
+    { src: '/gallery/work0.jpg', type: 'image', alt: 'Creative Work', category: 'all' },
+    { src: '/gallery/work1.jpg', type: 'image', alt: 'Brand Campaign', category: 'branding' },
+    { src: '/gallery/work2.jpg', type: 'image', alt: 'Photography', category: 'photography' },
+    { src: '/gallery/work3.mp4', type: 'video', alt: 'Video Production', category: 'video' },
+    { src: '/gallery/work4.jpg', type: 'image', alt: 'Commercial Shoot', category: 'photography' },
+    { src: '/gallery/work5.mp4', type: 'video', alt: 'Motion Graphics', category: 'video' },
+    { src: '/gallery/work6.jpg', type: 'image', alt: 'Event Coverage', category: 'events' },
+    { src: '/gallery/work7.jpg', type: 'image', alt: 'Product Photography', category: 'photography' },
+    { src: '/gallery/work8.jpg', type: 'image', alt: 'Brand Identity', category: 'branding' },
+    { src: '/gallery/work9.jpg', type: 'image', alt: 'Creative Design', category: 'branding' },
+    { src: '/gallery/work10.jpg', type: 'image', alt: 'Social Media', category: 'branding' },
+    { src: '/gallery/work11.jpg', type: 'image', alt: 'Corporate Event', category: 'events' },
+    { src: '/gallery/work12.jpg', type: 'image', alt: 'Fashion Shoot', category: 'photography' },
+    { src: '/gallery/work13.jpg', type: 'image', alt: 'Documentary', category: 'video' },
+    { src: '/gallery/work14.jpg', type: 'image', alt: 'Advertising', category: 'branding' },
+    { src: '/gallery/work15.jpg', type: 'image', alt: 'Exhibition', category: 'events' },
+    { src: '/gallery/work16.jpg', type: 'image', alt: 'Portrait Photography', category: 'photography' },
+    { src: '/gallery/work17.jpg', type: 'image', alt: 'Campaign Visuals', category: 'branding' },
+    { src: '/gallery/work18.jpg', type: 'image', alt: 'Creative Content', category: 'branding' },
+    { src: '/gallery/work19.jpg', type: 'image', alt: 'Media Production', category: 'video' },
+    { src: '/gallery/work20.jpg', type: 'image', alt: 'Brand Shoot', category: 'photography' },
+    { src: '/gallery/work21.jpg', type: 'image', alt: 'Art Direction', category: 'branding' },
+    { src: '/gallery/work22.jpg', type: 'image', alt: 'Visual Campaign', category: 'branding' },
+    { src: '/gallery/work23.jpg', type: 'image', alt: 'Commercial Ad', category: 'video' },
+    { src: '/gallery/work24.jpg', type: 'image', alt: 'Event Design', category: 'events' },
+    { src: '/gallery/work25.jpg', type: 'image', alt: 'Creative Production', category: 'photography' },
+    { src: '/gallery/work26.jpg', type: 'image', alt: 'Brand Story', category: 'branding' },
+    { src: '/gallery/work27.jpg', type: 'image', alt: 'Graphic Design', category: 'branding' },
+    { src: '/gallery/work28.jpg', type: 'image', alt: 'Film Production', category: 'video' },
+    { src: '/gallery/work29.jpg', type: 'image', alt: 'Photography Studio', category: 'photography' },
+    { src: '/gallery/work30.jpg', type: 'image', alt: 'Campaign Production', category: 'branding' },
+    { src: '/gallery/work31.jpg', type: 'image', alt: 'Digital Content', category: 'branding' },
+    { src: '/gallery/work32.jpg', type: 'image', alt: 'Visual Story', category: 'photography' },
+    { src: '/gallery/work33.jpg', type: 'image', alt: 'Creative Direction', category: 'branding' },
+    { src: '/gallery/work34.mp4', type: 'video', alt: 'Promo Video', category: 'video' },
+    { src: '/gallery/work35.mp4', type: 'video', alt: 'Behind the Scenes', category: 'video' },
+  ]
+};
+
+// ============================================================
+// محتوى قسم عن الشركة / About Section Content
+// ============================================================
+export const ABOUT_CONTENT = {
+  en: {
+    title: 'TwinHub Media & AI Center',
+    description: 'TwinHub Agency: We keep pace with the latest developments in the world of advertising and artificial intelligence, offering you creative design and implementation, with speed, high quality, and competitive prices.',
+    aboutText: 'At TwinHub Agency, we work together to provide you with superior advertising creativity to communicate your services and products to your clients in the best possible way.',
+    locationText: 'We are based in Egypt, the most creative, diverse, and entertaining country in the region.',
+    visionTitle: 'Our Vision',
+    visionText: 'We offer integrated media production and smart, results-oriented solutions, aiming to be a global influence in intelligent content delivery.',
+    missionTitle: 'Our Mission',
+    missionText: 'We strive to deliver high-quality content. As pioneers, we set measurable, achievable, and realistic goals for our partners.',
+    whatWeDoTitle: 'What We Do',
+    whatWeDoSubtitle: "We're not just an agency, we're a trusted partner",
+    stats: [
+      { id: 'projects', value: '150+', label: 'Projects Completed', icon: 'Award' },
+      { id: 'clients', value: '100+', label: 'Happy Clients', icon: 'Users' },
+      { id: 'years', value: '20+', label: 'Years Experience', icon: 'Clock' },
+      { id: 'rate', value: '99%', label: 'Client Satisfaction', icon: 'Target' }
+    ]
+  },
+  ar: {
+    title: 'TwinHub Media & AI Center',
+    description: 'وكالة TwinHub: نواكب أحدث التطورات في عالم الإعلان والذكاء الاصطناعي، ونقدم لك التصميم الإبداعي والتنفيذ، بسرعة وجودة عالية وأسعار تنافسية.',
+    aboutText: 'في وكالة TwinHub، نعمل معًا لنقدم لك إبداعًا إعلانيًا متفوقًا لتوصيل خدماتك ومنتجاتك إلى عملائك بأفضل طريقة ممكنة.',
+    locationText: 'نحن مقرنا في مصر، البلد الأكثر إبداعًا وتنوعًا وترفيهًا في المنطقة.',
+    visionTitle: 'رؤيتنا',
+    visionText: 'نقدم إنتاج وسائط متكامل، حلول ذكية موجهة نحو النتائج، ولنكون واحدة من أكثر الشركات تأثيرًا في تقديم محتوى عالي الجودة وذكي.',
+    missionTitle: 'مهمتنا',
+    missionText: 'نسعى لتقديم محتوى عالي الجودة. كرواد، ساهمنا في نجاح أكبر الشركات من خلال وضع أهداف تسويقية قابلة للقياس والتحقيق.',
+    whatWeDoTitle: 'ما نقوم به',
+    whatWeDoSubtitle: 'لسنا مجرد وكالة، نحن شريك موثوق',
+    stats: [
+      { id: 'projects', value: '150+', label: 'مشروع مكتمل', icon: 'Award' },
+      { id: 'clients', value: '100+', label: 'عميل سعيد', icon: 'Users' },
+      { id: 'years', value: '20+', label: 'سنة خبرة', icon: 'Clock' },
+      { id: 'rate', value: '99%', label: 'رضا العملاء', icon: 'Target' }
+    ]
+  }
+};
+
+// ============================================================
+// محتوى قسم العملاء / Clients Section Content
+// ============================================================
+export const CLIENTS_CONTENT = {
+  en: {
+    title: 'Clients & Success Partners',
+    subtitle: 'Trusted by leading brands across industries',
+    description: "We've had the privilege of working with amazing clients who trust us to bring their visions to life.",
+  },
+  ar: {
+    title: 'العملاء وشركاء النجاح',
+    subtitle: 'موثوق من قبل العلامات التجارية الرائدة عبر الصناعات',
+    description: 'لقد حظينا بشرف العمل مع عملاء رائعين يثقون بنا لتحقيق رؤاهم.',
+  },
+  logos: [
+    '05551b48361291.5895ec5ca8529.jpg',
+    '1.jpg', '1.png', '10.jpg', '11.jpg', '12-76816d4.jpg', '13.jpg', 
+    '17.jpg', '18.jpeg', '2.jpg', '2.png', '3.jpg', '3.png', '5.jpg', 
+    '5.png', '6.jpg', '7.jpg', '8.jpg', '9.jpg', 'Logo1.png', 
+    'RED SEA LOGO.png', 'avatars-000511228836-pmthbo-t500x500 (1).jpg', 
+    'blob-04ea318.png', 'blob-3cd870b.png', 'blob-af8c579.png', 
+    'logo royal company-02-01.png', 'logo الكنافة السورى-01.png', 
+    'logo-fb6edbc.jpg', 'logo.jpg', 'logo.png'
+  ]
 };

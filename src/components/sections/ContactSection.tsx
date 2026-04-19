@@ -1,12 +1,16 @@
 import { useState } from 'react';
-import { Mail, Phone, MapPin, Send, MessageCircle, Loader2 } from 'lucide-react';
+import { Mail, Phone, MapPin, Send, MessageCircle, Loader2, Clock } from 'lucide-react';
 import MediaBackground from '../common/MediaBackground';
+import { CONTACT_INFO, CONTACT_SECTION_CONTENT } from '../../config/site.config';
 
 interface ContactSectionProps {
   language: string;
 }
 
 export default function ContactSection({ language }: ContactSectionProps) {
+  const t = CONTACT_SECTION_CONTENT[language as keyof typeof CONTACT_SECTION_CONTENT] || CONTACT_SECTION_CONTENT.en;
+  const isRtl = language === 'ar';
+  
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -16,86 +20,29 @@ export default function ContactSection({ language }: ContactSectionProps) {
   });
   const [formStatus, setFormStatus] = useState<'idle' | 'sending' | 'success' | 'error'>('idle');
 
-  const content = {
-    en: {
-      title: 'Get In Touch',
-      subtitle: 'Contact us when you choose TwinHub Media & AI Center. There\'s much to see here. So, take your time, look around, and learn all there is to know about us. We hope you enjoy our site and take a moment to drop us a line.',
-      startConversation: 'Let\'s Start a Conversation',
-      emailUs: 'Email Us',
-      callUs: 'Call Us',
-      whatsappUs: 'WhatsApp Us',
-      visitUs: 'Visit Us',
-      officeHours: 'Office Hours',
-      fullName: 'Full Name',
-      emailAddress: 'Email Address',
-      company: 'Company',
-      serviceNeeded: 'Service Needed',
-      message: 'Message',
-      messagePlaceholder: 'Tell us about your project, goals, timeline, and any specific requirements...',
-      sendMessage: 'Send Message',
-      selectService: 'Select a service',
-      services: [
-        'AI Center',
-        'Video Production',
-        'Photography',
-        'Post Production',
-        'Creative Design',
-        'Content Strategy',
-        'Digital Media'
-      ],
-      schedule: {
-        weekdays: 'Monday - Friday',
-        weekdaysTime: '9:00 AM - 6:00 PM',
-        saturday: 'Saturday',
-        saturdayTime: '10:00 AM - 4:00 PM',
-        sunday: 'Sunday',
-        sundayTime: 'By Appointment'
-      }
-    },
-    ar: {
-      title: 'تواصل معنا',
-      subtitle: 'تواصل معنا عندما تختار TwinHub Media & AI Center. هناك الكثير لتراه هنا. لذا، خذ وقتك، انظر حولك، وتعلم كل ما يمكن معرفته عنا. نأمل أن تستمتع بموقعنا وأن تأخذ لحظة لتراسلنا.',
-      startConversation: 'لنبدأ محادثة',
-      emailUs: 'راسلنا',
-      callUs: 'اتصل بنا',
-      whatsappUs: 'واتساب',
-      visitUs: 'زرنا',
-      officeHours: 'ساعات العمل',
-      fullName: 'الاسم الكامل',
-      emailAddress: 'البريد الإلكتروني',
-      company: 'الشركة',
-      serviceNeeded: 'الخدمة المطلوبة',
-      message: 'الرسالة',
-      messagePlaceholder: 'أخبرنا عن مشروعك وأهدافك والجدول الزمني وأي متطلبات محددة...',
-      sendMessage: 'إرسال الرسالة',
-      selectService: 'اختر خدمة',
-      services: [
-        'إنتاج الفيديو',
-        'التصوير الفوتوغرافي',
-        'ما بعد الإنتاج',
-        'التصميم الإبداعي',
-        'استراتيجية المحتوى',
-        'الوسائط الرقمية'
-      ],
-      schedule: {
-        weekdays: 'الاثنين - الجمعة',
-        weekdaysTime: '9:00 ص - 6:00 م',
-        saturday: 'السبت',
-        saturdayTime: '10:00 ص - 4:00 م',
-        sunday: 'الأحد',
-        sundayTime: 'بموعد مسبق'
-      }
-    }
-  };
-
-  const t = content[language as keyof typeof content] || content.en;
-
-  const handleSubmit = () => {
-    // النموذج سيتم معالجته عن طريق Netlify تلقائياً بسبب data-netlify="true"
-    // يمكننا إضافة بعض التأثيرات البصرية هنا إذا أردنا
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     setFormStatus('sending');
-    // لضمان عمل إعادة توجيه Netlify أو عرض رسالة النجاح الخاصة بها،
-    // لا نقوم بـ e.preventDefault()، نترك Netlify يتولى الأمر
+
+    const form = e.currentTarget;
+    const data = new FormData(form);
+
+    try {
+      const response = await fetch('/', {
+        method: 'POST',
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: new URLSearchParams(data as any).toString()
+      });
+
+      if (response.ok) {
+        setFormStatus('success');
+        setFormData({ name: '', email: '', company: '', service: '', message: '' });
+      } else {
+        setFormStatus('error');
+      }
+    } catch (error) {
+      setFormStatus('error');
+    }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -106,222 +53,179 @@ export default function ContactSection({ language }: ContactSectionProps) {
   };
 
   return (
-    <section id="contact" className="py-20 bg-gray-50 relative overflow-hidden">
+    <section id="contact" className="relative py-24 lg:py-32 bg-black overflow-hidden">
       <MediaBackground
         backgroundImage="/backgrounds/contact/contact-bg.jpg"
-        overlayOpacity={0.95}
-        className="absolute inset-0"
+        overlayOpacity={0.97}
+        className="h-full w-full"
       >
-        {/* Cinematic Elements */}
-        <div className="absolute top-1/3 left-1/4 opacity-5 pointer-events-none decorative-pulse">
-          <img 
-            src="/Twinhub Logo_Artboard 17-3_Artboard 17_Artboard 17.png"
-            alt="Decorative M"
-            className="h-64 w-auto"
-          />
-        </div>
-        
-        {/* Film grain overlay */}
-        <div className="absolute inset-0 opacity-10 bg-pattern"></div>
+        <div className="absolute inset-0 bg-gradient-to-v from-black via-transparent to-black/80"></div>
       </MediaBackground>
       
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        
         {/* Section Header */}
-        <div className="text-center mb-16">
-          <h2 className="text-4xl sm:text-5xl font-bold text-gray-900 mb-6">
-            {t.title.split(' ')[0]} <span className="text-red-600">{t.title.split(' ')[1] || 'Touch'}</span>
+        <div className="text-center mb-24 animate-fade-in">
+          <h2 className="text-4xl sm:text-6xl font-bold text-white mb-6">
+            {isRtl ? (
+              <>تواصل <span className="text-red-600">معنا</span></>
+            ) : (
+              <>Get In <span className="text-red-600">Touch</span></>
+            )}
           </h2>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+          <p className="text-xl text-gray-400 max-w-2xl mx-auto leading-relaxed font-light">
             {t.subtitle}
           </p>
         </div>
 
-        <div className="grid lg:grid-cols-2 gap-16">
-          {/* Contact Info */}
-          <div>
-            <h3 className="text-2xl font-bold text-gray-900 mb-8">{t.startConversation}</h3>
+        <div className={`grid lg:grid-cols-2 gap-16 lg:gap-24 items-start ${isRtl ? 'lg:flex-row-reverse' : ''}`}>
+          
+          {/* Left Side: Contact Cards & Info */}
+          <div className="space-y-10">
+            <h3 className="text-3xl font-bold text-white mb-8">{t.startConversation}</h3>
             
-            <div className="space-y-8 mb-12">
-              <div className="flex items-start">
-                <div className="w-12 h-12 bg-red-600 rounded-xl flex items-center justify-center mr-4 flex-shrink-0">
-                  <Mail className="w-6 h-6 text-white" />
-                </div>
-                <div>
-                  <h4 className="font-semibold text-gray-900 mb-1">{t.emailUs}</h4>
-                  <p className="text-gray-600">info@twinhub.net</p>
-                </div>
-              </div>
+            <div className="grid sm:grid-cols-2 gap-6">
+              {/* Email Card */}
+              <a href={`mailto:${CONTACT_INFO.email}`} className="group p-6 bg-white/[0.03] border border-white/5 rounded-2xl hover:bg-white/[0.07] transition-all">
+                <Mail className="w-8 h-8 text-red-500 mb-4" />
+                <h4 className="text-white font-bold mb-1">{t.emailUs}</h4>
+                <p className="text-gray-400 text-sm">{CONTACT_INFO.email}</p>
+              </a>
 
-              <div className="flex items-start">
-                <div className="w-12 h-12 bg-red-600 rounded-xl flex items-center justify-center mr-4 flex-shrink-0">
-                  <MessageCircle className="w-6 h-6 text-white" />
-                </div>
-                <div>
-                  <h4 className="font-semibold text-gray-900 mb-1">{t.whatsappUs}</h4>
-                  <p className="text-gray-600">01007197170</p>
-                </div>
-              </div>
-
-              <div className="flex items-start">
-                <div className="w-12 h-12 bg-red-600 rounded-xl flex items-center justify-center mr-4 flex-shrink-0">
-                  <Phone className="w-6 h-6 text-white" />
-                </div>
-                <div>
-                  <h4 className="font-semibold text-gray-900 mb-1">{t.callUs}</h4>
-                  <p className="text-gray-600">01007197170</p>
-                  <p className="text-gray-600">+264355712</p>
-                </div>
-              </div>
-
-              <div className="flex items-start">
-                <div className="w-12 h-12 bg-red-600 rounded-xl flex items-center justify-center mr-4 flex-shrink-0">
-                  <MapPin className="w-6 h-6 text-white" />
-                </div>
-                <div>
-                  <h4 className="font-semibold text-gray-900 mb-1">{t.visitUs}</h4>
-                  <p className="text-gray-600">47 Nagib Al Rihani, Town Down</p>
-                  <p className="text-gray-600">Cairo Governorate 4320210, Egypt</p>
-                </div>
-              </div>
+              {/* WhatsApp Card */}
+              <a href={`https://wa.me/${CONTACT_INFO.whatsapp}`} target="_blank" rel="noreferrer" className="group p-6 bg-white/[0.03] border border-white/5 rounded-2xl hover:bg-white/[0.07] transition-all">
+                <MessageCircle className="w-8 h-8 text-green-500 mb-4" />
+                <h4 className="text-white font-bold mb-1">{t.whatsappUs}</h4>
+                <p className="text-gray-400 text-sm">{CONTACT_INFO.phone}</p>
+              </a>
             </div>
 
-            {/* Office Hours */}
-            <div className="bg-white p-8 rounded-2xl shadow-lg">
-              <h4 className="font-bold text-gray-900 mb-4">{t.officeHours}</h4>
-              <div className="space-y-2 text-gray-600">
-                <div className="flex justify-between">
-                  <span>{t.schedule.weekdays}</span>
-                  <span>{t.schedule.weekdaysTime}</span>
+            {/* Address & Office Hours */}
+            <div className="p-8 bg-white/[0.03] border border-white/5 rounded-3xl space-y-8">
+              <div className="flex gap-4">
+                <MapPin className="text-red-500 shrink-0" size={24} />
+                <div>
+                  <h4 className="text-white font-bold mb-2">{t.visitUs}</h4>
+                  <p className="text-gray-400 font-light leading-relaxed">
+                    {isRtl ? CONTACT_INFO.address.ar : CONTACT_INFO.address.en}
+                  </p>
                 </div>
-                <div className="flex justify-between">
-                  <span>{t.schedule.saturday}</span>
-                  <span>{t.schedule.saturdayTime}</span>
+              </div>
+
+              <div className="pt-8 border-t border-white/5">
+                <div className="flex gap-4 mb-6">
+                  <Clock className="text-red-500 shrink-0" size={24} />
+                  <h4 className="text-white font-bold">{t.officeHours}</h4>
                 </div>
-                <div className="flex justify-between">
-                  <span>{t.schedule.sunday}</span>
-                  <span>{t.schedule.sundayTime}</span>
+                <div className="space-y-3 text-sm font-light text-gray-400">
+                  <div className="flex justify-between items-center bg-white/[0.02] p-3 rounded-xl">
+                    <span>{t.schedule.weekdays}</span>
+                    <span className="text-white font-medium">{t.schedule.weekdaysTime}</span>
+                  </div>
+                  <div className="flex justify-between items-center bg-white/[0.02] p-3 rounded-xl">
+                    <span>{t.schedule.saturday}</span>
+                    <span className="text-white font-medium">{t.schedule.saturdayTime}</span>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
 
-          {/* Contact Form */}
-          <div className="bg-white p-8 rounded-2xl shadow-xl">
-            <form 
-              name="contact"
-              method="POST"
-              data-netlify="true"
-              onSubmit={handleSubmit} 
-              className="space-y-6"
-            >
-              {/* حقل مخفي ضروري لعمل Netlify Forms */}
-              <input type="hidden" name="form-name" value="contact" />
-              <input type="hidden" name="subject" value="رسالة جديدة من موقع TwinHub" />
-              
-              <div className="grid md:grid-cols-2 gap-6">
-                <div>
-                  <label htmlFor="name" className="block text-sm font-semibold text-gray-900 mb-2">
-                    {t.fullName} *
-                  </label>
-                  <input
-                    type="text"
-                    id="name"
-                    name="name"
-                    required
-                    value={formData.name}
-                    onChange={handleChange}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all duration-300"
-                    placeholder={language === 'ar' ? 'اسمك' : 'Your name'}
-                  />
-                </div>
-                <div>
-                  <label htmlFor="email" className="block text-sm font-semibold text-gray-900 mb-2">
-                    {t.emailAddress} *
-                  </label>
-                  <input
-                    type="email"
-                    id="email"
-                    name="email"
-                    required
-                    value={formData.email}
-                    onChange={handleChange}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all duration-300"
-                    placeholder={language === 'ar' ? 'بريدك@الإلكتروني.com' : 'your@email.com'}
-                  />
-                </div>
-              </div>
+          {/* Right Side: Contact Form */}
+          <div className="relative">
+             {/* Glow decorative */}
+            <div className="absolute -inset-4 bg-red-600/10 blur-3xl opacity-20 pointer-events-none"></div>
 
-              <div className="grid md:grid-cols-2 gap-6">
-                <div>
-                  <label htmlFor="company" className="block text-sm font-semibold text-gray-900 mb-2">
-                    {t.company}
-                  </label>
-                  <input
-                    type="text"
-                    id="company"
-                    name="company"
-                    value={formData.company}
-                    onChange={handleChange}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all duration-300"
-                    placeholder={language === 'ar' ? 'شركتك' : 'Your company'}
-                  />
-                </div>
-                <div>
-                  <label htmlFor="service" className="block text-sm font-semibold text-gray-900 mb-2">
-                    {t.serviceNeeded}
-                  </label>
-                  <select
-                    id="service"
-                    name="service"
-                    value={formData.service}
-                    onChange={handleChange}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all duration-300"
-                  >
-                    <option value="">{t.selectService}</option>
-                    {t.services.map((service, index) => (
-                      <option key={index} value={service}>{service}</option>
-                    ))}
-                  </select>
-                </div>
-              </div>
-
-              <div>
-                <label htmlFor="message" className="block text-sm font-semibold text-gray-900 mb-2">
-                  {t.message} *
-                </label>
-                <textarea
-                  id="message"
-                  name="message"
-                  required
-                  rows={6}
-                  value={formData.message}
-                  onChange={handleChange}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all duration-300 resize-none"
-                  placeholder={t.messagePlaceholder}
-                ></textarea>
-              </div>
-
-              <button
-                type="submit"
-                disabled={formStatus === 'sending'}
-                className={`w-full py-4 px-8 rounded-xl font-semibold transform hover:scale-[1.02] transition-all duration-300 shadow-lg hover:shadow-xl flex items-center justify-center ${
-                  formStatus === 'sending' ? 'bg-gray-400 text-white cursor-wait' :
-                  'bg-red-600 text-white hover:bg-red-700'
-                }`}
+            <div className="relative bg-white/[0.02] border border-white/10 backdrop-blur-xl p-8 lg:p-12 rounded-3xl shadow-2xl">
+              <form 
+                name="contact"
+                method="POST"
+                data-netlify="true"
+                onSubmit={handleSubmit} 
+                className="space-y-6"
               >
-                {formStatus === 'sending' ? (
-                  <>
-                    <Loader2 className="w-5 h-5 mr-2 animate-spin" />
-                    {language === 'ar' ? 'جاري الإرسال...' : 'Sending...'}
-                  </>
-                ) : (
-                  <>
-                    <Send className="w-5 h-5 mr-2" />
-                    {t.sendMessage}
-                  </>
-                )}
-              </button>
-            </form>
+                <input type="hidden" name="form-name" value="contact" />
+                
+                <div className="grid sm:grid-cols-2 gap-6">
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium text-gray-300">{t.fullName}</label>
+                    <input
+                      name="name"
+                      required
+                      value={formData.name}
+                      onChange={handleChange}
+                      className="w-full bg-white/[0.05] border border-white/10 rounded-xl px-4 py-3 text-white focus:ring-2 focus:ring-red-600 outline-none transition-all"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium text-gray-300">{t.emailAddress}</label>
+                    <input
+                      name="email"
+                      type="email"
+                      required
+                      value={formData.email}
+                      onChange={handleChange}
+                      className="w-full bg-white/[0.05] border border-white/10 rounded-xl px-4 py-3 text-white focus:ring-2 focus:ring-red-600 outline-none transition-all"
+                    />
+                  </div>
+                </div>
+
+                <div className="grid sm:grid-cols-2 gap-6">
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium text-gray-300">{t.company}</label>
+                    <input
+                      name="company"
+                      value={formData.company}
+                      onChange={handleChange}
+                      className="w-full bg-white/[0.05] border border-white/10 rounded-xl px-4 py-3 text-white focus:ring-2 focus:ring-red-600 outline-none transition-all"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium text-gray-300">{t.serviceNeeded}</label>
+                    <select
+                      name="service"
+                      value={formData.service}
+                      onChange={handleChange}
+                      className="w-full bg-white/[0.05] border border-white/10 rounded-xl px-4 py-3 text-white focus:ring-2 focus:ring-red-600 outline-none transition-all appearance-none"
+                    >
+                      <option value="" className="bg-gray-900">{t.selectService}</option>
+                      {t.services.map(s => <option key={s} value={s} className="bg-gray-900">{s}</option>)}
+                    </select>
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <label className="text-sm font-medium text-gray-300">{t.message}</label>
+                  <textarea
+                    name="message"
+                    required
+                    rows={5}
+                    value={formData.message}
+                    onChange={handleChange}
+                    className="w-full bg-white/[0.05] border border-white/10 rounded-xl px-4 py-3 text-white focus:ring-2 focus:ring-red-600 outline-none transition-all resize-none"
+                    placeholder={t.messagePlaceholder}
+                  />
+                </div>
+
+                <button
+                  type="submit"
+                  disabled={formStatus === 'sending'}
+                  className={`w-full py-4 rounded-xl font-bold flex items-center justify-center gap-2 transition-all duration-300 ${
+                    formStatus === 'sending' ? 'bg-gray-700 text-gray-400' : 
+                    formStatus === 'success' ? 'bg-green-600 text-white' : 
+                    'bg-red-600 text-white hover:bg-red-700 shadow-[0_0_20px_rgba(220,38,38,0.2)]'
+                  }`}
+                >
+                  {formStatus === 'sending' ? <Loader2 className="animate-spin" /> : <Send size={20} />}
+                  <span>
+                    {formStatus === 'sending' ? (isRtl ? 'جاري الإرسال...' : 'Sending...') :
+                     formStatus === 'success' ? (isRtl ? 'تم الإرسال بنجاح!' : 'Sent Successfully!') :
+                     formStatus === 'error' ? (isRtl ? 'فشل الإرسال!' : 'Failed to send!') :
+                     t.sendMessage}
+                  </span>
+                </button>
+              </form>
+            </div>
           </div>
         </div>
       </div>

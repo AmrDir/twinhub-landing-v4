@@ -73,3 +73,84 @@
 - هل نموذج Netlify جاهز لالتقاط البيانات (سنستطيع التأكد من ذلك بمجرد رفعه على Netlify)؟
 
 أنتظر أمرك و"الضوء الأخضر" للبدء في إجراء هذه التعديلات فوراً!
+
+
+==================================
+
+إذا نعم، قلّي فقط أي صيغة تفضل:
+
+Colors فقط داخل tailwind.config.js (مثل colors: { cinemaRed: '#DC2626', ... })
+Colors + semantic roles داخل config (مثل primary, link, success, error, bg, text بحيث الربط يكون مباشر مع الأدوار)
+بمجرد تأكيدك، سأُخرج لك Dark فقط مع:
+
+تنظيم tokens (background/text/primary/link/success/error…)
+Mapping واضح لأدوار الألوان الستة
+و HTML guide palette بالمربعات + HEX + “استخدام مقترح” لكل لون.
+Colors فقط داخل tailwind.config.js
+Sider Fusion
+تمام—هنا Dark فقط وبشرطك: الألوان فقط داخل tailwind.config.js (بدون semantic roles في الـ config).
+وبنفس الوقت سأعطيك semantic mapping كدليل استخدام خارج الـ config كي يظل الفريق ملتزمًا بالأدوار.
+
+1) tailwind.config.js — Colors only (Dark)
+js
+// tailwind.config.js
+module.exports = {
+  theme: {
+    extend: {
+      colors: {
+        // Fixed design tokens (Dark only delivery)
+        "cinema-red": "#DC2626",     // Primary / buttons / confirmations
+        "digital-blue": "#3B82F6",  // Links / tech sections / AI / automation
+        "dark-obsidian": "#0A0A0A",  // Dark evaluation backgrounds
+        "platinum-gray": "#E5E7EB", // Primary text / reading on dark
+        "emerald": "#10B981",       // Success / active / enabled
+        "crimson": "#EF4444",      // Errors / alerts
+      },
+    },
+  },
+};
+2) Mapping (Semantic roles) — دليل استخدام على شكل “كيف نستخدم كل لون”
+هذا ليس داخل الـ config (حسب شرطك)، لكنه هو قواعد الواجهات:
+
+جدول
+الدور (Role)	استخدم اللون (Token)	Hex
+Primary	cinema-red	#DC2626
+Buttons / Confirmations	cinema-red	#DC2626
+Links / Tech / AI / Automation	digital-blue	#3B82F6
+Background (evaluation dark)	dark-obsidian	#0A0A0A
+Text (primary reading)	platinum-gray	#E5E7EB
+Success / Active / Enabled	emerald	#10B981
+Errors / Alerts	crimson	#EF4444
+3) HTML guide palette (Swatches + HEX + “استخدام مقترح”)
+انسخ هذا كـ guide (يمكنك وضعه في صفحة توثيق داخل المشروع):
+
+html
+<div style="display:flex;gap:12px;flex-wrap:wrap;font-family:system-ui, -apple-system, Segoe UI, Roboto, Arial;">  
+  <div style="width:180px;border:1px solid #333;border-radius:10px;padding:10px;background:#111;color:#eee;">  
+    <div style="height:56px;border-radius:8px;background:#DC2626;"></div>  
+    <div style="margin-top:8px;"><b>Cinema Red</b></div>  
+    <div>#DC2626</div>  
+    <div style="margin-top:6px;color:#bbb;">Primary / Buttons / Confirmations</div>  
+  </div>  
+
+  <div style="width:180px;border:1px solid #333;border-radius:10px;padding:10px;background:#111;color:#eee;">  
+    <div style="height:56px;border-radius:8px;background:#3B82F6;"></div>  
+    <div style="margin-top:8px;"><b>Digital Blue</b></div>  
+    <div>#3B82F6</div>  
+    <div style="margin-top:6px;color:#bbb;">Links / Tech / AI / Automation</div>  
+  </div>  
+
+  <div style="width:180px;border:1px solid #333;border-radius:10px;padding:10px;background:#111;color:#eee;">  
+    <div style="height:56px;border-radius:8px;background:#0A0A0A;border:1px solid #222;"></div>  
+    <div style="margin-top:8px;"><b>Dark Obsidian</b></div>  
+    <div>#0A0A0A</div>  
+    <div style="margin-top:6px;color:#bbb;">Dark evaluation background</div>  
+  </div>  
+
+  <div style="width:180px;border:1px solid #333;border-radius:10px;padding:10px;background:#111;color:#eee;">  
+    <div style="height:56px;border-radius:8px;background:#E5E7EB;"></div>  
+    <div style="margin-top:8px;"><b>Platinum Gray</b></div>  
+    <div>#E5E7EB</div>  
+    <div style="margin-top:6px;color:#bbb;">Primary text / reading on dark</div>  
+  </div
+اذهب أبعد——تحليل متعمق مع البحث العميق

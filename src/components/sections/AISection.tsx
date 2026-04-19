@@ -1,172 +1,108 @@
-import { Brain, Zap, Film, Palette, Target, ArrowRight } from 'lucide-react';
+import { Brain, Zap, ArrowRight, Monitor, Cpu } from 'lucide-react';
 import MediaBackground from '../common/MediaBackground';
+import { AI_SOLUTIONS } from '../../config/site.config';
 
 interface AISectionProps {
   language: string;
 }
 
 export default function AISection({ language }: AISectionProps) {
-  const content = {
-    en: {
-      title: 'Revolutionizing Film and Advertising Production with AI',
-      subtitle: 'A Bridge Between Art and Technology',
-      description: 'Empowering businesses to craft compelling visual stories - combining AI technology with traditional filmmaking, at a fraction of the cost.',
-      cta: 'Explore Our Solutions',
-      foundedText: 'Founded by a group of filmmakers passionate about innovation, TwinHub combines traditional filmmaking expertise with cutting-edge AI technology.',
-      missionText: 'Our mission is to provide businesses with content that enhances creativity rather than replaces it, making high-quality production accessible to everyone.',
-      features: [
-        {
-          icon: Brain,
-          title: 'AI-Powered Creativity',
-          description: 'Intelligent content generation that amplifies human creativity'
-        },
-        {
-          icon: Film,
-          title: 'Smart Production',
-          description: 'Streamlined workflows that reduce costs without compromising quality'
-        },
-        {
-          icon: Palette,
-          title: 'Creative Enhancement',
-          description: 'AI tools that enhance artistic vision rather than replace it'
-        },
-        {
-          icon: Target,
-          title: 'Precision Marketing',
-          description: 'Data-driven insights for maximum campaign effectiveness'
-        }
-      ]
-    },
-    ar: {
-      title: 'ثورة في إنتاج الأفلام والإعلانات بالذكاء الاصطناعي',
-      subtitle: 'جسر بين الفن والتكنولوجيا',
-      description: 'تمكين الشركات من صياغة قصص بصرية مقنعة - دمج تقنية الذكاء الاصطناعي مع صناعة الأفلام التقليدية، بجزء من التكلفة.',
-      cta: 'استكشف حلولنا',
-      foundedText: 'تأسست من قبل مجموعة من صانعي الأفلام المتحمسين للابتكار، تجمع TwinHub بين خبرة صناعة الأفلام التقليدية وتقنية الذكاء الاصطناعي المتطورة.',
-      missionText: 'مهمتنا هي تزويد الشركات بمحتوى يعزز الإبداع بدلاً من استبداله، مما يجعل الإنتاج عالي الجودة في متناول الجميع.',
-      features: [
-        {
-          icon: Brain,
-          title: 'إبداع مدعوم بالذكاء الاصطناعي',
-          description: 'توليد محتوى ذكي يضخم الإبداع البشري'
-        },
-        {
-          icon: Film,
-          title: 'إنتاج ذكي',
-          description: 'سير عمل مبسط يقلل التكاليف دون المساس بالجودة'
-        },
-        {
-          icon: Palette,
-          title: 'تعزيز الإبداع',
-          description: 'أدوات ذكاء اصطناعي تعزز الرؤية الفنية بدلاً من استبدالها'
-        },
-        {
-          icon: Target,
-          title: 'تسويق دقيق',
-          description: 'رؤى مدفوعة بالبيانات لأقصى فعالية للحملة'
-        }
-      ]
-    }
-  };
-
-  const t = content[language as keyof typeof content] || content.en;
+  const t = AI_SOLUTIONS;
+  const isRtl = language === 'ar';
 
   return (
-    <section id="ai" className="relative overflow-hidden">
+    <section id="ai" className="relative overflow-hidden bg-black">
       <MediaBackground
         backgroundImage="/backgrounds/clients/ai-bg.png"
-        overlayOpacity={0.7}
-        className="py-20"
+        overlayOpacity={0.8}
+        className="py-24 lg:py-32"
       >
-        {/* Cinematic Elements */}
-        <div className="absolute inset-0 bg-gradient-to-br from-red-900/20 via-black/40 to-gray-900/60"></div>
-        <div className="absolute top-1/3 left-1/4 w-64 h-64 bg-red-600/10 rounded-full blur-3xl animate-pulse"></div>
-        <div className="absolute bottom-1/4 right-1/3 w-80 h-80 bg-blue-600/5 rounded-full blur-3xl animate-pulse delay-1000"></div>
+        {/* Cinematic Lighting Overlays */}
+        <div className="absolute inset-0 bg-gradient-to-br from-red-950/40 via-black/60 to-gray-900/80 pointer-events-none"></div>
+        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-red-600/5 rounded-full blur-[120px] animate-pulse"></div>
         
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          {/* Hero Section */}
-          <div className="text-center mb-20">
-            <div className="w-20 h-20 bg-red-600 rounded-2xl flex items-center justify-center mx-auto mb-8">
-              <Brain className="w-10 h-10 text-white" />
+          
+          {/* Section Header - The Bridge */}
+          <div className="mb-20 text-center lg:text-left rtl:lg:text-right">
+            <div className="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-red-600/10 border border-red-600/20 text-red-500 text-sm font-medium tracking-widest uppercase mb-6 animate-fade-in">
+              <Brain size={18} />
+              <span>{t.subtitle[language as keyof typeof t.subtitle]}</span>
             </div>
-            
-            <h1 className="text-4xl sm:text-6xl font-bold text-white mb-6 leading-tight">
-              {t.title}
-            </h1>
-            
-            <p className="text-xl sm:text-2xl text-gray-300 mb-8 max-w-4xl mx-auto leading-relaxed">
-              {t.description}
-            </p>
-            
-            <button 
-              onClick={() => document.getElementById('services')?.scrollIntoView({ behavior: 'smooth' })}
-              className="inline-flex items-center px-8 py-4 bg-red-600 text-white font-semibold rounded-lg hover:bg-red-700 transform hover:scale-105 transition-all duration-300 shadow-xl hover:shadow-2xl"
-            >
-              {t.cta}
-              <ArrowRight className="ml-2 w-5 h-5" />
-            </button>
-          </div>
-
-          {/* Bridge Section */}
-          <div className="text-center mb-20">
-            <h2 className="text-3xl sm:text-4xl font-bold text-white mb-8">
-              "{t.subtitle}"
+            <h2 className="text-4xl lg:text-6xl font-bold text-white mb-8 leading-tight max-w-4xl">
+              {t.title[language as keyof typeof t.title]}
             </h2>
+          </div>
+
+          {/* Main Content Layout - Split View */}
+          <div className={`grid lg:grid-cols-2 gap-12 lg:gap-20 items-center ${isRtl ? 'lg:flex-row-reverse' : ''}`}>
             
-            <div className="grid md:grid-cols-2 gap-12 max-w-6xl mx-auto">
-              <div className="bg-white/10 backdrop-blur-md p-8 rounded-2xl">
-                <p className="text-gray-200 leading-relaxed text-lg">
-                  {t.foundedText}
-                </p>
-              </div>
+            {/* Left Content / Mission */}
+            <div className="space-y-8 animate-fade-in-up">
+              <p className="text-xl lg:text-2xl text-gray-300 leading-relaxed font-light">
+                {t.description[language as keyof typeof t.description]}
+              </p>
               
-              <div className="bg-white/10 backdrop-blur-md p-8 rounded-2xl">
-                <p className="text-gray-200 leading-relaxed text-lg">
-                  {t.missionText}
-                </p>
+              <div className="flex flex-col gap-6">
+                <button 
+                  onClick={() => document.getElementById('services')?.scrollIntoView({ behavior: 'smooth' })}
+                  className="group inline-flex items-center gap-3 text-white font-semibold text-lg hover:text-red-500 transition-colors w-fit"
+                >
+                  <span>{language === 'ar' ? 'استكشف حلولنا' : 'Explore Our Solutions'}</span>
+                  <ArrowRight className={`w-5 h-5 transition-transform group-hover:translate-x-2 ${isRtl ? 'rotate-180 group-hover:-translate-x-2' : ''}`} />
+                </button>
               </div>
             </div>
-          </div>
 
-          {/* Features Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {t.features.map((feature, index) => (
-              <div
-                key={feature.title}
-                className="group bg-white/10 backdrop-blur-md p-8 rounded-2xl hover:bg-white/20 transition-all duration-500 transform hover:-translate-y-2"
-                style={{ animationDelay: `${index * 100}ms` }}
-              >
-                <div className="w-16 h-16 bg-red-600 rounded-xl flex items-center justify-center mb-6 group-hover:bg-red-700 transition-colors duration-300">
-                  <feature.icon className="w-8 h-8 text-white" />
+            {/* Right Content / Digital Products Cards */}
+            <div className="grid sm:grid-cols-2 gap-6 relative">
+              {/* Asymmetric Product Grid */}
+              {t.features.map((feature, index) => (
+                <div 
+                  key={feature.id}
+                  className={`group relative p-8 rounded-3xl border border-white/5 bg-white/[0.03] backdrop-blur-xl hover:bg-white/[0.07] hover:border-red-500/30 transition-all duration-500 flex flex-col justify-between ${
+                    index === 0 ? 'lg:-translate-y-6' : 'lg:translate-y-6'
+                  }`}
+                >
+                  <div className="mb-8">
+                    <div className={`w-14 h-14 rounded-2xl flex items-center justify-center mb-6 shadow-lg transition-transform duration-500 group-hover:scale-110 ${
+                      feature.id === 'apps' 
+                        ? 'bg-gradient-to-br from-electric-blue to-blue-900 shadow-blue-500/20' 
+                        : 'bg-gradient-to-br from-fusion-teal to-cyan-900 shadow-cyan-500/20'
+                    }`}>
+                      {feature.id === 'apps' ? <Monitor className="text-white" size={28} /> : <Cpu className="text-white" size={28} />}
+                    </div>
+                    <h3 className={`text-2xl font-bold text-white mb-4 transition-colors ${
+                      feature.id === 'apps' ? 'group-hover:text-electric-blue' : 'group-hover:text-fusion-teal'
+                    }`}>
+                      {feature.title[language as keyof typeof feature.title]}
+                    </h3>
+                    <p className="text-gray-400 leading-relaxed font-light">
+                      {feature.desc[language as keyof typeof feature.desc]}
+                    </p>
+                  </div>
+                  
+                  <div className="pt-4 border-t border-white/5 opacity-0 group-hover:opacity-100 transition-opacity">
+                     <span className={`text-sm font-medium ${
+                       feature.id === 'apps' ? 'text-electric-blue' : 'text-fusion-teal'
+                     }`}>{language === 'ar' ? 'اعرف المزيد' : 'Learn More'}</span>
+                  </div>
                 </div>
-                
-                <h3 className="text-xl font-bold text-white mb-4 group-hover:text-red-300 transition-colors duration-300">
-                  {feature.title}
-                </h3>
-                
-                <p className="text-gray-300 leading-relaxed">
-                  {feature.description}
-                </p>
-              </div>
-            ))}
+              ))}
+              
+              {/* Subtle Decorative element */}
+              <div className="absolute -z-10 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-red-600/5 blur-[100px] pointer-events-none"></div>
+            </div>
+
           </div>
 
-          {/* Innovation Department */}
-          <div className="mt-20 bg-gradient-to-r from-red-600/20 to-black/20 backdrop-blur-md p-12 rounded-3xl text-center">
-            <div className="w-16 h-16 bg-red-600 rounded-2xl flex items-center justify-center mx-auto mb-6">
-              <Zap className="w-8 h-8 text-white" />
-            </div>
-            
-            <h3 className="text-2xl font-bold text-white mb-4">
-              {language === 'ar' ? 'قسم الذكاء الاصطناعي والابتكار' : 'AI and Innovation Department'}
-            </h3>
-            
-            <p className="text-gray-300 leading-relaxed max-w-4xl mx-auto text-lg">
-              {language === 'ar' 
-                ? 'الهدف من القسم الذي يتمحور حول استخدام الذكاء الاصطناعي لتطوير حلول عملية ومبتكرة تغطي مجالات متعددة، مع التركيز على قدرة القسم على الابتكار وتطبيق الذكاء الاصطناعي بشكل فعّال ومستدام داخل الشركة.'
-                : 'The department focuses on using artificial intelligence to develop practical and innovative solutions covering multiple fields, with emphasis on the department\'s ability to innovate and apply AI effectively and sustainably within the company.'
-              }
-            </p>
+          {/* Bottom Trust/Innovation Banner */}
+          <div className="mt-32 pt-16 border-t border-white/5 flex flex-wrap justify-center gap-12 opacity-40 grayscale hover:grayscale-0 transition-all duration-700">
+             {/* Here we can place small tech logos later if needed */}
+             <div className="text-white font-mono tracking-tighter text-sm uppercase">Innovation Center</div>
+             <div className="text-white font-mono tracking-tighter text-sm uppercase">Smart Automation</div>
+             <div className="text-white font-mono tracking-tighter text-sm uppercase">AI Engineering</div>
+             <div className="text-white font-mono tracking-tighter text-sm uppercase">Creative Tech</div>
           </div>
         </div>
       </MediaBackground>

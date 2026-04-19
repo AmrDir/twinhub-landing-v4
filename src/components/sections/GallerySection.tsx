@@ -1,240 +1,187 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useMemo } from 'react';
 import { ChevronLeft, ChevronRight, X, Play, Maximize2 } from 'lucide-react';
 import MediaBackground from '../common/MediaBackground';
-
-interface GalleryItem {
-  src: string;
-  type: 'image' | 'video';
-  alt?: string;
-  category?: string;
-}
+import { GALLERY_CONTENT } from '../../config/site.config';
 
 interface GallerySectionProps {
   language: string;
 }
 
-// جميع ملفات المعرض المتاحة
-const galleryItems: GalleryItem[] = [
-  { src: '/gallery/work0.jpg', type: 'image', alt: 'Creative Work', category: 'all' },
-  { src: '/gallery/work1.jpg', type: 'image', alt: 'Brand Campaign', category: 'branding' },
-  { src: '/gallery/work2.jpg', type: 'image', alt: 'Photography', category: 'photography' },
-  { src: '/gallery/work3.mp4', type: 'video', alt: 'Video Production', category: 'video' },
-  { src: '/gallery/work4.jpg', type: 'image', alt: 'Commercial Shoot', category: 'photography' },
-  { src: '/gallery/work5.mp4', type: 'video', alt: 'Motion Graphics', category: 'video' },
-  { src: '/gallery/work6.jpg', type: 'image', alt: 'Event Coverage', category: 'events' },
-  { src: '/gallery/work7.jpg', type: 'image', alt: 'Product Photography', category: 'photography' },
-  { src: '/gallery/work8.jpg', type: 'image', alt: 'Brand Identity', category: 'branding' },
-  { src: '/gallery/work9.jpg', type: 'image', alt: 'Creative Design', category: 'branding' },
-  { src: '/gallery/work10.jpg', type: 'image', alt: 'Social Media', category: 'branding' },
-  { src: '/gallery/work11.jpg', type: 'image', alt: 'Corporate Event', category: 'events' },
-  { src: '/gallery/work12.jpg', type: 'image', alt: 'Fashion Shoot', category: 'photography' },
-  { src: '/gallery/work13.jpg', type: 'image', alt: 'Documentary', category: 'video' },
-  { src: '/gallery/work14.jpg', type: 'image', alt: 'Advertising', category: 'branding' },
-  { src: '/gallery/work15.jpg', type: 'image', alt: 'Exhibition', category: 'events' },
-  { src: '/gallery/work16.jpg', type: 'image', alt: 'Portrait Photography', category: 'photography' },
-  { src: '/gallery/work17.jpg', type: 'image', alt: 'Campaign Visuals', category: 'branding' },
-  { src: '/gallery/work18.jpg', type: 'image', alt: 'Creative Content', category: 'branding' },
-  { src: '/gallery/work19.jpg', type: 'image', alt: 'Media Production', category: 'video' },
-  { src: '/gallery/work20.jpg', type: 'image', alt: 'Brand Shoot', category: 'photography' },
-  { src: '/gallery/work21.jpg', type: 'image', alt: 'Art Direction', category: 'branding' },
-  { src: '/gallery/work22.jpg', type: 'image', alt: 'Visual Campaign', category: 'branding' },
-  { src: '/gallery/work23.jpg', type: 'image', alt: 'Commercial Ad', category: 'video' },
-  { src: '/gallery/work24.jpg', type: 'image', alt: 'Event Design', category: 'events' },
-  { src: '/gallery/work25.jpg', type: 'image', alt: 'Creative Production', category: 'photography' },
-  { src: '/gallery/work26.jpg', type: 'image', alt: 'Brand Story', category: 'branding' },
-  { src: '/gallery/work27.jpg', type: 'image', alt: 'Graphic Design', category: 'branding' },
-  { src: '/gallery/work28.jpg', type: 'image', alt: 'Film Production', category: 'video' },
-  { src: '/gallery/work29.jpg', type: 'image', alt: 'Photography Studio', category: 'photography' },
-  { src: '/gallery/work30.jpg', type: 'image', alt: 'Campaign Production', category: 'branding' },
-  { src: '/gallery/work31.jpg', type: 'image', alt: 'Digital Content', category: 'branding' },
-  { src: '/gallery/work32.jpg', type: 'image', alt: 'Visual Story', category: 'photography' },
-  { src: '/gallery/work33.jpg', type: 'image', alt: 'Creative Direction', category: 'branding' },
-  { src: '/gallery/work34.mp4', type: 'video', alt: 'Promo Video', category: 'video' },
-  { src: '/gallery/work35.mp4', type: 'video', alt: 'Behind the Scenes', category: 'video' },
-];
+/**
+ * Interactive Tilt Card Component
+ * Creates a 3D effect based on mouse position
+ */
+function InteractiveCard({ item, onClick, index }: { item: any, onClick: () => void, index: number }) {
+  const cardRef = useRef<HTMLDivElement>(null);
+  const [rotate, setRotate] = useState({ x: 0, y: 0 });
 
-const ITEMS_PER_PAGE = 12;
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!cardRef.current) return;
+    const card = cardRef.current;
+    const rect = card.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    const centerX = rect.width / 2;
+    const centerY = rect.height / 2;
+    
+    // Calculate rotation (max 15 degrees)
+    const rotateX = ((y - centerY) / centerY) * -10;
+    const rotateY = ((x - centerX) / centerX) * 10;
+    
+    setRotate({ x: rotateX, y: rotateY });
+  };
+
+  const handleMouseLeave = () => {
+    setRotate({ x: 0, y: 0 });
+  };
+
+  return (
+    <div
+      ref={cardRef}
+      className="group relative aspect-[4/5] rounded-2xl overflow-hidden cursor-pointer transition-transform duration-200 ease-out"
+      style={{
+        perspective: '1000px',
+        transform: `rotateX(${rotate.x}deg) rotateY(${rotate.y}deg)`,
+      }}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+      onClick={onClick}
+    >
+      {/* Glow highlight */}
+      <div className="absolute inset-0 z-10 bg-gradient-to-br from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+
+      {item.type === 'image' ? (
+        <img
+          src={item.src}
+          alt={item.alt}
+          className="w-full h-full object-cover transform scale-105 group-hover:scale-110 transition-transform duration-700"
+          loading="lazy"
+        />
+      ) : (
+        <video
+          src={item.src}
+          muted
+          playsInline
+          className="w-full h-full object-cover transform scale-105 group-hover:scale-110 transition-transform duration-700"
+          onMouseOver={(e) => (e.target as HTMLVideoElement).play()}
+          onMouseOut={(e) => { const v = e.target as HTMLVideoElement; v.pause(); v.currentTime = 0; }}
+        />
+      )}
+
+      {/* Content Overlay */}
+      <div className="absolute inset-0 bg-black/20 group-hover:bg-black/40 transition-all duration-300 flex flex-col justify-end p-6">
+        <div className="translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300">
+          <p className="text-white font-bold text-lg mb-1">{item.alt}</p>
+          <p className="text-red-500 text-xs tracking-widest uppercase">{item.category}</p>
+        </div>
+        
+        <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity">
+           {item.type === 'video' ? <Play className="text-white" size={24} /> : <Maximize2 className="text-white" size={20} />}
+        </div>
+      </div>
+
+      {/* Video badge */}
+      {item.type === 'video' && (
+        <div className="absolute top-4 left-4 bg-red-600/90 text-white text-[10px] px-2 py-0.5 rounded-full font-bold uppercase tracking-tighter">
+          Motion
+        </div>
+      )}
+    </div>
+  );
+}
+
+const ITEMS_PER_PAGE = 8;
 
 export default function GallerySection({ language }: GallerySectionProps) {
+  const t = GALLERY_CONTENT[language as keyof typeof GALLERY_CONTENT] || GALLERY_CONTENT.en;
+  const isRtl = language === 'ar';
+  
   const [activeFilter, setActiveFilter] = useState('all');
   const [visibleCount, setVisibleCount] = useState(ITEMS_PER_PAGE);
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
   const [featuredIndex, setFeaturedIndex] = useState(0);
-  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
-  const content = {
-    en: {
-      title: 'Our',
-      titleHighlight: 'Gallery',
-      subtitle: 'A cinematic showcase of our creative work and productions',
-      filters: {
-        all: 'All Works',
-        video: 'Video',
-        photography: 'Photography',
-        branding: 'Branding',
-        events: 'Events',
-      },
-      loadMore: 'Load More',
-      featured: 'Featured Work',
-    },
-    ar: {
-      title: 'معرض',
-      titleHighlight: 'أعمالنا',
-      subtitle: 'عرض سينمائي لأعمالنا الإبداعية وإنتاجاتنا',
-      filters: {
-        all: 'جميع الأعمال',
-        video: 'فيديو',
-        photography: 'تصوير',
-        branding: 'هوية بصرية',
-        events: 'فعاليات',
-      },
-      loadMore: 'عرض المزيد',
-      featured: 'أعمال مميزة',
-    },
-  };
-
-  const t = content[language as keyof typeof content] || content.en;
-
-  const filteredItems = activeFilter === 'all'
-    ? galleryItems
-    : galleryItems.filter(item => item.category === activeFilter);
-
-  const visibleItems = filteredItems.slice(0, visibleCount);
-
-  // Featured carousel (أول 6 عناصر)
-  const featuredItems = galleryItems.slice(0, 6);
-
-  useEffect(() => {
-    intervalRef.current = setInterval(() => {
-      setFeaturedIndex((prev) => (prev + 1) % featuredItems.length);
-    }, 4000);
-    return () => {
-      if (intervalRef.current) clearInterval(intervalRef.current);
-    };
-  }, [featuredItems.length]);
-
-  // Reset visible count when filter changes
-  useEffect(() => {
-    setVisibleCount(ITEMS_PER_PAGE);
+  const filteredItems = useMemo(() => {
+    return activeFilter === 'all'
+      ? GALLERY_CONTENT.items
+      : GALLERY_CONTENT.items.filter(item => item.category === activeFilter);
   }, [activeFilter]);
 
-  const openLightbox = (index: number) => {
-    setLightboxIndex(index);
-    document.body.style.overflow = 'hidden';
-  };
+  const visibleItems = filteredItems.slice(0, visibleCount);
+  const featuredItems = GALLERY_CONTENT.items.slice(0, 5);
 
-  const closeLightbox = () => {
-    setLightboxIndex(null);
-    document.body.style.overflow = '';
-  };
-
-  const navigateLightbox = (direction: 'prev' | 'next') => {
-    if (lightboxIndex === null) return;
-    const total = visibleItems.length;
-    if (direction === 'next') {
-      setLightboxIndex((lightboxIndex + 1) % total);
-    } else {
-      setLightboxIndex((lightboxIndex - 1 + total) % total);
-    }
-  };
-
-  // Keyboard navigation for lightbox
+  // Auto-slide for featured
   useEffect(() => {
-    const total = visibleItems.length;
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (lightboxIndex === null) return;
-      if (e.key === 'Escape') closeLightbox();
-      if (e.key === 'ArrowRight') setLightboxIndex((lightboxIndex + 1) % total);
-      if (e.key === 'ArrowLeft') setLightboxIndex((lightboxIndex - 1 + total) % total);
-    };
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [lightboxIndex, visibleItems.length]);
+    const timer = setInterval(() => {
+      setFeaturedIndex(prev => (prev + 1) % featuredItems.length);
+    }, 5000);
+    return () => clearInterval(timer);
+  }, [featuredItems.length]);
 
   return (
-    <section id="gallery" className="py-20 bg-black relative overflow-hidden">
+    <section id="gallery" className="py-24 bg-black relative overflow-hidden">
       <MediaBackground
         backgroundImage="/backgrounds/clients/clients-bg.jpg"
-        overlayOpacity={0.90}
+        overlayOpacity={0.96}
         className="absolute inset-0"
-      >
-        <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-transparent to-black/80"></div>
-      </MediaBackground>
-
+      />
+      
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        {/* Header */}
-        <div className="text-center mb-12">
-          <h2 className="text-4xl sm:text-5xl font-bold text-white mb-4">
-            {t.title} <span className="text-red-600">{t.titleHighlight}</span>
+        
+        {/* Header with Visual Rhythm */}
+        <div className="text-center mb-20 animate-fade-in">
+          <h2 className="text-4xl sm:text-7xl font-bold text-white mb-6 tracking-tighter">
+            {isRtl ? (
+              <>{t.title} <span className="text-red-600">{t.titleHighlight}</span></>
+            ) : (
+              <>{t.title} <span className="text-red-600">{t.titleHighlight}</span></>
+            )}
           </h2>
-          <p className="text-xl text-gray-300 max-w-3xl mx-auto">{t.subtitle}</p>
+          <p className="text-xl text-gray-400 max-w-2xl mx-auto font-light leading-relaxed">
+            {t.subtitle}
+          </p>
         </div>
 
-        {/* Featured Carousel */}
-        <div className="mb-16">
-          <h3 className="text-2xl font-bold text-white mb-6 text-center">{t.featured}</h3>
-          <div className="relative h-[400px] sm:h-[500px] max-w-4xl mx-auto rounded-2xl overflow-hidden">
-            {featuredItems.map((item, idx) => (
-              <div
-                key={item.src}
-                className={`absolute inset-0 transition-all duration-1000 ease-in-out cursor-pointer ${
-                  idx === featuredIndex ? 'opacity-100 scale-100 z-20' : 'opacity-0 scale-95 z-10'
-                }`}
-                onClick={() => openLightbox(galleryItems.indexOf(item))}
-              >
-                {item.type === 'image' ? (
-                  <img
-                    src={item.src}
-                    alt={item.alt}
-                    className="w-full h-full object-cover"
-                    loading="lazy"
-                  />
-                ) : (
-                  <video
-                    src={item.src}
-                    autoPlay
-                    loop
-                    muted
-                    playsInline
-                    className="w-full h-full object-cover"
-                  />
-                )}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-                <div className="absolute bottom-6 left-6 text-white">
-                  <p className="text-lg font-semibold">{item.alt}</p>
-                  {item.type === 'video' && (
-                    <div className="flex items-center gap-2 mt-2 text-red-400">
-                      <Play size={16} /> <span className="text-sm">Video</span>
-                    </div>
-                  )}
-                </div>
-              </div>
-            ))}
-            {/* Dots navigation */}
-            <div className="absolute bottom-4 right-6 flex gap-2 z-30">
-              {featuredItems.map((_, idx) => (
-                <button
-                  key={idx}
-                  className={`w-3 h-3 rounded-full transition-all duration-300 ${
-                    idx === featuredIndex ? 'bg-red-600 w-8' : 'bg-white/50 hover:bg-white/80'
+        {/* Featured Showcase (Cinematic Large View) */}
+        <div className="mb-24 group/gallery">
+           <div className="relative aspect-[21/9] rounded-3xl overflow-hidden shadow-2xl border border-white/5">
+              {featuredItems.map((item, idx) => (
+                <div
+                  key={item.src}
+                  className={`absolute inset-0 transition-opacity duration-1000 ${
+                    idx === featuredIndex ? 'opacity-100 z-10' : 'opacity-0 z-0'
                   }`}
-                  onClick={() => setFeaturedIndex(idx)}
-                />
+                >
+                  <img src={item.src} className="w-full h-full object-cover" alt="Featured" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent pointer-events-none" />
+                </div>
               ))}
-            </div>
-          </div>
+              <div className="absolute bottom-10 left-10 z-20">
+                <p className="text-red-600 font-bold uppercase tracking-widest text-sm mb-2">{t.featured}</p>
+                <h4 className="text-3xl text-white font-bold">{featuredItems[featuredIndex]?.alt}</h4>
+              </div>
+              
+              <div className="absolute bottom-10 right-10 z-20 flex gap-2">
+                {featuredItems.map((_, idx) => (
+                  <div 
+                    key={idx} 
+                    className={`h-1 transition-all duration-500 rounded-full ${idx === featuredIndex ? 'w-8 bg-red-600' : 'w-2 bg-white/20'}`} 
+                  />
+                ))}
+              </div>
+           </div>
         </div>
 
-        {/* Filter Tabs */}
-        <div className="flex flex-wrap justify-center gap-3 mb-12">
+        {/* Filters */}
+        <div className="flex flex-wrap justify-center gap-4 mb-16">
           {Object.entries(t.filters).map(([key, label]) => (
             <button
               key={key}
-              onClick={() => setActiveFilter(key)}
-              className={`px-6 py-3 rounded-full font-semibold text-sm transition-all duration-300 ${
+              onClick={() => { setActiveFilter(key); setVisibleCount(ITEMS_PER_PAGE); }}
+              className={`px-8 py-3 rounded-full text-sm font-medium transition-all duration-500 ${
                 activeFilter === key
                   ? 'bg-red-600 text-white shadow-lg shadow-red-600/30'
-                  : 'bg-white/10 text-gray-300 hover:bg-white/20 hover:text-white backdrop-blur-sm'
+                  : 'bg-white/5 text-gray-400 hover:bg-white/10 hover:text-white'
               }`}
             >
               {label}
@@ -242,108 +189,65 @@ export default function GallerySection({ language }: GallerySectionProps) {
           ))}
         </div>
 
-        {/* Gallery Grid */}
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+        {/* Interactive Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {visibleItems.map((item, idx) => (
-            <div
-              key={item.src}
-              className="group relative aspect-square rounded-xl overflow-hidden cursor-pointer transform hover:scale-[1.02] transition-all duration-500"
-              onClick={() => openLightbox(idx)}
+            <div 
+              key={`${item.src}-${idx}`}
+              className={idx % 5 === 0 ? 'lg:col-span-2 lg:row-span-2' : ''}
             >
-              {item.type === 'image' ? (
-                <img
-                  src={item.src}
-                  alt={item.alt}
-                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-                  loading="lazy"
-                />
-              ) : (
-                <video
-                  src={item.src}
-                  muted
-                  playsInline
-                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-                  onMouseOver={(e) => (e.target as HTMLVideoElement).play()}
-                  onMouseOut={(e) => { const v = e.target as HTMLVideoElement; v.pause(); v.currentTime = 0; }}
-                />
-              )}
-              {/* Hover Overlay */}
-              <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-all duration-300 flex items-center justify-center">
-                <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                  {item.type === 'video' ? (
-                    <Play className="w-10 h-10 text-white drop-shadow-lg" />
-                  ) : (
-                    <Maximize2 className="w-8 h-8 text-white drop-shadow-lg" />
-                  )}
-                </div>
-              </div>
-              {/* Video badge */}
-              {item.type === 'video' && (
-                <div className="absolute top-3 right-3 bg-red-600 text-white text-xs px-2 py-1 rounded-full font-semibold">
-                  ▶ Video
-                </div>
-              )}
+               <InteractiveCard 
+                  item={item} 
+                  index={idx}
+                  onClick={() => setLightboxIndex(GALLERY_CONTENT.items.indexOf(item))} 
+               />
             </div>
           ))}
         </div>
 
         {/* Load More */}
         {visibleCount < filteredItems.length && (
-          <div className="text-center mt-12">
+          <div className="text-center mt-20">
             <button
               onClick={() => setVisibleCount(prev => prev + ITEMS_PER_PAGE)}
-              className="px-8 py-4 bg-red-600 text-white font-semibold rounded-lg hover:bg-red-700 transform hover:scale-105 transition-all duration-300 shadow-xl"
+              className="group relative px-12 py-5 bg-white text-black font-bold rounded-2xl hover:bg-red-600 hover:text-white transition-all duration-500"
             >
-              {t.loadMore} ({filteredItems.length - visibleCount} {language === 'ar' ? 'متبقي' : 'remaining'})
+              <span className="relative z-10">
+                {t.loadMore} ({filteredItems.length - visibleCount} {t.remaining})
+              </span>
             </button>
           </div>
         )}
       </div>
 
-      {/* Lightbox */}
-      {lightboxIndex !== null && visibleItems[lightboxIndex] && (
-        <div className="fixed inset-0 z-50 bg-black/95 flex items-center justify-center p-4" onClick={closeLightbox}>
-          <button
-            className="absolute top-6 right-6 text-white hover:text-red-400 transition-colors z-50"
-            onClick={closeLightbox}
-          >
-            <X size={32} />
+      {/* Lightbox Implementation */}
+      {lightboxIndex !== null && (
+        <div className="fixed inset-0 z-[100] bg-black/98 flex items-center justify-center p-6 backdrop-blur-xl animate-fade-in" onClick={() => setLightboxIndex(null)}>
+          <button className="absolute top-10 right-10 text-white/50 hover:text-white transition-colors" onClick={() => setLightboxIndex(null)}>
+            <X size={40} />
           </button>
-
-          <button
-            className="absolute left-4 top-1/2 -translate-y-1/2 text-white hover:text-red-400 transition-colors z-50 bg-black/50 p-3 rounded-full"
-            onClick={(e) => { e.stopPropagation(); navigateLightbox('prev'); }}
-          >
-            <ChevronLeft size={28} />
-          </button>
-
-          <button
-            className="absolute right-4 top-1/2 -translate-y-1/2 text-white hover:text-red-400 transition-colors z-50 bg-black/50 p-3 rounded-full"
-            onClick={(e) => { e.stopPropagation(); navigateLightbox('next'); }}
-          >
-            <ChevronRight size={28} />
-          </button>
-
-          <div className="max-w-5xl max-h-[85vh] w-full" onClick={(e) => e.stopPropagation()}>
-            {visibleItems[lightboxIndex].type === 'image' ? (
-              <img
-                src={visibleItems[lightboxIndex].src}
-                alt={visibleItems[lightboxIndex].alt}
-                className="w-full h-full max-h-[85vh] object-contain rounded-lg"
-              />
-            ) : (
-              <video
-                src={visibleItems[lightboxIndex].src}
-                autoPlay
-                controls
-                loop
-                className="w-full h-full max-h-[85vh] object-contain rounded-lg"
-              />
-            )}
-            <p className="text-center text-gray-400 mt-4 text-sm">
-              {visibleItems[lightboxIndex].alt} — {lightboxIndex + 1} / {visibleItems.length}
-            </p>
+          
+          <div className="relative max-w-6xl w-full aspect-video rounded-3xl overflow-hidden shadow-2xl" onClick={e => e.stopPropagation()}>
+             {GALLERY_CONTENT.items[lightboxIndex].type === 'image' ? (
+                <img src={GALLERY_CONTENT.items[lightboxIndex].src} className="w-full h-full object-contain" alt="Preview" />
+             ) : (
+                <video src={GALLERY_CONTENT.items[lightboxIndex].src} controls autoPlay className="w-full h-full" />
+             )}
           </div>
+
+          <button 
+            className="absolute left-10 p-4 rounded-full bg-white/5 hover:bg-white/10 text-white transition-all"
+            onClick={e => { e.stopPropagation(); setLightboxIndex(prev => prev! > 0 ? prev! - 1 : GALLERY_CONTENT.items.length - 1) }}
+          >
+            <ChevronLeft size={32} />
+          </button>
+
+          <button 
+            className="absolute right-10 p-4 rounded-full bg-white/5 hover:bg-white/10 text-white transition-all"
+            onClick={e => { e.stopPropagation(); setLightboxIndex(prev => (prev! + 1) % GALLERY_CONTENT.items.length) }}
+          >
+            <ChevronRight size={32} />
+          </button>
         </div>
       )}
     </section>
