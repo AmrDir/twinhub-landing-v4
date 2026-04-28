@@ -15,7 +15,7 @@ import WhatsAppButton from './components/common/WhatsAppButton';
 // Admin Pages (To be created)
 import LoginPage from './pages/admin/LoginPage';
 import Dashboard from './pages/admin/Dashboard';
-import { getSession } from './lib/supabase';
+import { supabase } from './lib/supabase';
 
 function App() {
   const [language, setLanguage] = useState('en');
@@ -23,18 +23,19 @@ function App() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Check initial session
-    const initAuth = async () => {
-      try {
-        const session = await getSession();
-        setSession(session);
-      } catch (e) {
-        console.error('Auth check failed');
-      } finally {
-        setLoading(false);
-      }
-    };
-    initAuth();
+    // Read session immediately from localStorage (no network round-trip)
+    supabase?.auth.getSession().then(({ data: { session } }) => {
+      setSession(session);
+      setLoading(false);
+    }) ?? setLoading(false);
+
+    // Stay in sync with login / logout / token-refresh events
+    const { data: { subscription } } = supabase?.auth.onAuthStateChange((_event, session) => {
+      setSession(session);
+      setLoading(false);
+    }) ?? { data: { subscription: null } };
+
+    return () => subscription?.unsubscribe();
   }, []);
 
   const handleLanguageChange = (newLanguage: string) => {
@@ -45,7 +46,7 @@ function App() {
 
   if (loading) {
     return <div className="min-h-screen bg-black flex items-center justify-center">
-      <div className="w-12 h-12 border-4 border-red-600 border-t-transparent rounded-full animate-spin"></div>
+      <div className="w-12 h-12 border-4 border-cinema-red border-t-transparent rounded-full animate-spin"></div>
     </div>;
   }
 

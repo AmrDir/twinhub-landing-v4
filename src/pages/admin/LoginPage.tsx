@@ -1,8 +1,10 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { LogIn } from 'lucide-react';
 import { signInWithEmail } from '../../lib/supabase';
 
 export default function LoginPage() {
+  const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
@@ -14,8 +16,8 @@ export default function LoginPage() {
     setError(null);
     try {
       await signInWithEmail(email, password);
-      // Supabase handles the session, App.tsx will detect it and redirect
-      window.location.href = '/admin';
+      // onAuthStateChange in App.tsx fires immediately — just navigate
+      navigate('/admin', { replace: true });
     } catch (err: any) {
       setError(err.message || 'Invalid email or password');
       setLoading(false);
