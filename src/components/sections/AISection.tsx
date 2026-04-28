@@ -60,7 +60,7 @@ export default function AISection({ language }: AISectionProps) {
               {t.features.map((feature, index) => (
                 <div 
                   key={feature.id}
-                  className={`group relative p-8 rounded-3xl border border-white/5 bg-white/[0.03] backdrop-blur-xl hover:bg-white/[0.07] hover:border-red-500/30 transition-all duration-500 flex flex-col justify-between ${
+                  className={`group relative p-8 rounded-3xl border border-white/10 bg-white/[0.06] backdrop-blur-xl hover:bg-white/[0.10] hover:border-cinema-red/30 transition-all duration-500 flex flex-col justify-between ${
                     index === 0 ? 'lg:-translate-y-6' : 'lg:translate-y-6'
                   }`}
                 >
@@ -82,7 +82,7 @@ export default function AISection({ language }: AISectionProps) {
                     </p>
                   </div>
                   
-                  <div className="pt-4 border-t border-white/5 opacity-0 group-hover:opacity-100 transition-opacity">
+                  <div className="pt-4 border-t border-white/10 opacity-0 group-hover:opacity-100 transition-opacity">
                      <span className={`text-sm font-medium ${
                        feature.id === 'apps' ? 'text-electric-blue' : 'text-fusion-teal'
                      }`}>{language === 'ar' ? 'اعرف المزيد' : 'Learn More'}</span>

@@ -60,6 +60,67 @@ export const AI_SOLUTIONS = {
 };
 
 // ============================================================
+// محتوى قسم المنتجات والمنصات الذكية / Products & AI Platforms
+// ============================================================
+export const PRODUCTS_CONTENT = {
+  title: {
+    en: 'Our Smart Platforms',
+    ar: 'منصاتنا وتطبيقاتنا الذكية',
+  },
+  subtitle: {
+    en: 'Innovations Driven By AI',
+    ar: 'ابتكارات مدفوعة بالذكاء الاصطناعي',
+  },
+  products: [
+    {
+      id: 'ask-prompt-me',
+      name: { en: 'Ask Prompt Me', ar: 'Ask Prompt Me' },
+      description: {
+        en: 'An advanced AI prompting platform designed to supercharge your workflow and creative processes.',
+        ar: 'منصة ذكاء اصطناعي متقدمة لتوليد وهندسة الأوامر (Prompt Engineering) لتعزيز سير العمل والإبداع.'
+      },
+      features: {
+        en: ['AI Workflow Automation', 'Prompt Library', 'API Integration'],
+        ar: ['أتمتة سير العمل', 'مكتبة أوامر جاهزة', 'ربط برمجي API']
+      },
+      media: '/products/ask-prompt-me.mp4',
+      type: 'video',
+      link: '#'
+    },
+    {
+      id: 'lingualink',
+      name: { en: 'LinguaLink', ar: 'LinguaLink' },
+      description: {
+        en: 'A seamless AI-powered translation and localization hub breaking language barriers in real-time.',
+        ar: 'مركز ترجمة وتوطين متقدم يعمل بالذكاء الاصطناعي لكسر حواجز اللغة في الوقت الفعلي.'
+      },
+      features: {
+        en: ['Real-time Translation', 'Contextual Localization', 'Multi-format Support'],
+        ar: ['ترجمة فورية', 'توطين سياقي', 'دعم صيغ متعددة']
+      },
+      media: '/products/lingualink.mp4',
+      type: 'video',
+      link: '#'
+    },
+    {
+      id: 'karma-house',
+      name: { en: 'Karma House', ar: 'كارما هاوس (Karma House)' },
+      description: {
+        en: 'Our most ambitious invention. An intelligent ecosystem combining cinematic aesthetics with autonomous AI reasoning.',
+        ar: 'اختراعنا الأهم والأكثر طموحاً على كافة المستويات. نظام بيئي ذكي يجمع بين الجماليات السينمائية والذكاء الاصطناعي المستقل لحلول متكاملة.'
+      },
+      features: {
+        en: ['Autonomous AI', 'Cinematic Rendering', 'Emotional Intelligence'],
+        ar: ['ذكاء اصطناعي مستقل', 'عرض سينمائي', 'ذكاء عاطفي']
+      },
+      media: '/products/karma-house.mp4',
+      type: 'video',
+      link: '#'
+    }
+  ]
+};
+
+// ============================================================
 // إعدادات الموقع العامة / General Site Settings
 // ============================================================
 export const SITE_CONFIG = {

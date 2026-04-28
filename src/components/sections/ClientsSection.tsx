@@ -1,22 +1,28 @@
 import { CLIENTS_CONTENT } from '../../config/site.config';
+import { useSiteData } from '../../context/SiteContext';
+import MediaBackground from '../common/MediaBackground';
 
 interface ClientsSectionProps {
   language: string;
 }
 
 export default function ClientsSection({ language }: ClientsSectionProps) {
+  const { settings } = useSiteData();
   const t = CLIENTS_CONTENT[language as keyof typeof CLIENTS_CONTENT] || CLIENTS_CONTENT.en;
   
   // مضاعفة الشعارات لضمان وجود حلقة مستمرة بدون فراغات
   const doubleLogos = [...CLIENTS_CONTENT.logos, ...CLIENTS_CONTENT.logos];
 
+  const bgMedia = settings?.clients_bg_media || '/backgrounds/clients/clients-bg.jpg';
+  const bgOpacity = settings?.clients_bg_opacity ?? 0.95;
+
   return (
     <section id="clients" className="relative py-24 bg-black overflow-hidden border-t border-white/5">
-      {/* Background cinematic depth */}
-      <div className="absolute inset-0 z-0">
-        <div className="absolute inset-0 bg-[#0A0A0A]"></div>
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(220,38,38,0.05)_0%,transparent_70%)]"></div>
-      </div>
+      <MediaBackground
+        backgroundImage={bgMedia}
+        overlayOpacity={bgOpacity}
+        className="absolute inset-0 z-0"
+      />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Section Header */}
@@ -31,7 +37,7 @@ export default function ClientsSection({ language }: ClientsSectionProps) {
 
         {/* Infinite Marquee Section */}
         <div className="relative py-10 overflow-hidden before:absolute before:left-0 before:top-0 before:z-10 before:h-full before:w-32 before:bg-gradient-to-r before:from-black before:to-transparent after:absolute after:right-0 after:top-0 after:z-10 after:h-full after:w-32 after:bg-gradient-to-l after:from-black after:to-transparent">
-          <div className="flex gap-16 animate-infinite-scroll hover:pause-animation items-center">
+          <div className="flex gap-16 animate-infinite-scroll items-center">
             {doubleLogos.map((img, idx) => (
               <div 
                 key={`${img}-${idx}`} 
@@ -61,7 +67,7 @@ export default function ClientsSection({ language }: ClientsSectionProps) {
           width: max-content;
           animation: infinite-scroll 40s linear infinite;
         }
-        .pause-animation {
+        .animate-infinite-scroll:hover {
           animation-play-state: paused;
         }
       `}</style>

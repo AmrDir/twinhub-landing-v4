@@ -30,13 +30,13 @@ export default function Header({ language, onLanguageChange }: HeaderProps) {
   };
 
   const navItems = {
-    en: ['Home', 'Services', 'AI Solutions', 'Gallery', 'Clients', 'About', 'Contact'],
-    ar: ['الرئيسية', 'الخدمات', 'حلول الذكاء الاصطناعي', 'المعرض', 'العملاء', 'من نحن', 'اتصل بنا']
+    en: ['Home', 'Services', 'AI Solutions', 'Products', 'Gallery', 'Clients', 'About', 'Contact'],
+    ar: ['الرئيسية', 'الخدمات', 'حلول الذكاء الاصطناعي', 'منتجاتنا', 'المعرض', 'العملاء', 'من نحن', 'اتصل بنا']
   };
 
   const navLinks = {
-    en: ['home', 'services', 'ai', 'gallery', 'clients', 'about', 'contact'],
-    ar: ['home', 'services', 'ai', 'gallery', 'clients', 'about', 'contact']
+    en: ['home', 'services', 'ai', 'products', 'gallery', 'clients', 'about', 'contact'],
+    ar: ['home', 'services', 'ai', 'products', 'gallery', 'clients', 'about', 'contact']
   };
 
   const currentNavItems = navItems[language as keyof typeof navItems] || navItems.en;

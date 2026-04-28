@@ -2,6 +2,8 @@ import { useEffect, useRef, useState, useMemo } from 'react';
 import { ChevronLeft, ChevronRight, X, Play, Maximize2 } from 'lucide-react';
 import MediaBackground from '../common/MediaBackground';
 import { GALLERY_CONTENT } from '../../config/site.config';
+import { useSiteData } from '../../context/SiteContext';
+import { getYoutubeVideoId } from '../../lib/utils';
 
 interface GallerySectionProps {
   language: string;
@@ -38,15 +40,19 @@ function InteractiveCard({ item, onClick, index }: { item: any, onClick: () => v
   return (
     <div
       ref={cardRef}
-      className="group relative aspect-[4/5] rounded-2xl overflow-hidden cursor-pointer transition-transform duration-200 ease-out"
+      className="group relative aspect-[4/5] rounded-[2rem] overflow-hidden cursor-pointer transition-all duration-300 ease-out"
       style={{
-        perspective: '1000px',
+        perspective: '1200px',
         transform: `rotateX(${rotate.x}deg) rotateY(${rotate.y}deg)`,
+        boxShadow: rotate.x !== 0 || rotate.y !== 0 
+          ? `${-rotate.y}px ${rotate.x}px 30px rgba(0,0,0,0.5)` 
+          : '0 10px 20px rgba(0,0,0,0.3)'
       }}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
       onClick={onClick}
     >
+      <div className="inner-glow"></div>
       {/* Glow highlight */}
       <div className="absolute inset-0 z-10 bg-gradient-to-br from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
 
@@ -57,22 +63,41 @@ function InteractiveCard({ item, onClick, index }: { item: any, onClick: () => v
           className="w-full h-full object-cover transform scale-105 group-hover:scale-110 transition-transform duration-700"
           loading="lazy"
         />
-      ) : (
-        <video
-          src={item.src}
-          muted
-          playsInline
-          className="w-full h-full object-cover transform scale-105 group-hover:scale-110 transition-transform duration-700"
-          onMouseOver={(e) => (e.target as HTMLVideoElement).play()}
-          onMouseOut={(e) => { const v = e.target as HTMLVideoElement; v.pause(); v.currentTime = 0; }}
-        />
-      )}
+      ) : item.type === 'video' ? (
+        <div className="relative w-full h-full bg-gray-900 overflow-hidden">
+          {(() => {
+            const ytId = getYoutubeVideoId(item.src);
+            if (ytId) {
+              return (
+                <div className="w-full h-full overflow-hidden pointer-events-none relative">
+                   <img src={`https://img.youtube.com/vi/${ytId}/hqdefault.jpg`} className="w-full h-full object-cover transform scale-105 group-hover:scale-110 transition-transform duration-700 opacity-80" alt={item.alt} />
+                </div>
+              );
+            }
+            return (
+              <video
+                src={item.src}
+                className="w-full h-full object-cover opacity-80 transform scale-105 group-hover:scale-110 transition-transform duration-700"
+                muted
+                loop
+                playsInline
+                autoPlay
+              />
+            );
+          })()}
+          <div className="absolute inset-0 flex items-center justify-center">
+            <div className="w-16 h-16 rounded-full bg-black/50 backdrop-blur-md flex items-center justify-center border border-white/20 group-hover:scale-110 group-hover:bg-cinema-red transition-all duration-300">
+              <Play className="text-white ml-1" size={24} />
+            </div>
+          </div>
+        </div>
+      ) : null}
 
       {/* Content Overlay */}
       <div className="absolute inset-0 bg-black/20 group-hover:bg-black/40 transition-all duration-300 flex flex-col justify-end p-6">
         <div className="translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300">
           <p className="text-white font-bold text-lg mb-1">{item.alt}</p>
-          <p className="text-red-500 text-xs tracking-widest uppercase">{item.category}</p>
+          <p className="text-cinema-red-light text-xs tracking-widest uppercase">{item.category}</p>
         </div>
         
         <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity">
@@ -82,7 +107,7 @@ function InteractiveCard({ item, onClick, index }: { item: any, onClick: () => v
 
       {/* Video badge */}
       {item.type === 'video' && (
-        <div className="absolute top-4 left-4 bg-red-600/90 text-white text-[10px] px-2 py-0.5 rounded-full font-bold uppercase tracking-tighter">
+        <div className="absolute top-4 left-4 bg-cinema-red/90 text-white text-[10px] px-2 py-0.5 rounded-full font-bold uppercase tracking-tighter">
           Motion
         </div>
       )}
@@ -93,9 +118,18 @@ function InteractiveCard({ item, onClick, index }: { item: any, onClick: () => v
 const ITEMS_PER_PAGE = 8;
 
 export default function GallerySection({ language }: GallerySectionProps) {
+  const { gallery: dbGallery, settings } = useSiteData();
   const t = GALLERY_CONTENT[language as keyof typeof GALLERY_CONTENT] || GALLERY_CONTENT.en;
   const isRtl = language === 'ar';
   
+  // Construct final gallery items array
+  const activeGallery = dbGallery.length > 0 ? dbGallery.map(g => ({
+    src: g.media,
+    type: g.media_type,
+    category: g.category,
+    alt: g.alt_text
+  })) : GALLERY_CONTENT.items;
+
   const [activeFilter, setActiveFilter] = useState('all');
   const [visibleCount, setVisibleCount] = useState(ITEMS_PER_PAGE);
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
@@ -103,12 +137,12 @@ export default function GallerySection({ language }: GallerySectionProps) {
 
   const filteredItems = useMemo(() => {
     return activeFilter === 'all'
-      ? GALLERY_CONTENT.items
-      : GALLERY_CONTENT.items.filter(item => item.category === activeFilter);
-  }, [activeFilter]);
+      ? activeGallery
+      : activeGallery.filter(item => item.category === activeFilter);
+  }, [activeFilter, activeGallery]);
 
   const visibleItems = filteredItems.slice(0, visibleCount);
-  const featuredItems = GALLERY_CONTENT.items.slice(0, 5);
+  const featuredItems = activeGallery.slice(0, 5);
 
   // Auto-slide for featured
   useEffect(() => {
@@ -121,30 +155,32 @@ export default function GallerySection({ language }: GallerySectionProps) {
   return (
     <section id="gallery" className="py-24 bg-black relative overflow-hidden">
       <MediaBackground
-        backgroundImage="/backgrounds/clients/clients-bg.jpg"
-        overlayOpacity={0.96}
+        backgroundImage={settings?.gallery_bg_media || "/backgrounds/clients/clients-bg.jpg"}
+        overlayOpacity={settings?.gallery_bg_opacity ?? 0.92}
         className="absolute inset-0"
       />
       
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         
         {/* Header with Visual Rhythm */}
-        <div className="text-center mb-20 animate-fade-in">
-          <h2 className="text-4xl sm:text-7xl font-bold text-white mb-6 tracking-tighter">
+        <div className="text-center mb-24 animate-fade-in">
+          <h2 className="text-5xl sm:text-8xl font-bold text-white mb-8 tracking-tighter leading-none">
             {isRtl ? (
-              <>{t.title} <span className="text-red-600">{t.titleHighlight}</span></>
+              <>{t.title} <span className="text-cinema-red">{t.titleHighlight}</span></>
             ) : (
-              <>{t.title} <span className="text-red-600">{t.titleHighlight}</span></>
+              <>{t.title} <span className="text-cinema-red">{t.titleHighlight}</span></>
             )}
           </h2>
-          <p className="text-xl text-gray-400 max-w-2xl mx-auto font-light leading-relaxed">
+          <p className="text-xl sm:text-2xl text-gray-300 max-w-3xl mx-auto font-light leading-relaxed opacity-95">
             {t.subtitle}
           </p>
         </div>
 
         {/* Featured Showcase (Cinematic Large View) */}
-        <div className="mb-24 group/gallery">
-           <div className="relative aspect-[21/9] rounded-3xl overflow-hidden shadow-2xl border border-white/5">
+        <div className="mb-32 group/gallery relative">
+           {/* Layered Shadow for depth */}
+           <div className="absolute -inset-4 bg-cinema-red/5 blur-3xl rounded-[4rem] -z-10"></div>
+           <div className="relative aspect-[3/4] sm:aspect-video lg:aspect-[21/9] rounded-[2rem] sm:rounded-[3rem] overflow-hidden shadow-[0_50px_100px_-20px_rgba(0,0,0,0.8)] border border-white/10">
               {featuredItems.map((item, idx) => (
                 <div
                   key={item.src}
@@ -157,7 +193,7 @@ export default function GallerySection({ language }: GallerySectionProps) {
                 </div>
               ))}
               <div className="absolute bottom-10 left-10 z-20">
-                <p className="text-red-600 font-bold uppercase tracking-widest text-sm mb-2">{t.featured}</p>
+                <p className="text-cinema-red font-bold uppercase tracking-widest text-sm mb-2">{t.featured}</p>
                 <h4 className="text-3xl text-white font-bold">{featuredItems[featuredIndex]?.alt}</h4>
               </div>
               
@@ -165,7 +201,7 @@ export default function GallerySection({ language }: GallerySectionProps) {
                 {featuredItems.map((_, idx) => (
                   <div 
                     key={idx} 
-                    className={`h-1 transition-all duration-500 rounded-full ${idx === featuredIndex ? 'w-8 bg-red-600' : 'w-2 bg-white/20'}`} 
+                    className={`h-1 transition-all duration-500 rounded-full ${idx === featuredIndex ? 'w-8 bg-cinema-red' : 'w-2 bg-white/20'}`} 
                   />
                 ))}
               </div>
@@ -180,7 +216,7 @@ export default function GallerySection({ language }: GallerySectionProps) {
               onClick={() => { setActiveFilter(key); setVisibleCount(ITEMS_PER_PAGE); }}
               className={`px-8 py-3 rounded-full text-sm font-medium transition-all duration-500 ${
                 activeFilter === key
-                  ? 'bg-red-600 text-white shadow-lg shadow-red-600/30'
+                  ? 'bg-cinema-red text-white shadow-lg shadow-cinema-red/30'
                   : 'bg-white/5 text-gray-400 hover:bg-white/10 hover:text-white'
               }`}
             >
@@ -199,7 +235,7 @@ export default function GallerySection({ language }: GallerySectionProps) {
                <InteractiveCard 
                   item={item} 
                   index={idx}
-                  onClick={() => setLightboxIndex(GALLERY_CONTENT.items.indexOf(item))} 
+                  onClick={() => setLightboxIndex(filteredItems.indexOf(item))} 
                />
             </div>
           ))}
@@ -210,7 +246,7 @@ export default function GallerySection({ language }: GallerySectionProps) {
           <div className="text-center mt-20">
             <button
               onClick={() => setVisibleCount(prev => prev + ITEMS_PER_PAGE)}
-              className="group relative px-12 py-5 bg-white text-black font-bold rounded-2xl hover:bg-red-600 hover:text-white transition-all duration-500"
+              className="group relative px-12 py-5 bg-white text-black font-bold rounded-2xl hover:bg-cinema-red hover:text-white transition-all duration-500"
             >
               <span className="relative z-10">
                 {t.loadMore} ({filteredItems.length - visibleCount} {t.remaining})
@@ -228,23 +264,38 @@ export default function GallerySection({ language }: GallerySectionProps) {
           </button>
           
           <div className="relative max-w-6xl w-full aspect-video rounded-3xl overflow-hidden shadow-2xl" onClick={e => e.stopPropagation()}>
-             {GALLERY_CONTENT.items[lightboxIndex].type === 'image' ? (
-                <img src={GALLERY_CONTENT.items[lightboxIndex].src} className="w-full h-full object-contain" alt="Preview" />
-             ) : (
-                <video src={GALLERY_CONTENT.items[lightboxIndex].src} controls autoPlay className="w-full h-full" />
-             )}
+             {(() => {
+                const item = filteredItems[lightboxIndex];
+                if (item.type === 'image') {
+                   return <img src={item.src} className="w-full h-full object-contain" alt={item.alt} />;
+                }
+                const ytId = getYoutubeVideoId(item.src);
+                if (ytId) {
+                   return (
+                     <iframe
+                       src={`https://www.youtube.com/embed/${ytId}?autoplay=1&rel=0&showinfo=0`}
+                       title={item.alt}
+                       frameBorder="0"
+                       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                       className="w-full h-full"
+                       allowFullScreen
+                     />
+                   );
+                }
+                return <video src={item.src} controls autoPlay className="w-full h-full" />;
+             })()}
           </div>
 
           <button 
             className="absolute left-10 p-4 rounded-full bg-white/5 hover:bg-white/10 text-white transition-all"
-            onClick={e => { e.stopPropagation(); setLightboxIndex(prev => prev! > 0 ? prev! - 1 : GALLERY_CONTENT.items.length - 1) }}
+            onClick={e => { e.stopPropagation(); setLightboxIndex(prev => prev! > 0 ? prev! - 1 : filteredItems.length - 1) }}
           >
             <ChevronLeft size={32} />
           </button>
 
           <button 
             className="absolute right-10 p-4 rounded-full bg-white/5 hover:bg-white/10 text-white transition-all"
-            onClick={e => { e.stopPropagation(); setLightboxIndex(prev => (prev! + 1) % GALLERY_CONTENT.items.length) }}
+            onClick={e => { e.stopPropagation(); setLightboxIndex(prev => (prev! + 1) % filteredItems.length) }}
           >
             <ChevronRight size={32} />
           </button>

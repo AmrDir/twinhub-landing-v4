@@ -7,23 +7,28 @@ if (!supabaseUrl || !supabaseAnonKey) {
   console.warn('Supabase credentials are missing. Dashboard features may not work.');
 }
 
-export const supabase = createClient(
-  supabaseUrl || '',
-  supabaseAnonKey || ''
-);
+export const supabase = (supabaseUrl && supabaseAnonKey) 
+  ? createClient(supabaseUrl, supabaseAnonKey)
+  : null;
 
 /**
  * Helper to check if we are authenticated
  */
 export const getSession = async () => {
-  const { data: { session } } = await supabase.auth.getSession();
-  return session;
+  if (!supabase) return null;
+  try {
+    const { data: { session } } = await supabase.auth.getSession();
+    return session;
+  } catch (e) {
+    return null;
+  }
 };
 
 /**
  * Sign in with Google logic
  */
 export const signInWithGoogle = async () => {
+  if (!supabase) throw new Error('Supabase client not initialized');
   const { data, error } = await supabase.auth.signInWithOAuth({
     provider: 'google',
     options: {
@@ -36,9 +41,24 @@ export const signInWithGoogle = async () => {
 };
 
 /**
+ * Sign in with Email logic
+ */
+export const signInWithEmail = async (email: string, password: string) => {
+  if (!supabase) throw new Error('Supabase client not initialized');
+  const { data, error } = await supabase.auth.signInWithPassword({
+    email,
+    password,
+  });
+  
+  if (error) throw error;
+  return data;
+};
+
+/**
  * Sign out logic
  */
 export const signOut = async () => {
+  if (!supabase) throw new Error('Supabase client not initialized');
   const { error } = await supabase.auth.signOut();
   if (error) throw error;
 };

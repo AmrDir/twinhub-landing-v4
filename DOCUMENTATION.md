@@ -26,7 +26,8 @@
 
 موقع **TwinHub Media & AI Center** هو موقع Landing Page تعريفي لشركة إنتاج وسائط وذكاء اصطناعي مقرها مصر. يتكون من صفحة واحدة (SPA) متعددة الأقسام مع دعم ثنائي اللغة (عربي/إنجليزي).
 
-### المميزات الحالية:
+### المميزات الحالية
+
 - ✅ صفحة واحدة متعددة الأقسام (SPA)
 - ✅ دعم ثنائي اللغة (EN/AR) مع RTL
 - ✅ تصميم متجاوب (Responsive)
@@ -128,7 +129,7 @@ TwinHub-Landing V.4/
 
 ## 4. خريطة الأقسام والمكونات
 
-### ترتيب الأقسام في الصفحة:
+### ترتيب الأقسام في الصفحة
 
 | # | القسم | المكون | الـ ID | الحالة |
 |---|-------|--------|--------|--------|
@@ -142,7 +143,8 @@ TwinHub-Landing V.4/
 | 8 | التواصل | `ContactSection.tsx` | `#contact` | ⚠️ نموذج غير فعّال |
 | 9 | Footer | `Footer.tsx` | - | ⚠️ نشرة بريدية غير فعّالة |
 
-### ملاحظات على التنقل (Navigation):
+### ملاحظات على التنقل (Navigation)
+
 - Header يحتوي على 7 روابط: Home, Services, AI Solutions, **Gallery**, Clients, About, Contact
 - `GallerySection` مُضمّن داخل `AboutSection` وليس قسم مستقل
 - `PortfolioSection.tsx` و `Portfolio.tsx` موجودان لكن **غير مستخدمين**
@@ -167,6 +169,7 @@ TwinHub-Landing V.4/
 ### 5.2 خلفيات الأقسام (`public/backgrounds/`)
 
 #### Hero Section (`backgrounds/hero/`)
+
 | الملف | الاستخدام | المكون |
 |-------|-----------|--------|
 | `hero-bg.mp4` | فيديو خلفية البطل | `HeroSection.tsx` |
@@ -174,12 +177,14 @@ TwinHub-Landing V.4/
 | `mark.png` | علامة TwinHub في الوسط | `HeroSection.tsx` |
 
 #### Services Section (`backgrounds/services/`)
+
 | الملف | الاستخدام | المكون |
 |-------|-----------|--------|
 | `services-bg.jpg` | ⚠️ غير مستخدم (يُستخدم Pexels URL) | - |
 | `services-bg.mp4` | ⚠️ غير مستخدم | - |
 
 #### Clients Section (`backgrounds/clients/`)
+
 | الملف | الاستخدام | المكون |
 |-------|-----------|--------|
 | `twinhub-bg.png` أو `1 twinhub-bg.png` | خلفية قسم العملاء | `ClientsSection.tsx` |
@@ -192,18 +197,21 @@ TwinHub-Landing V.4/
 | `coustmer service-*.png` | ⚠️ غير مستخدم | - |
 
 #### Contact Section (`backgrounds/contact/`)
+
 | الملف | الاستخدام | المكون |
 |-------|-----------|--------|
 | `contact-bg.jpg` | ⚠️ غير مستخدم (يُستخدم Pexels URL) | - |
 | `contact-bg.mp4` | ⚠️ غير مستخدم | - |
 
 ### 5.3 معرض الأعمال (`public/gallery/`)
+
 | الملفات | النوع | الحالة |
 |---------|-------|--------|
 | `work0.jpg` - `work33.jpg` | صور | ⚠️ فقط 5 ملفات مستخدمة في الكود |
 | `work3.mp4`, `work5.mp4`, `work34.mp4`, `work35.mp4` | فيديو | ⚠️ فقط 2 مستخدمة |
 
-### 5.4 حجم الميديا:
+### 5.4 حجم الميديا
+
 - **backgrounds/**: ~62 ميجا
 - **gallery/**: ~97 ميجا
 - **المجموع**: ~159 ميجا
@@ -212,7 +220,7 @@ TwinHub-Landing V.4/
 
 ## 6. تقرير المراجعة الهندسية الشامل 🔍
 
-### ✅ ما يعمل بشكل صحيح (REAL):
+### ✅ ما يعمل بشكل صحيح (REAL)
 
 | العنصر | الحالة | التفاصيل |
 |--------|--------|----------|
@@ -229,7 +237,7 @@ TwinHub-Landing V.4/
 | قائمة الموبايل | ✅ تعمل | Hamburger menu |
 | التأثيرات البصرية | ✅ تعمل | Hover, Animations, Transitions |
 
-### ⚠️ ما لا يعمل حقيقياً (FAKE/NOT FUNCTIONAL):
+### ⚠️ ما لا يعمل حقيقياً (FAKE/NOT FUNCTIONAL)
 
 | العنصر | المشكلة | الأولوية |
 |--------|---------|----------|
@@ -247,9 +255,10 @@ TwinHub-Landing V.4/
 
 ## 7. المشاكل المكتشفة والتوصيات 🔧
 
-### 🔴 مشاكل حرجة (يجب إصلاحها قبل الإنتاج):
+### 🔴 مشاكل حرجة (يجب إصلاحها قبل الإنتاج)
 
 #### 1. نموذج التواصل غير فعّال
+
 ```
 الحالة الحالية: console.log + alert
 المطلوب: ربط مع خدمة إرسال بريد فعلية
@@ -261,6 +270,7 @@ TwinHub-Landing V.4/
 ```
 
 #### 2. النشرة البريدية (Newsletter) غير مربوطة
+
 ```
 الحلول المقترحة:
   - Mailchimp API
@@ -269,14 +279,16 @@ TwinHub-Landing V.4/
 ```
 
 #### 3. سنة حقوق النشر قديمة
+
 ```
 الحالي: © 2024
 المطلوب: © 2026 أو تحديث تلقائي
 ```
 
-### 🟡 مشاكل متوسطة:
+### 🟡 مشاكل متوسطة
 
 #### 4. صور خارجية (External URLs)
+
 ```
 المكون: ServicesSection.tsx - يستخدم Pexels URL
 المكون: ContactSection.tsx - يستخدم Pexels URL
@@ -285,6 +297,7 @@ TwinHub-Landing V.4/
 ```
 
 #### 5. Supabase غير مستخدم
+
 ```
 مُثبّت في package.json: "@supabase/supabase-js": "^2.57.4"
 غير مستخدم في أي ملف
@@ -292,6 +305,7 @@ TwinHub-Landing V.4/
 ```
 
 #### 6. روابط خدمات معطلة
+
 ```
 ServicesSection: روابط "Learn More" تشير لصفحات داخلية غير موجودة
 /services/ai-center, /services/video-production, etc.
@@ -299,15 +313,17 @@ ServicesSection: روابط "Learn More" تشير لصفحات داخلية غي
 ```
 
 #### 7. أسماء ملفات بمسافات
+
 ```
 ملف: "twinhub ric.jpg" - يحتوي مسافة (مشكلة URL encoding)
 ملف: "RED SEA LOGO.png" - مسافات في الاسم
 الحل: إعادة تسمية بدون مسافات
 ```
 
-### 🟢 تحسينات مقترحة:
+### 🟢 تحسينات مقترحة
 
 #### 8. تحسين SEO
+
 ```
 - إضافة Sitemap.xml
 - إضافة robots.txt
@@ -317,6 +333,7 @@ ServicesSection: روابط "Learn More" تشير لصفحات داخلية غي
 ```
 
 #### 9. تحسين الأداء
+
 ```
 - ضغط الصور (WebP format)
 - Lazy loading للصور
@@ -326,6 +343,7 @@ ServicesSection: روابط "Learn More" تشير لصفحات داخلية غي
 ```
 
 #### 10. ملفات غير ضرورية
+
 ```
 - __init__.py files (Python) في كل مجلد
 - .venv/ (مجلد Python virtual environment)
@@ -337,6 +355,7 @@ ServicesSection: روابط "Learn More" تشير لصفحات داخلية غي
 ```
 
 #### 11. أمان
+
 ```
 - لا يوجد ملف .env (جيد - لا أسرار مكشوفة حالياً)
 - لا يوجد HTTPS enforcement في الكود
@@ -383,7 +402,7 @@ ServicesSection: روابط "Learn More" تشير لصفحات داخلية غي
 | **SSL** | مجاني |
 | **Workers** | Edge Functions مجانية |
 
-### 🔄 خطوات نقل الدومين من GoDaddy:
+### 🔄 خطوات نقل الدومين من GoDaddy
 
 1. **لا تنقل الدومين** - فقط غيّر DNS Records
 2. في GoDaddy → DNS Management
@@ -391,7 +410,7 @@ ServicesSection: روابط "Learn More" تشير لصفحات داخلية غي
 4. أو غيّر Nameservers إلى الاستضافة الجديدة
 5. انتظر 24-48 ساعة لانتشار DNS
 
-### 📊 مقارنة سريعة:
+### 📊 مقارنة سريعة
 
 | الميزة | Vercel | Netlify | Cloudflare |
 |--------|--------|---------|------------|
@@ -408,11 +427,13 @@ ServicesSection: روابط "Learn More" تشير لصفحات داخلية غي
 
 ## 9. دليل التشغيل والنشر 🚀
 
-### المتطلبات:
+### المتطلبات
+
 - Node.js >= 18
 - npm >= 9
 
-### التطوير المحلي:
+### التطوير المحلي
+
 ```bash
 # تثبيت التبعيات
 npm install
@@ -434,7 +455,8 @@ npm run build
 npm run preview
 ```
 
-### النشر على Vercel:
+### النشر على Vercel
+
 ```bash
 # 1. تثبيت Vercel CLI
 npm install -g vercel
@@ -449,7 +471,8 @@ vercel
 vercel --prod
 ```
 
-### النشر على Netlify:
+### النشر على Netlify
+
 ```bash
 # 1. تثبيت Netlify CLI
 npm install -g netlify-cli
@@ -462,7 +485,8 @@ npm run build
 netlify deploy --dir=dist --prod
 ```
 
-### إعدادات البناء:
+### إعدادات البناء
+
 - **Build Command**: `npm run build`
 - **Output Directory**: `dist`
 - **Node Version**: `18+`
@@ -471,28 +495,32 @@ netlify deploy --dir=dist --prod
 
 ## 10. خطة التطوير والتحسين 📈
 
-### المرحلة 1 - إصلاحات حرجة (الأولوية القصوى):
+### المرحلة 1 - إصلاحات حرجة (الأولوية القصوى)
+
 - [ ] تفعيل نموذج التواصل (EmailJS/Formspree)
 - [ ] تفعيل النشرة البريدية
 - [ ] تحديث سنة حقوق النشر
 - [ ] استبدال الصور الخارجية بمحلية
 - [ ] إصلاح روابط "Learn More" المعطلة
 
-### المرحلة 2 - تنظيف وتحسين:
+### المرحلة 2 - تنظيف وتحسين
+
 - [ ] حذف ملفات `__init__.py` غير الضرورية
 - [ ] حذف أو استخدام Supabase
 - [ ] ضغط وتحسين الصور والفيديوهات
 - [ ] تحميل جميع ملفات Gallery في المعرض
 - [ ] إصلاح أسماء الملفات بمسافات
 
-### المرحلة 3 - SEO والأداء:
+### المرحلة 3 - SEO والأداء
+
 - [ ] إضافة sitemap.xml
 - [ ] إضافة robots.txt
 - [ ] تحسين Lighthouse scores
 - [ ] إضافة Schema.org
 - [ ] تحسين Core Web Vitals
 
-### المرحلة 4 - ميزات جديدة:
+### المرحلة 4 - ميزات جديدة
+
 - [ ] إضافة صفحات Privacy/Terms
 - [ ] إضافة Google Analytics
 - [ ] إضافة WhatsApp floating button
@@ -503,7 +531,8 @@ netlify deploy --dir=dist --prod
 
 ## الملحقات
 
-### أوامر مفيدة:
+### أوامر مفيدة
+
 ```bash
 # حجم مجلد dist بعد البناء
 du -sh dist/
@@ -518,7 +547,8 @@ npm update
 npm outdated
 ```
 
-### ملفات التكوين المهمة:
+### ملفات التكوين المهمة
+
 | الملف | الغرض |
 |-------|-------|
 | `vite.config.ts` | إعدادات Vite (plugins, optimizations) |

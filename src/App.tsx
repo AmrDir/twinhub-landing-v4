@@ -5,6 +5,7 @@ import HeroSection from './components/sections/HeroSection';
 import ServicesSection from './components/sections/ServicesSection';
 import AISection from './components/sections/AISection';
 import GallerySection from './components/sections/GallerySection';
+import ProductsSection from './components/sections/ProductsSection';
 import ClientsSection from './components/sections/ClientsSection';
 import AboutSection from './components/sections/AboutSection';
 import ContactSection from './components/sections/ContactSection';
@@ -23,10 +24,17 @@ function App() {
 
   useEffect(() => {
     // Check initial session
-    getSession().then(session => {
-      setSession(session);
-      setLoading(false);
-    });
+    const initAuth = async () => {
+      try {
+        const session = await getSession();
+        setSession(session);
+      } catch (e) {
+        console.error('Auth check failed');
+      } finally {
+        setLoading(false);
+      }
+    };
+    initAuth();
   }, []);
 
   const handleLanguageChange = (newLanguage: string) => {
@@ -52,6 +60,7 @@ function App() {
               <HeroSection language={language} />
               <ServicesSection language={language} />
               <AISection language={language} />
+              <ProductsSection language={language} />
               <GallerySection language={language} />
               <ClientsSection language={language} />
               <AboutSection language={language} />
@@ -70,6 +79,9 @@ function App() {
           path="/admin/*" 
           element={session ? <Dashboard session={session} /> : <Navigate to="/login" />} 
         />
+
+        {/* Catch-all Redirect to Home */}
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </div>
   );
