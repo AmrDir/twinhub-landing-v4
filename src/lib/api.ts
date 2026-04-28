@@ -2,6 +2,7 @@ import { supabase } from './supabase';
 
 // Hero Content
 export const getHeroContent = async () => {
+  if (!supabase) return null;
   const { data, error } = await supabase
     .from('hero_content')
     .select('*')
@@ -16,6 +17,7 @@ export const getHeroContent = async () => {
 };
 
 export const updateHeroContent = async (id: string, updates: any) => {
+  if (!supabase) throw new Error('Supabase not configured');
   const { data, error } = await supabase
     .from('hero_content')
     .update(updates)
@@ -29,6 +31,7 @@ export const updateHeroContent = async (id: string, updates: any) => {
 
 // Products
 export const getProducts = async () => {
+  if (!supabase) return [];
   const { data, error } = await supabase
     .from('products')
     .select('*')
@@ -42,6 +45,7 @@ export const getProducts = async () => {
 };
 
 export const updateProduct = async (id: string, updates: any) => {
+  if (!supabase) throw new Error('Supabase not configured');
   const { data, error } = await supabase
     .from('products')
     .update(updates)
@@ -54,6 +58,7 @@ export const updateProduct = async (id: string, updates: any) => {
 };
 
 export const addProduct = async (productData: any) => {
+  if (!supabase) throw new Error('Supabase not configured');
   const { data, error } = await supabase
     .from('products')
     .insert([productData])
@@ -65,6 +70,7 @@ export const addProduct = async (productData: any) => {
 };
 
 export const deleteProduct = async (id: string) => {
+  if (!supabase) throw new Error('Supabase not configured');
   const { error } = await supabase
     .from('products')
     .delete()
@@ -76,6 +82,7 @@ export const deleteProduct = async (id: string) => {
 
 // Site Settings
 export const getSiteSettings = async () => {
+  if (!supabase) return null;
   const { data, error } = await supabase
     .from('site_settings')
     .select('*')
@@ -90,6 +97,7 @@ export const getSiteSettings = async () => {
 };
 
 export const updateSiteSettings = async (id: string, updates: any) => {
+  if (!supabase) throw new Error('Supabase not configured');
   const { data, error } = await supabase
     .from('site_settings')
     .update(updates)
@@ -103,6 +111,7 @@ export const updateSiteSettings = async (id: string, updates: any) => {
 
 // Services
 export const getServices = async () => {
+  if (!supabase) return [];
   const { data, error } = await supabase
     .from('services')
     .select('*')
@@ -116,6 +125,7 @@ export const getServices = async () => {
 };
 
 export const updateService = async (id: string, updates: any) => {
+  if (!supabase) throw new Error('Supabase not configured');
   const { data, error } = await supabase
     .from('services')
     .update(updates)
@@ -129,6 +139,7 @@ export const updateService = async (id: string, updates: any) => {
 
 // Gallery
 export const getGallery = async () => {
+  if (!supabase) return [];
   const { data, error } = await supabase
     .from('gallery')
     .select('*')
@@ -142,6 +153,7 @@ export const getGallery = async () => {
 };
 
 export const addGalleryItem = async (itemData: any) => {
+  if (!supabase) throw new Error('Supabase not configured');
   const { data, error } = await supabase
     .from('gallery')
     .insert([itemData])
@@ -153,6 +165,7 @@ export const addGalleryItem = async (itemData: any) => {
 };
 
 export const deleteGalleryItem = async (id: string) => {
+  if (!supabase) throw new Error('Supabase not configured');
   const { error } = await supabase
     .from('gallery')
     .delete()
