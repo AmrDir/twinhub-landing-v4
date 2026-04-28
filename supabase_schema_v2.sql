@@ -226,19 +226,31 @@ ALTER TABLE public.services      ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.gallery       ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.site_settings ENABLE ROW LEVEL SECURITY;
 
+-- Drop policies first so the script is safe to re-run
+DROP POLICY IF EXISTS "public_read_hero"     ON public.hero_content;
+DROP POLICY IF EXISTS "public_read_products"  ON public.products;
+DROP POLICY IF EXISTS "public_read_services"  ON public.services;
+DROP POLICY IF EXISTS "public_read_gallery"   ON public.gallery;
+DROP POLICY IF EXISTS "public_read_settings"  ON public.site_settings;
+DROP POLICY IF EXISTS "admin_all_hero"        ON public.hero_content;
+DROP POLICY IF EXISTS "admin_all_products"    ON public.products;
+DROP POLICY IF EXISTS "admin_all_services"    ON public.services;
+DROP POLICY IF EXISTS "admin_all_gallery"     ON public.gallery;
+DROP POLICY IF EXISTS "admin_all_settings"    ON public.site_settings;
+
 -- Public read (anonymous visitors can load site content)
-CREATE POLICY IF NOT EXISTS "public_read_hero"     ON public.hero_content  FOR SELECT USING (true);
-CREATE POLICY IF NOT EXISTS "public_read_products"  ON public.products      FOR SELECT USING (true);
-CREATE POLICY IF NOT EXISTS "public_read_services"  ON public.services      FOR SELECT USING (true);
-CREATE POLICY IF NOT EXISTS "public_read_gallery"   ON public.gallery       FOR SELECT USING (true);
-CREATE POLICY IF NOT EXISTS "public_read_settings"  ON public.site_settings FOR SELECT USING (true);
+CREATE POLICY "public_read_hero"     ON public.hero_content  FOR SELECT USING (true);
+CREATE POLICY "public_read_products"  ON public.products      FOR SELECT USING (true);
+CREATE POLICY "public_read_services"  ON public.services      FOR SELECT USING (true);
+CREATE POLICY "public_read_gallery"   ON public.gallery       FOR SELECT USING (true);
+CREATE POLICY "public_read_settings"  ON public.site_settings FOR SELECT USING (true);
 
 -- Authenticated admin — full write access
-CREATE POLICY IF NOT EXISTS "admin_all_hero"     ON public.hero_content  FOR ALL USING ((SELECT auth.role()) = 'authenticated');
-CREATE POLICY IF NOT EXISTS "admin_all_products"  ON public.products      FOR ALL USING ((SELECT auth.role()) = 'authenticated');
-CREATE POLICY IF NOT EXISTS "admin_all_services"  ON public.services      FOR ALL USING ((SELECT auth.role()) = 'authenticated');
-CREATE POLICY IF NOT EXISTS "admin_all_gallery"   ON public.gallery       FOR ALL USING ((SELECT auth.role()) = 'authenticated');
-CREATE POLICY IF NOT EXISTS "admin_all_settings"  ON public.site_settings FOR ALL USING ((SELECT auth.role()) = 'authenticated');
+CREATE POLICY "admin_all_hero"     ON public.hero_content  FOR ALL USING ((SELECT auth.role()) = 'authenticated');
+CREATE POLICY "admin_all_products"  ON public.products      FOR ALL USING ((SELECT auth.role()) = 'authenticated');
+CREATE POLICY "admin_all_services"  ON public.services      FOR ALL USING ((SELECT auth.role()) = 'authenticated');
+CREATE POLICY "admin_all_gallery"   ON public.gallery       FOR ALL USING ((SELECT auth.role()) = 'authenticated');
+CREATE POLICY "admin_all_settings"  ON public.site_settings FOR ALL USING ((SELECT auth.role()) = 'authenticated');
 
 
 -- ============================================================
