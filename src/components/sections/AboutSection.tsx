@@ -110,10 +110,10 @@ export default function AboutSection({ language }: AboutSectionProps) {
             const Icon = iconMap[stat.icon as keyof typeof iconMap];
             return (
               <div key={stat.id} className="text-center group">
-                <div className="inline-flex items-center justify-center w-12 h-12 mb-4 rounded-xl bg-gray-50 text-gray-400 group-hover:bg-cinema-red group-hover:text-white transition-all duration-500 shadow-sm group-hover:shadow-cinema-red/20">
+                <div className="inline-flex items-center justify-center w-12 h-12 mb-4 rounded-xl bg-cinema-red/8 text-cinema-red group-hover:bg-cinema-red group-hover:text-white transition-all duration-500 shadow-sm group-hover:shadow-cinema-red/20">
                   <Icon size={24} />
                 </div>
-                <h5 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-1 group-hover:text-cinema-red transition-colors">
+                <h5 className="text-3xl sm:text-4xl font-bold text-cinema-red mb-1">
                   {stat.value}
                 </h5>
                 <p className="text-sm text-gray-400 font-light uppercase tracking-wide">

@@ -160,6 +160,10 @@ export default function GallerySection({ language }: GallerySectionProps) {
         className="absolute inset-0"
       />
       
+      {/* Ambient orbs */}
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[900px] h-[400px] bg-cinema-red/6 rounded-full blur-[150px] pointer-events-none z-0"></div>
+      <div className="absolute bottom-0 right-0 w-[400px] h-[400px] bg-fusion-teal/5 rounded-full blur-[120px] pointer-events-none z-0"></div>
+
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         
         {/* Header with Visual Rhythm */}

@@ -24,6 +24,11 @@ export default function ClientsSection({ language }: ClientsSectionProps) {
         className="absolute inset-0 z-0"
       />
 
+      {/* Ambient warm orb */}
+      <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-0">
+        <div className="w-[800px] h-[400px] bg-cinema-red/5 rounded-full blur-[120px]"></div>
+      </div>
+
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Section Header */}
         <div className="text-center mb-16 animate-fade-in">

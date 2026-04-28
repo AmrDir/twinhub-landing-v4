@@ -18,8 +18,9 @@ export default function AISection({ language }: AISectionProps) {
         className="py-24 lg:py-32"
       >
         {/* Cinematic Lighting Overlays */}
-        <div className="absolute inset-0 bg-gradient-to-br from-red-950/40 via-black/60 to-gray-900/80 pointer-events-none"></div>
-        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-red-600/5 rounded-full blur-[120px] animate-pulse"></div>
+        <div className="absolute inset-0 bg-gradient-to-br from-red-950/40 via-black/60 to-blue-950/30 pointer-events-none"></div>
+        <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-electric-blue/8 rounded-full blur-[140px] animate-pulse pointer-events-none"></div>
+        <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-fusion-teal/6 rounded-full blur-[120px] pointer-events-none"></div>
         
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           

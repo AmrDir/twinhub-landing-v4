@@ -38,16 +38,18 @@ export default function Footer({ language }: Props) {
   };
 
   const socialItems = [
-    { icon: Instagram, href: SOCIAL_LINKS.instagram, label: 'Instagram' },
-    { icon: Facebook, href: SOCIAL_LINKS.facebook, label: 'Facebook' },
-    { icon: Video, href: SOCIAL_LINKS.vimeo, label: 'Vimeo' },
-    { icon: Youtube, href: SOCIAL_LINKS.youtube, label: 'YouTube' },
-    { icon: Twitter, href: SOCIAL_LINKS.twitter, label: 'Twitter' },
-    { icon: Linkedin, href: SOCIAL_LINKS.linkedin, label: 'LinkedIn' }
+    { icon: Instagram, href: SOCIAL_LINKS.instagram, label: 'Instagram', hover: 'hover:bg-pink-600' },
+    { icon: Facebook, href: SOCIAL_LINKS.facebook, label: 'Facebook', hover: 'hover:bg-blue-600' },
+    { icon: Video, href: SOCIAL_LINKS.vimeo, label: 'Vimeo', hover: 'hover:bg-sky-500' },
+    { icon: Youtube, href: SOCIAL_LINKS.youtube, label: 'YouTube', hover: 'hover:bg-cinema-red' },
+    { icon: Twitter, href: SOCIAL_LINKS.twitter, label: 'Twitter', hover: 'hover:bg-slate-600' },
+    { icon: Linkedin, href: SOCIAL_LINKS.linkedin, label: 'LinkedIn', hover: 'hover:bg-blue-700' }
   ];
 
   return (
-    <footer className="bg-black text-white py-16 relative overflow-hidden">
+    <footer className="bg-[#080404] text-white py-16 relative overflow-hidden border-t border-cinema-red/10">
+      {/* Ambient glow */}
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[200px] bg-cinema-red/6 rounded-full blur-[100px] pointer-events-none"></div>
       {/* Background decorative elements */}
       <div className="absolute top-0 right-0 opacity-10 pointer-events-none">
         <img 
@@ -72,16 +74,16 @@ export default function Footer({ language }: Props) {
           {/* Company Info */}
           <div className="lg:col-span-2">
             <div className="mb-6 flex flex-col gap-3 text-gray-300 text-sm">
-              <a href={CONTACT_INFO.mapUrl} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 hover:text-red-400 transition-colors">
-                <MapPin className="w-5 h-5 text-red-500 flex-shrink-0" />
+              <a href={CONTACT_INFO.mapUrl} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 hover:text-cinema-red-light transition-colors">
+                <MapPin className="w-5 h-5 text-cinema-red flex-shrink-0" />
                 <span>{language === 'ar' ? CONTACT_INFO.address.ar : CONTACT_INFO.address.en}</span>
               </a>
-              <a href={`tel:${CONTACT_INFO.phone}`} className="flex items-center gap-3 hover:text-red-400 transition-colors">
-                <Phone className="w-5 h-5 text-red-500 flex-shrink-0" />
+              <a href={`tel:${CONTACT_INFO.phone}`} className="flex items-center gap-3 hover:text-cinema-red-light transition-colors">
+                <Phone className="w-5 h-5 text-cinema-red flex-shrink-0" />
                 <span>{CONTACT_INFO.phone} / {CONTACT_INFO.phone2}</span>
               </a>
-              <a href={`mailto:${CONTACT_INFO.email}`} className="flex items-center gap-3 hover:text-red-400 transition-colors">
-                <Mail className="w-5 h-5 text-red-500 flex-shrink-0" />
+              <a href={`mailto:${CONTACT_INFO.email}`} className="flex items-center gap-3 hover:text-cinema-red-light transition-colors">
+                <Mail className="w-5 h-5 text-cinema-red flex-shrink-0" />
                 <span>{CONTACT_INFO.email}</span>
               </a>
             </div>
@@ -95,9 +97,9 @@ export default function Footer({ language }: Props) {
                   aria-label={label}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-12 h-12 bg-gray-800 rounded-xl flex items-center justify-center hover:bg-red-600 transition-colors duration-300 group"
+                  className={`w-12 h-12 bg-white/5 border border-white/10 rounded-xl flex items-center justify-center ${hover} transition-colors duration-300 group`}
                 >
-                  <Icon className="w-5 h-5 text-gray-300 group-hover:text-white" />
+                  <Icon className="w-5 h-5 text-gray-400 group-hover:text-white transition-colors" />
                 </a>
               ))}
             </div>
@@ -105,13 +107,13 @@ export default function Footer({ language }: Props) {
 
           {/* Quick Links */}
           <div>
-            <h3 className="text-lg font-bold mb-6">{language === 'ar' ? 'روابط سريعة' : 'Quick Links'}</h3>
+            <h3 className="text-lg font-bold mb-6 text-white">{language === 'ar' ? 'روابط سريعة' : 'Quick Links'}</h3>
             <ul className="space-y-3">
               {quickLinks.map((item) => (
                 <li key={item.id}>
                   <button 
                     onClick={() => scrollToSection(item.id)}
-                    className="text-gray-300 hover:text-red-400 transition-colors duration-300"
+                    className="text-gray-400 hover:text-cinema-red-light transition-colors duration-300"
                   >
                     {language === 'ar' ? item.ar : item.en}
                   </button>
@@ -128,7 +130,7 @@ export default function Footer({ language }: Props) {
                 <li key={service}>
                   <button 
                     onClick={() => scrollToSection('services')}
-                    className="text-gray-300 hover:text-red-400 transition-colors duration-300"
+                    className="text-gray-400 hover:text-cinema-red-light transition-colors duration-300"
                   >
                     {service}
                   </button>
@@ -139,7 +141,7 @@ export default function Footer({ language }: Props) {
         </div>
 
         {/* Newsletter Signup */}
-        <div className="border-t border-gray-800 pt-8 mb-8">
+        <div className="border-t border-white/8 pt-8 mb-8">
           <form 
             name="newsletter" 
             method="POST" 
@@ -159,7 +161,7 @@ export default function Footer({ language }: Props) {
                   name="subscriber_email"
                   required
                   placeholder={language === 'ar' ? 'بريدك الإلكتروني' : 'Enter your email'}
-                  className="flex-1 md:w-64 px-4 py-3 bg-gray-800 border border-gray-700 rounded-l-xl focus:ring-2 focus:ring-red-500 focus:border-transparent text-white placeholder-gray-400"
+                  className="flex-1 md:w-64 px-4 py-3 bg-white/5 border border-white/10 rounded-l-xl focus:ring-2 focus:ring-cinema-red focus:border-cinema-red/50 text-white placeholder:text-gray-600 outline-none transition-all"
                   value={email}
                   onChange={e => setEmail(e.target.value)}
                 />
@@ -167,7 +169,7 @@ export default function Footer({ language }: Props) {
                   type="submit"
                   className={`px-6 py-3 rounded-r-xl font-semibold transition-colors duration-300 ${
                     subscribeStatus === 'sending' ? 'bg-gray-500 text-white cursor-wait' :
-                    'bg-red-600 text-white hover:bg-red-700'
+                    'bg-cinema-red text-white hover:bg-cinema-red-hover'
                   }`}
                   disabled={subscribeStatus === 'sending'}
                 >
@@ -176,7 +178,7 @@ export default function Footer({ language }: Props) {
               </div>
               <button
                 type="button"
-                className="px-6 py-3 bg-white text-red-600 rounded-xl font-semibold border-2 border-red-600 hover:bg-red-600 hover:text-white transition-colors duration-300 whitespace-nowrap"
+                className="px-6 py-3 bg-white text-cinema-red rounded-xl font-semibold border-2 border-cinema-red hover:bg-cinema-red hover:text-white transition-colors duration-300 whitespace-nowrap"
                 onClick={() => scrollToSection('contact')}
               >
                 {language === 'ar' ? 'تواصل معنا' : 'Get In Touch'}
@@ -186,7 +188,7 @@ export default function Footer({ language }: Props) {
         </div>
 
         {/* Bottom Footer */}
-        <div className="border-t border-gray-800 pt-8 flex flex-col md:flex-row items-center justify-between">
+        <div className="border-t border-white/8 pt-8 flex flex-col md:flex-row items-center justify-between">
           <div className="text-gray-400 text-sm mb-4 md:mb-0">
             © {new Date().getFullYear()} TwinHub Media & AI Center. {language === 'ar' ? 'جميع الحقوق محفوظة.' : 'All rights reserved.'}
           </div>
