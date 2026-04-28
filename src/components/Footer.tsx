@@ -90,7 +90,7 @@ export default function Footer({ language }: Props) {
             
             {/* Social Media */}
             <div className="flex space-x-4">
-              {socialItems.map(({ icon: Icon, href, label }) => (
+              {socialItems.map(({ icon: Icon, href, label, hover }) => (
                 <a
                   key={label}
                   href={href}
