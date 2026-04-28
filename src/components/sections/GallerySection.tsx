@@ -122,13 +122,17 @@ export default function GallerySection({ language }: GallerySectionProps) {
   const t = GALLERY_CONTENT[language as keyof typeof GALLERY_CONTENT] || GALLERY_CONTENT.en;
   const isRtl = language === 'ar';
   
-  // Construct final gallery items array
-  const activeGallery = dbGallery.length > 0 ? dbGallery.map(g => ({
-    src: g.media,
-    type: g.media_type,
-    category: g.category,
-    alt: g.alt_text
-  })) : GALLERY_CONTENT.items;
+  // Construct final gallery items array (deduplicate by src to guard against duplicate DB rows)
+  const activeGallery = useMemo(() => {
+    const raw = dbGallery.length > 0 ? dbGallery.map(g => ({
+      src: g.media,
+      type: g.media_type,
+      category: g.category,
+      alt: g.alt_text
+    })) : GALLERY_CONTENT.items;
+    const seen = new Set<string>();
+    return raw.filter(item => seen.has(item.src) ? false : (seen.add(item.src), true));
+  }, [dbGallery]);
 
   const [activeFilter, setActiveFilter] = useState('all');
   const [visibleCount, setVisibleCount] = useState(ITEMS_PER_PAGE);
@@ -187,7 +191,7 @@ export default function GallerySection({ language }: GallerySectionProps) {
            <div className="relative aspect-[3/4] sm:aspect-video lg:aspect-[21/9] rounded-[2rem] sm:rounded-[3rem] overflow-hidden shadow-[0_50px_100px_-20px_rgba(0,0,0,0.8)] border border-white/10">
               {featuredItems.map((item, idx) => (
                 <div
-                  key={item.src}
+                  key={`featured-${idx}`}
                   className={`absolute inset-0 transition-opacity duration-1000 ${
                     idx === featuredIndex ? 'opacity-100 z-10' : 'opacity-0 z-0'
                   }`}
