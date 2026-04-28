@@ -35,6 +35,12 @@ interface SiteSettings {
   services_bg_opacity: number;
   products_bg_media: string;
   products_bg_opacity: number;
+  gallery_bg_media: string;
+  gallery_bg_opacity: number;
+  clients_bg_media: string;
+  clients_bg_opacity: number;
+  about_bg_media: string;
+  about_bg_opacity: number;
   contact_email: string;
   contact_phone: string;
   contact_whatsapp: string;
