@@ -123,7 +123,7 @@ export default function ServicesSection({ language }: ServicesSectionProps) {
                 </p>
 
                 {/* Features List with Visual Rhythm */}
-                <ul className="space-y-3 mb-8">
+                <ul className="space-y-3 mb-8 text-gray-400">
                   {service.features.map((feature, idx) => (
                     <li key={idx} className="flex items-center gap-3 text-sm text-gray-400 group-hover:text-gray-200 transition-colors">
                       <div className={`w-1.5 h-1.5 ${colors.iconBg.split(' ')[0]} rounded-full flex-shrink-0`}></div>

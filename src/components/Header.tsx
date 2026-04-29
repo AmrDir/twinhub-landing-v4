@@ -71,7 +71,7 @@ export default function Header({ language, onLanguageChange }: HeaderProps) {
               <button
                 key={item}
                 onClick={() => scrollToSection(currentNavLinks[index])}
-                className={`font-medium transition-colors duration-300 hover:text-red-600 ${
+                className={`font-medium transition-colors duration-300 hover:text-cinema-red ${
                   scrolled ? 'text-gray-800' : 'text-white'
                 }`}
               >
@@ -84,7 +84,7 @@ export default function Header({ language, onLanguageChange }: HeaderProps) {
           <div className="flex items-center space-x-4">
             <div className="relative">
               <button
-                className={`p-2 rounded-full border-2 border-transparent hover:border-red-500 transition-colors duration-300 ${scrolled ? 'text-gray-800 bg-white' : 'text-white bg-black/30'}`}
+                className={`p-2 rounded-full border-2 border-transparent hover:border-cinema-red transition-colors duration-300 ${scrolled ? 'text-gray-800 bg-white' : 'text-white bg-black/30'}`}
                 aria-label="Change Language"
                 onClick={() => setShowLangDropdown(v => !v)}
               >
@@ -93,13 +93,13 @@ export default function Header({ language, onLanguageChange }: HeaderProps) {
               {showLangDropdown && (
                 <div className="absolute right-0 mt-2 w-32 bg-white rounded-xl shadow-lg z-50">
                   <button
-                    className={`block w-full px-4 py-2 text-left text-gray-800 hover:text-red-600 transition-colors duration-300 ${language === 'en' ? 'font-bold' : ''}`}
+                    className={`block w-full px-4 py-2 text-left text-gray-800 hover:text-cinema-red transition-colors duration-300 ${language === 'en' ? 'font-bold' : ''}`}
                     onClick={() => { onLanguageChange('en'); setShowLangDropdown(false); }}
                   >
                     English
                   </button>
                   <button
-                    className={`block w-full px-4 py-2 text-left text-gray-800 hover:text-red-600 transition-colors duration-300 ${language === 'ar' ? 'font-bold' : ''}`}
+                    className={`block w-full px-4 py-2 text-left text-gray-800 hover:text-cinema-red transition-colors duration-300 ${language === 'ar' ? 'font-bold' : ''}`}
                     onClick={() => { onLanguageChange('ar'); setShowLangDropdown(false); }}
                   >
                     العربية
@@ -112,8 +112,9 @@ export default function Header({ language, onLanguageChange }: HeaderProps) {
             <div className="md:hidden">
             <button
               onClick={toggleMenu}
+              aria-label={isMenuOpen ? 'Close navigation menu' : 'Open navigation menu'}
               className={`p-2 rounded-md transition-colors duration-300 ${
-                scrolled ? 'text-gray-800 hover:text-red-600' : 'text-white hover:text-red-300'
+                scrolled ? 'text-gray-800 hover:text-cinema-red' : 'text-white hover:text-cinema-red-light'
               }`}
             >
               {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
@@ -130,7 +131,7 @@ export default function Header({ language, onLanguageChange }: HeaderProps) {
                 <button
                   key={item}
                   onClick={() => scrollToSection(currentNavLinks[index])}
-                  className="block w-full text-left font-medium text-gray-800 hover:text-red-600 transition-colors duration-300"
+                  className="block w-full text-left font-medium text-gray-800 hover:text-cinema-red transition-colors duration-300"
                 >
                   {item}
                 </button>

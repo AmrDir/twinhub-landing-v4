@@ -119,7 +119,7 @@ const ITEMS_PER_PAGE = 8;
 
 export default function GallerySection({ language }: GallerySectionProps) {
   const { gallery: dbGallery, settings } = useSiteData();
-  const t = GALLERY_CONTENT[language as keyof typeof GALLERY_CONTENT] || GALLERY_CONTENT.en;
+  const t = GALLERY_CONTENT[language as 'en' | 'ar'] || GALLERY_CONTENT.en;
   const isRtl = language === 'ar';
   
   // Construct final gallery items array (deduplicate by src to guard against duplicate DB rows)
@@ -196,7 +196,11 @@ export default function GallerySection({ language }: GallerySectionProps) {
                     idx === featuredIndex ? 'opacity-100 z-10' : 'opacity-0 z-0'
                   }`}
                 >
-                  <img src={item.src} className="w-full h-full object-cover" alt="Featured" />
+                  {item.type === 'video' ? (
+                    <video src={item.src} className="w-full h-full object-cover" autoPlay muted loop playsInline />
+                  ) : (
+                    <img src={item.src} className="w-full h-full object-cover" alt="Featured" />
+                  )}
                   <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent pointer-events-none" />
                 </div>
               ))}
@@ -254,7 +258,7 @@ export default function GallerySection({ language }: GallerySectionProps) {
           <div className="text-center mt-20">
             <button
               onClick={() => setVisibleCount(prev => prev + ITEMS_PER_PAGE)}
-              className="group relative px-12 py-5 bg-white text-black font-bold rounded-2xl hover:bg-cinema-red hover:text-white transition-all duration-500"
+              className="group relative px-12 py-5 bg-white/[0.06] border border-white/15 text-white font-bold rounded-2xl hover:bg-cinema-red hover:border-cinema-red hover:text-white transition-all duration-500"
             >
               <span className="relative z-10">
                 {t.loadMore} ({filteredItems.length - visibleCount} {t.remaining})
@@ -267,7 +271,7 @@ export default function GallerySection({ language }: GallerySectionProps) {
       {/* Lightbox Implementation */}
       {lightboxIndex !== null && (
         <div className="fixed inset-0 z-[100] bg-black/98 flex items-center justify-center p-6 backdrop-blur-xl animate-fade-in" onClick={() => setLightboxIndex(null)}>
-          <button className="absolute top-10 right-10 text-white/50 hover:text-white transition-colors" onClick={() => setLightboxIndex(null)}>
+          <button type="button" aria-label="Close lightbox" className="absolute top-10 right-10 text-white/50 hover:text-white transition-colors" onClick={() => setLightboxIndex(null)}>
             <X size={40} />
           </button>
           
@@ -294,14 +298,18 @@ export default function GallerySection({ language }: GallerySectionProps) {
              })()}
           </div>
 
-          <button 
+          <button
+            type="button"
+            aria-label="Previous item"
             className="absolute left-10 p-4 rounded-full bg-white/5 hover:bg-white/10 text-white transition-all"
             onClick={e => { e.stopPropagation(); setLightboxIndex(prev => prev! > 0 ? prev! - 1 : filteredItems.length - 1) }}
           >
             <ChevronLeft size={32} />
           </button>
 
-          <button 
+          <button
+            type="button"
+            aria-label="Next item"
             className="absolute right-10 p-4 rounded-full bg-white/5 hover:bg-white/10 text-white transition-all"
             onClick={e => { e.stopPropagation(); setLightboxIndex(prev => (prev! + 1) % filteredItems.length) }}
           >

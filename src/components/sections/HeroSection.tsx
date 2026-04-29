@@ -93,9 +93,10 @@ export default function HeroSection({ language }: HeroSectionProps) {
             >
               {t.exploreWork}
             </button>
-            <button 
+            <button
               onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
               className="btn-secondary min-w-[200px]"
+              aria-label={language === 'ar' ? 'ابدأ مشروعك الآن' : 'Start your project — scroll to contact form'}
             >
               {t.startProject}
             </button>

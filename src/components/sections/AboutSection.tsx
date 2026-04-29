@@ -20,17 +20,17 @@ export default function AboutSection({ language }: AboutSectionProps) {
   const s = SERVICES_CONTENT[language as keyof typeof SERVICES_CONTENT] || SERVICES_CONTENT.en;
   const isRtl = language === 'ar';
   
-  const bgMedia = settings?.about_bg_media || '/backgrounds/clients/about-bg.png';
-  const bgOpacity = settings?.about_bg_opacity ?? 0.94;
+  const bgMedia = settings?.about_bg_media || '/backgrounds/about/about-bg.png';
+  const bgOpacity = settings?.about_bg_opacity ?? 0.75;
 
   return (
-    <section id="about" className="relative py-24 bg-white overflow-hidden">
+    <section id="about" className="relative py-24 bg-black overflow-hidden">
       <MediaBackground
         backgroundImage={bgMedia}
         overlayOpacity={bgOpacity}
         className="absolute inset-0"
       >
-         <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-white to-transparent" />
+         <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-black/60 to-transparent" />
       </MediaBackground>
       
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
@@ -42,7 +42,7 @@ export default function AboutSection({ language }: AboutSectionProps) {
           <div className="space-y-8">
             <div className="space-y-4">
               <h2 
-                className="font-bold text-gray-900 tracking-tight leading-tight"
+                className="font-bold text-white tracking-tight leading-tight"
                 style={{ fontSize: 'var(--font-size-h2)' }}
               >
                 {isRtl ? (
@@ -51,28 +51,28 @@ export default function AboutSection({ language }: AboutSectionProps) {
                   <>About <span className="text-cinema-red">TwinHub</span></>
                 )}
               </h2>
-              <p className="text-xl text-gray-600 font-light leading-relaxed italic bg-red-50 rounded-2xl px-6 py-4">
+              <p className="text-xl text-gray-200 font-light leading-relaxed italic bg-cinema-red/[0.06] border border-cinema-red/15 rounded-2xl px-6 py-4">
                 {t.description}
               </p>
             </div>
 
-            <div className="space-y-6 text-lg text-gray-500 font-light leading-relaxed">
+            <div className="space-y-6 text-lg text-gray-300 font-light leading-relaxed">
               <p>{t.aboutText}</p>
               <p>{t.locationText}</p>
             </div>
 
             {/* Vision & Mission Cards */}
             <div className="grid sm:grid-cols-2 gap-6 pt-6">
-              <div className="p-6 bg-gray-50 rounded-2xl border border-gray-100 hover:border-cinema-red/20 transition-colors">
+              <div className="p-6 bg-gray-50 rounded-2xl border border-gray-100 border-l-4 border-l-cinema-red/50 hover:bg-white hover:shadow-sm transition-all duration-300">
                  <div className="flex items-center gap-3 mb-4">
                    <Target className="text-cinema-red" size={24} />
                    <h4 className="font-bold text-gray-900">{t.visionTitle}</h4>
                  </div>
                  <p className="text-sm text-gray-500 leading-relaxed font-light">{t.visionText}</p>
               </div>
-              <div className="p-6 bg-gray-50 rounded-2xl border border-gray-100 hover:border-cinema-red/20 transition-colors">
+              <div className="p-6 bg-gray-50 rounded-2xl border border-gray-100 border-l-4 border-l-electric-blue/50 hover:bg-white hover:shadow-sm transition-all duration-300">
                  <div className="flex items-center gap-3 mb-4">
-                   <Award className="text-cinema-red" size={24} />
+                   <Award className="text-electric-blue" size={24} />
                    <h4 className="font-bold text-gray-900">{t.missionTitle}</h4>
                  </div>
                  <p className="text-sm text-gray-500 leading-relaxed font-light">{t.missionText}</p>
@@ -85,7 +85,7 @@ export default function AboutSection({ language }: AboutSectionProps) {
             {/* Main Image with Frame */}
             <div className="relative z-10 rounded-3xl overflow-hidden shadow-2xl border-8 border-white">
               <img
-                src="/backgrounds/clients/about-bg.png"
+                src="/backgrounds/about/about-bg.png"
                 alt="TwinHub Workspace"
                 className="w-full h-auto"
               />
@@ -93,7 +93,7 @@ export default function AboutSection({ language }: AboutSectionProps) {
               
               {/* Floating Stat Card */}
               <div className={`absolute bottom-8 ${isRtl ? 'left-8' : 'right-8'} bg-white p-6 rounded-2xl shadow-xl animate-pulse-slow`}>
-                <p className="text-4xl font-bold text-cinema-red">20+</p>
+                <h3 className="text-4xl font-bold text-cinema-red">20+</h3>
                 <p className="text-sm text-gray-400 uppercase tracking-widest">{isRtl ? 'سنة خبرة' : 'Years of Art'}</p>
               </div>
             </div>
@@ -105,15 +105,22 @@ export default function AboutSection({ language }: AboutSectionProps) {
         </div>
 
         {/* Stats Grid with Modern Aesthetic */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 py-16 border-t border-gray-100">
-          {t.stats.map((stat: any) => {
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 py-16 border-t border-white/10">
+          {t.stats.map((stat: any, statIdx: number) => {
             const Icon = iconMap[stat.icon as keyof typeof iconMap];
+            const statColors = [
+              { iconBg: 'bg-cinema-red/8 text-cinema-red', iconHover: 'group-hover:bg-cinema-red', value: 'text-cinema-red' },
+              { iconBg: 'bg-electric-blue/8 text-electric-blue', iconHover: 'group-hover:bg-electric-blue', value: 'text-electric-blue' },
+              { iconBg: 'bg-fusion-teal/8 text-fusion-teal', iconHover: 'group-hover:bg-fusion-teal', value: 'text-fusion-teal' },
+              { iconBg: 'bg-cinema-red/8 text-cinema-red', iconHover: 'group-hover:bg-cinema-red', value: 'text-cinema-red' },
+            ];
+            const sc = statColors[statIdx % statColors.length];
             return (
               <div key={stat.id} className="text-center group">
-                <div className="inline-flex items-center justify-center w-12 h-12 mb-4 rounded-xl bg-cinema-red/8 text-cinema-red group-hover:bg-cinema-red group-hover:text-white transition-all duration-500 shadow-sm group-hover:shadow-cinema-red/20">
+                <div className={`inline-flex items-center justify-center w-12 h-12 mb-4 rounded-xl ${sc.iconBg} ${sc.iconHover} group-hover:text-white transition-all duration-500 shadow-sm`}>
                   <Icon size={24} />
                 </div>
-                <h5 className="text-3xl sm:text-4xl font-bold text-cinema-red mb-1">
+                <h5 className={`text-3xl sm:text-4xl font-bold ${sc.value} mb-1`}>
                   {stat.value}
                 </h5>
                 <p className="text-sm text-gray-400 font-light uppercase tracking-wide">
@@ -126,10 +133,10 @@ export default function AboutSection({ language }: AboutSectionProps) {
 
         {/* Short Summary of Services / What We Do */}
         <div className="mt-24 text-center">
-            <div className="inline-block p-4 bg-red-50 rounded-2xl mb-6">
+            <div className="inline-block p-4 bg-cinema-red/10 rounded-2xl mb-6">
               <Palette className="text-cinema-red" size={32} />
             </div>
-            <h3 className="text-3xl font-bold text-gray-900 mb-4">{t.whatWeDoTitle}</h3>
+            <h3 className="text-3xl font-bold text-white mb-4">{t.whatWeDoTitle}</h3>
             <p className="text-xl text-gray-400 font-light mb-12">{t.whatWeDoSubtitle}</p>
             
             <div className="flex flex-wrap justify-center gap-4">

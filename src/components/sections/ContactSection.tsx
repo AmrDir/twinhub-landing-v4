@@ -126,11 +126,11 @@ export default function ContactSection({ language }: ContactSectionProps) {
                 <div className="space-y-3 text-sm font-light text-gray-400">
                   <div className="flex justify-between items-center bg-white/[0.05] p-3 rounded-xl">
                     <span>{t.schedule.weekdays}</span>
-                    <span className="text-white font-medium">{t.schedule.weekdaysTime}</span>
+                    <span className="text-fusion-teal font-medium">{t.schedule.weekdaysTime}</span>
                   </div>
                   <div className="flex justify-between items-center bg-white/[0.05] p-3 rounded-xl">
                     <span>{t.schedule.saturday}</span>
-                    <span className="text-white font-medium">{t.schedule.saturdayTime}</span>
+                    <span className="text-fusion-teal font-medium">{t.schedule.saturdayTime}</span>
                   </div>
                 </div>
               </div>

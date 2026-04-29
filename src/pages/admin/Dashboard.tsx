@@ -62,6 +62,8 @@ export default function Dashboard({ session }: DashboardProps) {
           background_media: editedHero.background_media,
           we_create_en: editedHero.we_create_en,
           we_create_ar: editedHero.we_create_ar,
+          texts_en: editedHero.texts_en,
+          texts_ar: editedHero.texts_ar,
         });
       } else if (activeTab === 'products') {
         for (const p of editedProducts) {
@@ -71,6 +73,10 @@ export default function Dashboard({ session }: DashboardProps) {
             desc_en: p.desc_en,
             desc_ar: p.desc_ar,
             media: p.media,
+            media_type: p.media_type,
+            features_en: p.features_en,
+            features_ar: p.features_ar,
+            link: p.link,
           });
         }
       } else if (activeTab === 'settings' && editedSettings) {
@@ -89,6 +95,8 @@ export default function Dashboard({ session }: DashboardProps) {
           contact_email: editedSettings.contact_email,
           contact_phone: editedSettings.contact_phone,
           contact_whatsapp: editedSettings.contact_whatsapp,
+          social_instagram: editedSettings.social_instagram,
+          social_facebook: editedSettings.social_facebook,
         });
         // Immediately inject color
         document.documentElement.style.setProperty('--color-primary', editedSettings.primary_color);
@@ -99,6 +107,8 @@ export default function Dashboard({ session }: DashboardProps) {
             title_ar: s.title_ar,
             desc_en: s.desc_en,
             desc_ar: s.desc_ar,
+            features_en: s.features_en,
+            features_ar: s.features_ar,
           });
         }
       }
@@ -266,9 +276,26 @@ export default function Dashboard({ session }: DashboardProps) {
                       dir="rtl"
                     />
                  </div>
+                 <div className="space-y-2">
+                    <label className="text-sm font-bold text-gray-300 uppercase tracking-widest">Rotating Headlines (English, one per line)</label>
+                    <textarea
+                      value={(editedHero.texts_en || []).join('\n')}
+                      onChange={e => setEditedHero({...editedHero, texts_en: e.target.value.split('\n').filter((s: string) => s.trim())})}
+                      className="w-full bg-black/50 border border-white/10 rounded-xl p-4 text-white focus:border-cinema-red focus:ring-1 focus:ring-cinema-red/50 outline-none h-28 transition-all"
+                    />
+                 </div>
+                 <div className="space-y-2 rtl text-right">
+                    <label className="text-sm font-bold text-gray-300 uppercase tracking-widest">Rotating Headlines (Arabic, one per line)</label>
+                    <textarea
+                      value={(editedHero.texts_ar || []).join('\n')}
+                      onChange={e => setEditedHero({...editedHero, texts_ar: e.target.value.split('\n').filter((s: string) => s.trim())})}
+                      className="w-full bg-black/50 border border-white/10 rounded-xl p-4 text-white focus:border-cinema-red focus:ring-1 focus:ring-cinema-red/50 outline-none h-28 transition-all"
+                      dir="rtl"
+                    />
+                 </div>
                  <div className="space-y-2 md:col-span-2">
                     <label className="text-sm font-bold text-gray-300 uppercase tracking-widest">Background Media URL (.mp4)</label>
-                    <input 
+                    <input
                       type="text"
                       value={editedHero.background_media}
                       onChange={e => setEditedHero({...editedHero, background_media: e.target.value})}
@@ -341,7 +368,7 @@ export default function Dashboard({ session }: DashboardProps) {
                      </div>
                      <div className="space-y-2 md:col-span-2">
                        <label className="text-sm text-gray-400">Media URL (.mp4 / .jpg)</label>
-                       <input 
+                       <input
                          type="text"
                          value={p.media}
                          onChange={e => {
@@ -350,6 +377,59 @@ export default function Dashboard({ session }: DashboardProps) {
                            setEditedProducts(newProducts);
                          }}
                          className="w-full bg-black/50 border border-white/10 rounded-xl p-4 text-white focus:border-cinema-red outline-none"
+                       />
+                     </div>
+                     <div className="space-y-2">
+                       <label className="text-sm font-bold text-gray-300 uppercase tracking-widest">Media Type</label>
+                       <select
+                         value={p.media_type || 'image'}
+                         onChange={e => {
+                           const newProducts = [...editedProducts];
+                           newProducts[index].media_type = e.target.value;
+                           setEditedProducts(newProducts);
+                         }}
+                         className="w-full bg-black/50 border border-white/10 rounded-xl p-4 text-white focus:border-cinema-red focus:ring-1 focus:ring-cinema-red/50 outline-none transition-all appearance-none"
+                       >
+                         <option value="image">Image</option>
+                         <option value="video">Video</option>
+                       </select>
+                     </div>
+                     <div className="space-y-2">
+                       <label className="text-sm font-bold text-gray-300 uppercase tracking-widest">Product Link URL</label>
+                       <input
+                         type="text"
+                         value={p.link || ''}
+                         onChange={e => {
+                           const newProducts = [...editedProducts];
+                           newProducts[index].link = e.target.value;
+                           setEditedProducts(newProducts);
+                         }}
+                         className="w-full bg-black/50 border border-white/10 rounded-xl p-4 text-white focus:border-cinema-red focus:ring-1 focus:ring-cinema-red/50 outline-none transition-all"
+                       />
+                     </div>
+                     <div className="space-y-2">
+                       <label className="text-sm font-bold text-gray-300 uppercase tracking-widest">Features (English, one per line)</label>
+                       <textarea
+                         value={(p.features_en || []).join('\n')}
+                         onChange={e => {
+                           const newProducts = [...editedProducts];
+                           newProducts[index].features_en = e.target.value.split('\n').filter((s: string) => s.trim());
+                           setEditedProducts(newProducts);
+                         }}
+                         className="w-full bg-black/50 border border-white/10 rounded-xl p-4 text-white focus:border-cinema-red focus:ring-1 focus:ring-cinema-red/50 outline-none h-28 transition-all"
+                       />
+                     </div>
+                     <div className="space-y-2 rtl text-right">
+                       <label className="text-sm font-bold text-gray-300 uppercase tracking-widest">Features (Arabic, one per line)</label>
+                       <textarea
+                         value={(p.features_ar || []).join('\n')}
+                         onChange={e => {
+                           const newProducts = [...editedProducts];
+                           newProducts[index].features_ar = e.target.value.split('\n').filter((s: string) => s.trim());
+                           setEditedProducts(newProducts);
+                         }}
+                         className="w-full bg-black/50 border border-white/10 rounded-xl p-4 text-white focus:border-cinema-red focus:ring-1 focus:ring-cinema-red/50 outline-none h-28 transition-all"
+                         dir="rtl"
                        />
                      </div>
                    </div>
@@ -512,11 +592,31 @@ export default function Dashboard({ session }: DashboardProps) {
                    </div>
                    <div className="space-y-2">
                      <label className="text-sm font-bold text-gray-300 uppercase tracking-widest">WhatsApp Number</label>
-                     <input 
+                     <input
                        type="text"
                        value={editedSettings.contact_whatsapp}
                        onChange={e => setEditedSettings({...editedSettings, contact_whatsapp: e.target.value})}
                        className="w-full bg-black/50 border border-white/10 rounded-xl p-4 text-white focus:border-cinema-red focus:ring-1 focus:ring-cinema-red/50 outline-none transition-all"
+                     />
+                   </div>
+                   <div className="space-y-2">
+                     <label className="text-sm font-bold text-gray-300 uppercase tracking-widest">Instagram Handle URL</label>
+                     <input
+                       type="text"
+                       value={editedSettings.social_instagram || ''}
+                       onChange={e => setEditedSettings({...editedSettings, social_instagram: e.target.value})}
+                       className="w-full bg-black/50 border border-white/10 rounded-xl p-4 text-white focus:border-cinema-red focus:ring-1 focus:ring-cinema-red/50 outline-none transition-all"
+                       placeholder="https://instagram.com/..."
+                     />
+                   </div>
+                   <div className="space-y-2">
+                     <label className="text-sm font-bold text-gray-300 uppercase tracking-widest">Facebook Page URL</label>
+                     <input
+                       type="text"
+                       value={editedSettings.social_facebook || ''}
+                       onChange={e => setEditedSettings({...editedSettings, social_facebook: e.target.value})}
+                       className="w-full bg-black/50 border border-white/10 rounded-xl p-4 text-white focus:border-cinema-red focus:ring-1 focus:ring-cinema-red/50 outline-none transition-all"
+                       placeholder="https://facebook.com/..."
                      />
                    </div>
                  </div>
@@ -534,8 +634,9 @@ export default function Dashboard({ session }: DashboardProps) {
                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                      <div className="space-y-2">
                        <label className="text-sm text-gray-400">Title (English)</label>
-                       <input 
+                       <input
                          type="text"
+                         title="Service title in English"
                          value={s.title_en}
                          onChange={e => {
                            const newServ = [...editedServices];
@@ -547,8 +648,9 @@ export default function Dashboard({ session }: DashboardProps) {
                      </div>
                      <div className="space-y-2 rtl text-right">
                        <label className="text-sm text-gray-400">Title (Arabic)</label>
-                       <input 
+                       <input
                          type="text"
+                         title="Service title in Arabic"
                          value={s.title_ar}
                          onChange={e => {
                            const newServ = [...editedServices];
@@ -561,7 +663,8 @@ export default function Dashboard({ session }: DashboardProps) {
                      </div>
                      <div className="space-y-2">
                        <label className="text-sm text-gray-400">Description (English)</label>
-                       <textarea 
+                       <textarea
+                         title="Service description in English"
                          value={s.desc_en}
                          onChange={e => {
                            const newServ = [...editedServices];
@@ -573,7 +676,8 @@ export default function Dashboard({ session }: DashboardProps) {
                      </div>
                      <div className="space-y-2 rtl text-right">
                        <label className="text-sm text-gray-400">Description (Arabic)</label>
-                       <textarea 
+                       <textarea
+                         title="Service description in Arabic"
                          value={s.desc_ar}
                          onChange={e => {
                            const newServ = [...editedServices];
@@ -581,6 +685,35 @@ export default function Dashboard({ session }: DashboardProps) {
                            setEditedServices(newServ);
                          }}
                          className="w-full bg-black/50 border border-white/10 rounded-xl p-4 text-white focus:border-cinema-red outline-none h-24"
+                         dir="rtl"
+                       />
+                     </div>
+                     <div className="space-y-2">
+                       <label className="text-sm font-bold text-gray-300 uppercase tracking-widest">Features (English, one per line)</label>
+                       <textarea
+                         title="Service features in English, one per line"
+                         placeholder="Feature one&#10;Feature two&#10;Feature three"
+                         value={(s.features_en || []).join('\n')}
+                         onChange={e => {
+                           const newServ = [...editedServices];
+                           newServ[index].features_en = e.target.value.split('\n').filter((s: string) => s.trim());
+                           setEditedServices(newServ);
+                         }}
+                         className="w-full bg-black/50 border border-white/10 rounded-xl p-4 text-white focus:border-cinema-red focus:ring-1 focus:ring-cinema-red/50 outline-none h-28 transition-all"
+                       />
+                     </div>
+                     <div className="space-y-2 rtl text-right">
+                       <label className="text-sm font-bold text-gray-300 uppercase tracking-widest">Features (Arabic, one per line)</label>
+                       <textarea
+                         title="Service features in Arabic, one per line"
+                         placeholder="ميزة أولى&#10;ميزة ثانية&#10;ميزة ثالثة"
+                         value={(s.features_ar || []).join('\n')}
+                         onChange={e => {
+                           const newServ = [...editedServices];
+                           newServ[index].features_ar = e.target.value.split('\n').filter((s: string) => s.trim());
+                           setEditedServices(newServ);
+                         }}
+                         className="w-full bg-black/50 border border-white/10 rounded-xl p-4 text-white focus:border-cinema-red focus:ring-1 focus:ring-cinema-red/50 outline-none h-28 transition-all"
                          dir="rtl"
                        />
                      </div>
@@ -613,7 +746,8 @@ export default function Dashboard({ session }: DashboardProps) {
                    </div>
                    <div className="space-y-2">
                      <label className="text-sm text-gray-400">Type</label>
-                     <select 
+                     <select
+                       title="Media type"
                        value={newGalleryItem.media_type}
                        onChange={e => setNewGalleryItem({...newGalleryItem, media_type: e.target.value})}
                        className="w-full bg-black/50 border border-white/10 rounded-xl p-4 text-white focus:border-cinema-red outline-none appearance-none"
@@ -624,7 +758,8 @@ export default function Dashboard({ session }: DashboardProps) {
                    </div>
                    <div className="space-y-2">
                      <label className="text-sm text-gray-400">Category</label>
-                     <select 
+                     <select
+                       title="Media category"
                        value={newGalleryItem.category}
                        onChange={e => setNewGalleryItem({...newGalleryItem, category: e.target.value})}
                        className="w-full bg-black/50 border border-white/10 rounded-xl p-4 text-white focus:border-cinema-red outline-none appearance-none"
@@ -636,8 +771,19 @@ export default function Dashboard({ session }: DashboardProps) {
                        <option value="events">Events</option>
                      </select>
                    </div>
+                   <div className="space-y-2 md:col-span-2">
+                     <label className="text-sm font-bold text-gray-300 uppercase tracking-widest">Alt Text</label>
+                     <input
+                       type="text"
+                       value={newGalleryItem.alt_text}
+                       onChange={e => setNewGalleryItem({...newGalleryItem, alt_text: e.target.value})}
+                       className="w-full bg-black/50 border border-white/10 rounded-xl p-4 text-white focus:border-cinema-red focus:ring-1 focus:ring-cinema-red/50 outline-none transition-all"
+                       placeholder="Descriptive alt text..."
+                     />
+                   </div>
                  </div>
-                 <button 
+                 <button
+                   type="button"
                    onClick={handleAddGallery}
                    disabled={isSaving || !newGalleryItem.media}
                    className="mt-4 flex items-center gap-2 bg-white/10 text-white px-6 py-3 rounded-xl font-bold hover:bg-cinema-red transition-all disabled:opacity-50"
@@ -656,10 +802,12 @@ export default function Dashboard({ session }: DashboardProps) {
                        <video src={item.media} className="w-full h-full object-cover opacity-60 group-hover:opacity-100 transition-opacity" muted />
                      )}
                      <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                       <button 
+                       <button
+                         type="button"
                          onClick={() => handleDeleteGallery(item.id)}
                          className="p-2 bg-red-600 rounded-lg text-white hover:bg-red-700"
-                         title="Delete"
+                         title="Delete item"
+                         aria-label="Delete gallery item"
                        >
                          <Trash2 size={16} />
                        </button>

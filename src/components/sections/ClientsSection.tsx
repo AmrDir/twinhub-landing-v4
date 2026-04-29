@@ -32,9 +32,14 @@ export default function ClientsSection({ language }: ClientsSectionProps) {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Section Header */}
         <div className="text-center mb-16 animate-fade-in">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cinema-red/10 border border-cinema-red/20 text-cinema-red-light text-xs font-bold uppercase tracking-widest mb-5">
+            <span className="w-1.5 h-1.5 rounded-full bg-cinema-red animate-pulse inline-block"></span>
+            {language === 'ar' ? 'عملاؤنا' : 'Our Clients'}
+          </div>
           <h2 className="text-3xl sm:text-5xl font-bold text-white mb-4 tracking-tight">
             {t.title}
           </h2>
+          <div className="w-12 h-0.5 bg-cinema-red rounded-full mx-auto mb-5 opacity-70"></div>
           <p className="text-lg text-gray-500 font-light max-w-2xl mx-auto leading-relaxed">
             {t.description}
           </p>
@@ -61,21 +66,6 @@ export default function ClientsSection({ language }: ClientsSectionProps) {
         </div>
       </div>
 
-      {/* Global CSS for Infinite Scroll Performance */}
-      <style>{`
-        @keyframes infinite-scroll {
-          from { transform: translateX(0); }
-          to { transform: translateX(-50%); }
-        }
-        .animate-infinite-scroll {
-          display: flex;
-          width: max-content;
-          animation: infinite-scroll 40s linear infinite;
-        }
-        .animate-infinite-scroll:hover {
-          animation-play-state: paused;
-        }
-      `}</style>
     </section>
   );
 }

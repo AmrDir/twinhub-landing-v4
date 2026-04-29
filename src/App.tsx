@@ -72,8 +72,8 @@ function App() {
           </>
         } />
 
-        {/* Auth Route */}
-        <Route path="/login" element={<LoginPage />} />
+        {/* Auth Route — redirect to dashboard if already authenticated */}
+        <Route path="/login" element={session ? <Navigate to="/admin" replace /> : <LoginPage />} />
 
         {/* Private Admin Route */}
         <Route 

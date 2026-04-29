@@ -66,9 +66,15 @@ export default function ProductsSection({ language }: ProductsSectionProps) {
         <div className="relative space-y-24 pb-24">
           {t.products.map((product, index) => {
             const isLast = index === t.products.length - 1;
-            
+            const productBadgeColors = [
+              'border-cinema-red/30 bg-cinema-red/10 text-cinema-red-light',
+              'border-electric-blue/30 bg-electric-blue/10 text-electric-blue',
+              'border-fusion-teal/30 bg-fusion-teal/10 text-fusion-teal',
+            ];
+            const badgeColor = productBadgeColors[index % productBadgeColors.length];
+
             return (
-              <div 
+              <div
                 key={product.id}
                 className={`sticky top-24 sm:top-32 lg:top-40 w-full min-h-[60vh] sm:min-h-[70vh] rounded-[2rem] sm:rounded-[3rem] border border-white/10 bg-black/40 backdrop-blur-3xl overflow-hidden shadow-[0_50px_100px_-20px_rgba(0,0,0,0.7)] flex flex-col lg:flex-row`}
                 style={{
@@ -82,7 +88,7 @@ export default function ProductsSection({ language }: ProductsSectionProps) {
                 {/* Content Side */}
                 <div className={`p-12 lg:p-20 flex flex-col justify-center w-full lg:w-1/2 ${isRtl ? 'order-2 lg:order-2 text-right' : 'order-2 lg:order-1'}`}>
                   <div className="mb-6">
-                    <span className="inline-block px-4 py-1.5 rounded-full border border-cinema-red/30 bg-cinema-red/10 text-cinema-red-light text-sm font-bold tracking-widest uppercase mb-6">
+                    <span className={`inline-block px-4 py-1.5 rounded-full border ${badgeColor} text-sm font-bold tracking-widest uppercase mb-6`}>
                       0{index + 1} / AI Platform
                     </span>
                     <h3 className="text-4xl lg:text-6xl font-bold text-white mb-6 leading-tight">
@@ -94,7 +100,7 @@ export default function ProductsSection({ language }: ProductsSectionProps) {
                   </div>
                   
                   {/* Features List */}
-                  <ul className="space-y-4 mb-12">
+                  <ul className="space-y-4 mb-12 text-gray-300">
                     {product.features[language as keyof typeof product.features].map((feat, idx) => (
                       <li key={idx} className="flex items-center gap-4 text-gray-300">
                         <div className="w-2 h-2 rounded-full bg-cinema-red shadow-[0_0_10px_rgba(220,38,38,0.5)]"></div>
