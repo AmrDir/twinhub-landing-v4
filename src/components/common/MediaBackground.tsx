@@ -24,7 +24,7 @@ export default function MediaBackground({
   const ytId = isYoutubeBg || isYoutubeVideo;
 
   return (
-    <div className={className.includes('absolute') ? className : `relative ${className}`}>
+    <div className={`media-background-container ${className.includes('absolute') ? className : `relative ${className}`}`}>
       {/* Background Media */}
       {ytId ? (
         <div className="absolute inset-0 w-full h-full overflow-hidden">
@@ -56,10 +56,10 @@ export default function MediaBackground({
         <div className="absolute inset-0 bg-gradient-to-br from-gray-900 via-black to-gray-800" />
       )}
 
-      {/* Overlay */}
+      {/* Overlay with Cinematic Tint */}
       {overlay && (
         <div
-          className="absolute inset-0 bg-black"
+          className="absolute inset-0 bg-gradient-to-b from-[#020617]/80 to-[#00020A]/95"
           style={{ opacity: overlayOpacity }}
         />
       )}

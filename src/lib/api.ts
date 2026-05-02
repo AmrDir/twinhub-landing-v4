@@ -174,3 +174,84 @@ export const deleteGalleryItem = async (id: string) => {
   if (error) throw error;
   return true;
 };
+
+// Clients
+export const getClients = async () => {
+  if (!supabase) return [];
+  const { data, error } = await supabase
+    .from('clients')
+    .select('*')
+    .order('sort_order', { ascending: true });
+
+  if (error) {
+    console.error('Error fetching clients:', error);
+    return [];
+  }
+  return data;
+};
+
+export const addClient = async (clientData: any) => {
+  if (!supabase) throw new Error('Supabase not configured');
+  const { data, error } = await supabase
+    .from('clients')
+    .insert([clientData])
+    .select()
+    .single();
+
+  if (error) throw error;
+  return data;
+};
+
+export const deleteClient = async (id: string) => {
+  if (!supabase) throw new Error('Supabase not configured');
+  const { error } = await supabase
+    .from('clients')
+    .delete()
+    .eq('id', id);
+
+  if (error) throw error;
+  return true;
+};
+
+// Media Upload to Supabase Storage
+export const uploadMedia = async (file: File, folder: string = 'gallery'): Promise<string> => {
+  if (!supabase) throw new Error('Supabase not configured');
+  
+  const ext = file.name.split('.').pop()?.toLowerCase() || 'jpg';
+  const safeName = `${folder}/${Date.now()}_${Math.random().toString(36).slice(2, 8)}.${ext}`;
+  
+  const { data, error } = await supabase.storage
+    .from('media')
+    .upload(safeName, file, {
+      cacheControl: '3600',
+      upsert: false,
+    });
+  
+  if (error) throw error;
+  
+  // Get public URL
+  const { data: urlData } = supabase.storage
+    .from('media')
+    .getPublicUrl(data.path);
+  
+  return urlData.publicUrl;
+};
+
+// Delete media from Supabase Storage  
+export const deleteMedia = async (filePath: string): Promise<boolean> => {
+  if (!supabase) throw new Error('Supabase not configured');
+  
+  // Extract path from full URL
+  const bucketPath = filePath.includes('/storage/v1/object/public/media/')
+    ? filePath.split('/storage/v1/object/public/media/')[1]
+    : filePath;
+  
+  if (!bucketPath) return false;
+  
+  const { error } = await supabase.storage
+    .from('media')
+    .remove([bucketPath]);
+  
+  if (error) throw error;
+  return true;
+};

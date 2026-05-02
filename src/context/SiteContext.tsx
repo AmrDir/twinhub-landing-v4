@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { getHeroContent, getProducts, getSiteSettings, getServices, getGallery } from '../lib/api';
+import { getHeroContent, getProducts, getSiteSettings, getServices, getGallery, getClients } from '../lib/api';
 
 // Define the shape of our data
 interface HeroData {
@@ -31,21 +31,55 @@ interface ProductData {
 interface SiteSettings {
   id: string;
   primary_color: string;
+  secondary_color: string;
+  accent_color: string;
+  
   services_bg_media: string;
   services_bg_opacity: number;
   products_bg_media: string;
   products_bg_opacity: number;
+  products_showreel_url?: string;
   gallery_bg_media: string;
   gallery_bg_opacity: number;
   clients_bg_media: string;
   clients_bg_opacity: number;
   about_bg_media: string;
   about_bg_opacity: number;
+  
+  // AI Section
+  ai_title_en?: string;
+  ai_title_ar?: string;
+  ai_subtitle_en?: string;
+  ai_subtitle_ar?: string;
+  ai_desc_en?: string;
+  ai_desc_ar?: string;
+  ai_features?: any[];
+  innovation_keywords?: string[];
+  
+  // About Section
+  about_vision_text_en?: string;
+  about_vision_text_ar?: string;
+  about_mission_text_en?: string;
+  about_mission_text_ar?: string;
+  about_stats: any;
+  
+  // Contact
   contact_email: string;
   contact_phone: string;
+  contact_phone2?: string;
   contact_whatsapp: string;
+  address_en?: string;
+  address_ar?: string;
+  map_url?: string;
+  schedule?: any;
+  
+  // Social
   social_instagram: string;
   social_facebook: string;
+  social_youtube?: string;
+  social_vimeo?: string;
+  social_twitter?: string;
+  social_linkedin?: string;
 }
 
 interface ServiceData {
@@ -70,12 +104,20 @@ interface GalleryData {
   alt_text: string;
 }
 
+interface ClientData {
+  id: string;
+  sort_order: number;
+  logo_url: string;
+  name: string;
+}
+
 interface SiteContextType {
   hero: HeroData | null;
   products: ProductData[];
   settings: SiteSettings | null;
   services: ServiceData[];
   gallery: GalleryData[];
+  clients: ClientData[];
   loading: boolean;
   refreshData: () => Promise<void>;
 }
@@ -86,6 +128,7 @@ const SiteContext = createContext<SiteContextType>({
   settings: null,
   services: [],
   gallery: [],
+  clients: [],
   loading: true,
   refreshData: async () => {},
 });
@@ -98,30 +141,32 @@ export const SiteProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [settings, setSettings] = useState<SiteSettings | null>(null);
   const [services, setServices] = useState<ServiceData[]>([]);
   const [gallery, setGallery] = useState<GalleryData[]>([]);
+  const [clients, setClients] = useState<ClientData[]>([]);
   const [loading, setLoading] = useState(true);
 
   const fetchData = async () => {
     setLoading(true);
     try {
-      const [heroData, productsData, settingsData, servicesData, galleryData] = await Promise.all([
+      const [heroData, productsData, settingsData, servicesData, galleryData, clientsData] = await Promise.all([
         getHeroContent(),
         getProducts(),
         getSiteSettings(),
         getServices(),
         getGallery(),
+        getClients(),
       ]);
       
       if (heroData) setHero(heroData as HeroData);
       if (productsData) setProducts(productsData as ProductData[]);
       if (settingsData) {
         setSettings(settingsData as SiteSettings);
-        // Inject primary color dynamically
         document.documentElement.style.setProperty('--color-primary', settingsData.primary_color);
-        // We also want to inject color-primary-rgb or rgba but CSS var hex parsing is hard without a library.
-        // It's easiest to just set the main hex value.
+        if (settingsData.secondary_color) document.documentElement.style.setProperty('--color-secondary', settingsData.secondary_color);
+        if (settingsData.accent_color) document.documentElement.style.setProperty('--color-accent', settingsData.accent_color);
       }
       if (servicesData) setServices(servicesData as ServiceData[]);
       if (galleryData) setGallery(galleryData as GalleryData[]);
+      if (clientsData) setClients(clientsData as ClientData[]);
     } catch (error) {
       console.error('Error fetching site data:', error);
     } finally {
@@ -134,7 +179,7 @@ export const SiteProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }, []);
 
   return (
-    <SiteContext.Provider value={{ hero, products, settings, services, gallery, loading, refreshData: fetchData }}>
+    <SiteContext.Provider value={{ hero, products, settings, services, gallery, clients, loading, refreshData: fetchData }}>
       {children}
     </SiteContext.Provider>
   );

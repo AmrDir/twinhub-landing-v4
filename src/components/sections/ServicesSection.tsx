@@ -2,6 +2,7 @@ import { Brain, Video, Camera, Palette, Users, Award, ChevronRight } from 'lucid
 import MediaBackground from '../common/MediaBackground';
 import { SERVICES_CONTENT } from '../../config/site.config';
 import { useSiteData } from '../../context/SiteContext';
+import { useScrollReveal } from '../../hooks/useScrollReveal';
 
 interface ServicesSectionProps {
   language: string;
@@ -19,23 +20,23 @@ const iconMap = {
 // Brand color cycle across service cards: red → blue → teal → repeat
 const iconColorCycle = [
   {
-    iconBg: 'bg-cinema-red shadow-[0_0_20px_rgba(220,38,38,0.3)]',
-    cardBorder: 'hover:border-cinema-red/40',
-    cardGlow: 'from-cinema-red/10',
+    iconBg: 'bg-cinema-red shadow-[0_0_30px_rgba(220,38,38,0.4)]',
+    cardBorder: 'hover:border-cinema-red/60',
+    cardGlow: 'from-cinema-red/20',
     titleHover: 'group-hover:text-cinema-red-light',
     linkText: 'text-cinema-red-light',
   },
   {
-    iconBg: 'bg-electric-blue shadow-[0_0_20px_rgba(59,130,246,0.3)]',
-    cardBorder: 'hover:border-electric-blue/30',
-    cardGlow: 'from-electric-blue/10',
+    iconBg: 'bg-electric-blue shadow-[0_0_30px_rgba(59,130,246,0.4)]',
+    cardBorder: 'hover:border-electric-blue/50',
+    cardGlow: 'from-electric-blue/20',
     titleHover: 'group-hover:text-electric-blue',
     linkText: 'text-electric-blue',
   },
   {
-    iconBg: 'bg-fusion-teal shadow-[0_0_20px_rgba(13,148,136,0.3)]',
-    cardBorder: 'hover:border-fusion-teal/30',
-    cardGlow: 'from-fusion-teal/10',
+    iconBg: 'bg-fusion-teal shadow-[0_0_30px_rgba(13,148,136,0.4)]',
+    cardBorder: 'hover:border-fusion-teal/50',
+    cardGlow: 'from-fusion-teal/20',
     titleHover: 'group-hover:text-fusion-teal',
     linkText: 'text-fusion-teal',
   },
@@ -43,6 +44,7 @@ const iconColorCycle = [
 
 export default function ServicesSection({ language }: ServicesSectionProps) {
   const { services: dbServices, settings } = useSiteData();
+  const { ref, isVisible } = useScrollReveal();
   const defaultT = SERVICES_CONTENT[language as keyof typeof SERVICES_CONTENT] || SERVICES_CONTENT.en;
   const isRtl = language === 'ar';
 
@@ -55,13 +57,13 @@ export default function ServicesSection({ language }: ServicesSectionProps) {
     features: language === 'ar' ? s.features_ar : s.features_en
   })) : defaultT.services;
 
-  const bgMedia = settings?.services_bg_media || '/backgrounds/services/services-bg.jpg';
+  const bgMedia = settings?.services_bg_media || '/gallery/work16.jpg';
   const bgOpacity = settings?.services_bg_opacity ?? 0.85;
 
   return (
-    <section id="services" className="relative py-32 lg:py-48 bg-black overflow-hidden">
+    <section id="services" ref={ref} className="relative pt-6 pb-16 px-4 sm:px-6 lg:px-8 border-t border-white/[0.05]">
       {/* Top Edge Fasil (Cinematic Separation) */}
-      <div className="absolute top-0 inset-x-0 h-32 bg-gradient-to-b from-black to-transparent z-10"></div>
+      <div className="absolute top-0 inset-x-0 h-16 bg-gradient-to-b from-black to-transparent z-10"></div>
       
       {/* Background with cinematic depth */}
       <div className="absolute inset-0 z-0">
@@ -77,9 +79,9 @@ export default function ServicesSection({ language }: ServicesSectionProps) {
       <div className="absolute top-1/4 -right-32 w-[700px] h-[700px] bg-cinema-red/8 rounded-full blur-[180px] pointer-events-none z-0"></div>
       <div className="absolute bottom-1/4 -left-32 w-[500px] h-[500px] bg-electric-blue/6 rounded-full blur-[160px] pointer-events-none z-0"></div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <div className={`max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 transition-opacity duration-1000 ${isVisible ? 'opacity-100' : 'opacity-0'}`}>
         {/* Section Header */}
-        <div className="text-center mb-20 animate-fade-in">
+        <div className={`text-center mb-20 ${isVisible ? 'animate-fade-in' : ''}`}>
           <h2 className="text-4xl sm:text-6xl font-bold text-white mb-6 tracking-tight">
             {isRtl ? (
               <>خدماتنا <span className="text-cinema-red">الإبداعية</span></>
@@ -103,6 +105,7 @@ export default function ServicesSection({ language }: ServicesSectionProps) {
                 className={`group relative cinematic-card p-8 lg:p-10 ${colors.cardBorder} transition-all duration-700 transform hover:-translate-y-3`}
                 style={{ transitionDelay: `${index * 80}ms` }}
               >
+                <div className={`${isVisible ? 'animate-fade-in-up' : 'opacity-0'}`} style={{ animationDelay: `${(index + 1) * 100}ms` }}>
                 {/* Glow Effect */}
                 <div className={`absolute -inset-px bg-gradient-to-br ${colors.cardGlow} to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none`}></div>
                 <div className="inner-glow"></div>
@@ -140,9 +143,10 @@ export default function ServicesSection({ language }: ServicesSectionProps) {
                   <span>{defaultT.learnMore}</span>
                   <ChevronRight className={`w-4 h-4 transition-transform group-hover/btn:translate-x-1 ${isRtl ? 'rotate-180 group-hover/btn:-translate-x-1' : ''}`} />
                 </button>
-              </div>
-            );
-          })}
+                  </div>
+                </div>
+              );
+            })}
         </div>
       </div>
     </section>

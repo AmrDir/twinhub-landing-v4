@@ -44,11 +44,11 @@ export default function HeroSection({ language }: HeroSectionProps) {
     <section id="hero" className="relative w-full h-screen overflow-hidden">
       <MediaBackground
         backgroundVideo={t.background_media}
-        overlayOpacity={0.6}
+        overlayOpacity={settings?.hero_bg_opacity ?? 0.2}
         className="h-full w-full flex items-center justify-center"
       >
         {/* Dynamic Overlay for Depth */}
-        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/70 z-10"></div>
+        <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-transparent to-black/50 z-10"></div>
         
         {/* Grain / Texture Layer */}
         <div className="absolute inset-0 opacity-[0.03] z-15 pointer-events-none bg-pattern"></div>

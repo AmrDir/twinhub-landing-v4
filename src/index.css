@@ -14,18 +14,40 @@
   --space-3xl: 6rem;
   --space-4xl: 8rem;
   
-  --glass-border: rgba(255, 255, 255, 0.08);
-  --glass-bg: rgba(255, 255, 255, 0.03);
+  --glass-border: rgba(255, 255, 255, 0.12);
+  --glass-bg: rgba(15, 23, 42, 0.4);
+  --glass-glow: rgba(59, 130, 246, 0.15);
+
+  --color-primary: #DC2626; /* Cinema Red (Vibrant) */
+  --color-secondary: #0070FF; /* Electric Blue (High Glow) */
+  --color-accent: #14B8A6; /* Fusion Teal */
+  --color-space-deep: #020617; /* Midnight Space Blue */
+  --color-space-void: #00020A; /* Deepest Void */
 
   /* Fluid Typography */
-  --font-size-hero: clamp(2.25rem, 6vw, 6rem);
+  --font-size-hero: clamp(2.25rem, 8vw, 7rem);
   --font-size-h2: clamp(1.75rem, 5vw, 4.5rem);
-  --font-size-body: clamp(0.9rem, 1vw, 1.15rem);
+  --font-size-body: clamp(0.95rem, 1.2vw, 1.25rem);
 }
 
 /* RTL Support */
 [dir="rtl"] {
   text-align: right;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  width: 100%;
+}
+
+body {
+  background-color: var(--color-space-deep);
+  background-image: radial-gradient(circle at 50% 0%, #0B112B 0%, var(--color-space-deep) 70%, var(--color-space-void) 100%);
+  color: #F8FAFC; /* Ice White for better legibility */
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  min-height: 100vh;
 }
 
 [dir="rtl"] .space-x-4 > * + * {
@@ -199,10 +221,51 @@ p {
 }
 
 .cinematic-card {
-  @apply bg-white/[0.06] border border-white/[0.12] rounded-[2.5rem] backdrop-blur-xl overflow-hidden transition-all duration-700;
+  @apply bg-[#111827]/80 backdrop-blur-md border border-white/20 rounded-[2.5rem] relative overflow-hidden transition-all duration-700 shadow-[0_20px_50px_-12px_rgba(0,0,0,0.5)];
+}
+
+.cinematic-card:hover {
+  @apply border-white/40 bg-[#1F2937]/90 -translate-y-2;
   box-shadow:
-    inset 0 0 0 1px rgba(255, 255, 255, 0.12),
-    0 30px 60px -15px rgba(0, 0, 0, 0.8);
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.15),
+    0 40px 80px -15px rgba(0, 0, 0, 0.9),
+    0 0 40px rgba(0, 112, 255, 0.15);
+}
+
+/* --- Starfield Animation (Transparent Overlay) --- */
+.stars-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100dvh;
+  z-index: 1; /* Keep it behind content but above basic backgrounds */
+  pointer-events: none;
+  overflow: hidden;
+  background: transparent;
+  will-change: transform;
+  transform: translateZ(0); /* Hardware acceleration */
+}
+
+/* Base section stability */
+section {
+  position: relative;
+  isolation: isolate;
+}
+
+/* Specific fix for MediaBackground to stay below stars */
+.media-background-container {
+  position: relative;
+  z-index: -1;
+}
+
+header, footer, #whatsapp-button {
+  z-index: 100;
+}
+
+@keyframes twinkle {
+  0%, 100% { opacity: 0.2; transform: scale(0.8); }
+  50% { opacity: 1; transform: scale(1.1); }
 }
 
 .inner-glow {
@@ -351,13 +414,24 @@ p {
   to { transform: translateX(-50%); }
 }
 
+@keyframes infinite-scroll-reverse {
+  from { transform: translateX(-50%); }
+  to { transform: translateX(0); }
+}
+
 .animate-infinite-scroll {
   display: flex;
   width: max-content;
   animation: infinite-scroll 40s linear infinite;
 }
 
-.animate-infinite-scroll:hover {
+.animate-infinite-scroll-reverse {
+  display: flex;
+  width: max-content;
+  animation: infinite-scroll-reverse 40s linear infinite;
+}
+
+.animate-infinite-scroll:hover, .animate-infinite-scroll-reverse:hover {
   animation-play-state: paused;
 }
 

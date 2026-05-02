@@ -5,16 +5,16 @@ export default {
     extend: {
       colors: {
         "cinema-red": {
-          DEFAULT: "#DC2626",
-          hover: "#B91C1C",
-          light: "#EF4444"
+          DEFAULT: "var(--color-primary)",
+          hover: "var(--color-primary)",
+          light: "var(--color-primary)"
         },
         "dark-obsidian": {
           DEFAULT: "#0A0A0A",
           light: "#171717"
         },
-        "electric-blue": "#3B82F6",
-        "fusion-teal": "#0D9488",
+        "electric-blue": "var(--color-secondary)",
+        "fusion-teal": "var(--color-accent)",
         "platinum-gray": "#E5E7EB",
       },
       animation: {

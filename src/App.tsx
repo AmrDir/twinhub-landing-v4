@@ -11,6 +11,7 @@ import AboutSection from './components/sections/AboutSection';
 import ContactSection from './components/sections/ContactSection';
 import Footer from './components/Footer';
 import WhatsAppButton from './components/common/WhatsAppButton';
+import StarBackground from './components/common/StarBackground';
 
 // Admin Pages (To be created)
 import LoginPage from './pages/admin/LoginPage';
@@ -52,6 +53,7 @@ function App() {
 
   return (
     <div className={`min-h-screen ${language === 'ar' ? 'rtl' : 'ltr'}`}>
+      <StarBackground />
       <Routes>
         {/* Public Landing Page */}
         <Route path="/" element={

@@ -40,13 +40,13 @@ function InteractiveCard({ item, onClick, index }: { item: any, onClick: () => v
   return (
     <div
       ref={cardRef}
-      className="group relative aspect-[4/5] rounded-[2rem] overflow-hidden cursor-pointer transition-all duration-300 ease-out"
+      className="group relative aspect-[4/5] rounded-[2.5rem] overflow-hidden cursor-pointer transition-all duration-500 ease-out border border-white/20 hover:border-white/50"
       style={{
         perspective: '1200px',
         transform: `rotateX(${rotate.x}deg) rotateY(${rotate.y}deg)`,
         boxShadow: rotate.x !== 0 || rotate.y !== 0 
-          ? `${-rotate.y}px ${rotate.x}px 30px rgba(0,0,0,0.5)` 
-          : '0 10px 20px rgba(0,0,0,0.3)'
+          ? `${-rotate.y}px ${rotate.x}px 40px rgba(0,0,0,0.6)` 
+          : '0 15px 35px rgba(0,0,0,0.4)'
       }}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
@@ -115,23 +115,29 @@ function InteractiveCard({ item, onClick, index }: { item: any, onClick: () => v
   );
 }
 
-const ITEMS_PER_PAGE = 8;
+const ITEMS_PER_PAGE = 16;
 
 export default function GallerySection({ language }: GallerySectionProps) {
   const { gallery: dbGallery, settings } = useSiteData();
   const t = GALLERY_CONTENT[language as 'en' | 'ar'] || GALLERY_CONTENT.en;
   const isRtl = language === 'ar';
   
-  // Construct final gallery items array (deduplicate by src to guard against duplicate DB rows)
+  // Construct final gallery items array (Merge DB items with static defaults)
   const activeGallery = useMemo(() => {
-    const raw = dbGallery.length > 0 ? dbGallery.map(g => ({
+    const dbItems = dbGallery.map(g => ({
       src: g.media,
       type: g.media_type,
       category: g.category,
-      alt: g.alt_text
-    })) : GALLERY_CONTENT.items;
-    const seen = new Set<string>();
-    return raw.filter(item => seen.has(item.src) ? false : (seen.add(item.src), true));
+      alt: g.alt_text,
+      isDb: true
+    }));
+
+    // Merge: DB items first, then static items that aren't already in DB
+    const staticItems = GALLERY_CONTENT.items.filter(si => 
+      !dbItems.some(di => di.src === si.src)
+    );
+
+    return [...dbItems, ...staticItems];
   }, [dbGallery]);
 
   const [activeFilter, setActiveFilter] = useState('all');
@@ -157,9 +163,9 @@ export default function GallerySection({ language }: GallerySectionProps) {
   }, [featuredItems.length]);
 
   return (
-    <section id="gallery" className="py-24 bg-black relative overflow-hidden">
+    <section id="gallery" className="py-12 relative overflow-hidden">
       <MediaBackground
-        backgroundImage={settings?.gallery_bg_media || "/backgrounds/clients/clients-bg.jpg"}
+        backgroundImage={settings?.gallery_bg_media || "/gallery/work1.jpg"}
         overlayOpacity={settings?.gallery_bg_opacity ?? 0.92}
         className="absolute inset-0"
       />

@@ -83,8 +83,8 @@ export const PRODUCTS_CONTENT = {
         en: ['AI Workflow Automation', 'Prompt Library', 'API Integration'],
         ar: ['أتمتة سير العمل', 'مكتبة أوامر جاهزة', 'ربط برمجي API']
       },
-      media: '/products/ask-prompt-me.mp4',
-      type: 'video',
+      media: '/ask-prompt-me.png',
+      type: 'image',
       link: '#'
     },
     {
@@ -98,8 +98,8 @@ export const PRODUCTS_CONTENT = {
         en: ['Real-time Translation', 'Contextual Localization', 'Multi-format Support'],
         ar: ['ترجمة فورية', 'توطين سياقي', 'دعم صيغ متعددة']
       },
-      media: '/products/lingualink.mp4',
-      type: 'video',
+      media: '/products/lingualink.png',
+      type: 'image',
       link: '#'
     },
     {
@@ -113,8 +113,8 @@ export const PRODUCTS_CONTENT = {
         en: ['Autonomous AI', 'Cinematic Rendering', 'Emotional Intelligence'],
         ar: ['ذكاء اصطناعي مستقل', 'عرض سينمائي', 'ذكاء عاطفي']
       },
-      media: '/products/karma-house.mp4',
-      type: 'video',
+      media: '/work4.jpg',
+      type: 'image',
       link: '#'
     }
   ]
@@ -366,32 +366,26 @@ export const GALLERY_CONTENT = {
     remaining: 'متبقي'
   },
   items: [
-    { src: '/gallery/Day Exterior, Desert Location.jpeg', type: 'image', alt: 'Day Exterior, Desert Location', category: 'photography' },
-    { src: '/gallery/Director on Set Bokeh.jpeg', type: 'image', alt: 'Director on Set Bokeh', category: 'video' },
-    { src: '/gallery/Golden Projector Gate.jpeg', type: 'image', alt: 'Golden Projector Gate', category: 'photography' },
-    { src: '/gallery/Golden Rim Light and Cyan Points.jpeg', type: 'image', alt: 'Golden Rim Light and Cyan Points', category: 'photography' },
-    { src: '/gallery/Indoor Set, Smoke and Contrast.jpeg', type: 'image', alt: 'Indoor Set, Smoke and Contrast', category: 'video' },
-    { src: '/gallery/Night Indoor Set with Crew.jpeg', type: 'image', alt: 'Night Indoor Set with Crew', category: 'events' },
-    { src: '/gallery/Night Interior, High Tech Look.jpeg', type: 'image', alt: 'Night Interior, High Tech Look', category: 'video' },
-    { src: '/gallery/Outdoor Night Shoot, Forest.jpeg', type: 'image', alt: 'Outdoor Night Shoot, Forest', category: 'photography' },
-    { src: '/gallery/Outdoor Night Shoot, Urban.jpeg', type: 'image', alt: 'Outdoor Night Shoot, Urban', category: 'photography' },
-    { src: '/gallery/Silhouetted Passage.jpeg', type: 'image', alt: 'Silhouetted Passage', category: 'photography' },
-    { src: '/gallery/work1.jpg', type: 'image', alt: 'Brand Campaign', category: 'branding' },
-    { src: '/gallery/work2.jpg', type: 'image', alt: 'Photography', category: 'photography' },
-    { src: '/gallery/work4.jpg', type: 'image', alt: 'Commercial Shoot', category: 'photography' },
-    { src: '/gallery/work8.jpg', type: 'image', alt: 'Brand Identity', category: 'branding' },
-    { src: '/gallery/work13.jpg', type: 'image', alt: 'Documentary', category: 'video' },
-    { src: '/gallery/work15.jpg', type: 'image', alt: 'Exhibition', category: 'events' },
-    { src: '/gallery/work16.jpg', type: 'image', alt: 'Portrait Photography', category: 'photography' },
-    { src: '/gallery/work19.jpg', type: 'image', alt: 'Media Production', category: 'video' },
+    { src: '/gallery/work1.jpg', type: 'image', alt: 'Creative Production', category: 'branding' },
+    { src: '/gallery/work2.jpg', type: 'image', alt: 'Photography Art', category: 'photography' },
+    { src: '/gallery/work3.jpg', type: 'image', alt: 'Visual Storytelling', category: 'branding' },
+    { src: '/gallery/work4.jpg', type: 'image', alt: 'Cinematic Direction', category: 'video' },
+    { src: '/gallery/work5.jpg', type: 'image', alt: 'Studio Work', category: 'photography' },
+    { src: '/gallery/work7.jpg', type: 'image', alt: 'Creative Vision', category: 'branding' },
+    { src: '/gallery/work8.jpg', type: 'image', alt: 'Media Innovation', category: 'video' },
+    { src: '/gallery/work9.jpg', type: 'image', alt: 'Brand Identity', category: 'branding' },
+    { src: '/gallery/work10.jpg', type: 'image', alt: 'High-end Production', category: 'photography' },
+    { src: '/gallery/work11.jpg', type: 'image', alt: 'Motion Graphics', category: 'video' },
+    { src: '/gallery/work13.jpg', type: 'image', alt: 'Documentary Work', category: 'video' },
+    { src: '/gallery/work16.jpg', type: 'image', alt: 'Professional Photography', category: 'photography' },
     { src: '/gallery/work21.jpg', type: 'image', alt: 'Art Direction', category: 'branding' },
-    { src: '/gallery/work22.jpg', type: 'image', alt: 'Visual Campaign', category: 'branding' },
-    { src: '/gallery/work23.jpg', type: 'image', alt: 'Commercial Ad', category: 'video' },
-    { src: '/gallery/work24.jpg', type: 'image', alt: 'Event Design', category: 'events' },
-    { src: '/gallery/work25.jpg', type: 'image', alt: 'Creative Production', category: 'photography' },
-    { src: '/gallery/work26.jpg', type: 'image', alt: 'Brand Story', category: 'branding' },
-    { src: '/gallery/work27.jpg', type: 'image', alt: 'Graphic Design', category: 'branding' },
-    { src: '/gallery/work33.jpg', type: 'image', alt: 'Creative Direction', category: 'branding' },
+    { src: '/gallery/work22.jpg', type: 'image', alt: 'Visual Effects', category: 'video' },
+    { src: '/gallery/work23.jpg', type: 'image', alt: 'Commercial Production', category: 'video' },
+    { src: '/gallery/work24.jpg', type: 'image', alt: 'Event Media', category: 'events' },
+    { src: '/gallery/work25.jpg', type: 'image', alt: 'Digital Story', category: 'branding' },
+    { src: '/gallery/work26.jpg', type: 'image', alt: 'Creative Strategy', category: 'branding' },
+    { src: '/gallery/work27.jpg', type: 'image', alt: 'Brand Experience', category: 'photography' },
+    { src: '/gallery/work33.jpg', type: 'image', alt: 'Masterpiece Production', category: 'video' },
   ]
 };
 
@@ -452,13 +446,13 @@ export const CLIENTS_CONTENT = {
     description: 'لقد حظينا بشرف العمل مع عملاء رائعين يثقون بنا لتحقيق رؤاهم.',
   },
   logos: [
-    '05551b48361291.5895ec5ca8529.jpg',
-    '1.jpg', '1.png', '11.jpg', '13.jpg',
-    '17.jpg', '18.jpeg', '2.jpg', '2.png', '3.jpg', '3.png', '5.jpg',
-    '5.png', '6.jpg', '7.jpg', '8.jpg', '9.jpg', 'Logo1.png',
-    'RED SEA LOGO.png', 'avatars-000511228836-pmthbo-t500x500 (1).jpg',
-    'blob-04ea318.png', 'blob-3cd870b.png', 'blob-af8c579.png',
-    'logo royal company-02-01.png', 'logo الكنافة السورى-01.png',
-    'logo-fb6edbc.jpg', 'logo.jpg'
+    'logo-01.png', 'logo-02.png', 'logo-03.png', 'logo-04.png', 'logo-05.png',
+    'logo-06.png', 'logo-07.png', 'logo-08.png', 'logo-09.png', 'logo-10.png',
+    'logo-11.png', 'logo-12.png', 'logo-13.png', 'logo-14.png', 'logo-15.png',
+    'logo-16.png', 'logo-17.png', 'logo-18.png', 'logo-19.png', 'logo-20.png',
+    'logo-21.png', 'logo-22.png', 'logo-23.png', 'logo-24.png', 'logo-25.png',
+    'logo-26.png', 'logo-27.png', 'logo-28.png', 'logo-29.png', 'logo-30.png',
+    'logo-31.png', 'logo-32.png', 'logo-33.png', 'logo-34.png', 'logo-35.png',
+    'logo-36.png', 'logo-37.png', 'logo-38.png', 'logo-39.png', 'logo-40.png'
   ]
 };

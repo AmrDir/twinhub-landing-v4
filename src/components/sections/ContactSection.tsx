@@ -16,6 +16,10 @@ export default function ContactSection({ language }: ContactSectionProps) {
   const contactEmail = settings?.contact_email || CONTACT_INFO.email;
   const contactWhatsapp = settings?.contact_whatsapp || CONTACT_INFO.whatsapp;
   const contactPhone = settings?.contact_phone || CONTACT_INFO.phone;
+  const contactPhone2 = settings?.contact_phone2;
+  const address = isRtl ? (settings?.address_ar || CONTACT_INFO.address.ar) : (settings?.address_en || CONTACT_INFO.address.en);
+  const mapUrl = settings?.map_url || CONTACT_INFO.mapUrl;
+  const schedule = settings?.schedule || t.schedule;
   
   const [formData, setFormData] = useState({
     name: '',
@@ -59,7 +63,7 @@ export default function ContactSection({ language }: ContactSectionProps) {
   };
 
   return (
-    <section id="contact" className="relative py-24 lg:py-32 bg-black overflow-hidden">
+    <section id="contact" className="relative py-16 lg:py-24 bg-black overflow-hidden">
       <MediaBackground
         backgroundImage="/backgrounds/contact/contact-bg.jpg"
         overlayOpacity={0.97}
@@ -92,29 +96,34 @@ export default function ContactSection({ language }: ContactSectionProps) {
             
             <div className="grid sm:grid-cols-2 gap-6">
               {/* Email Card */}
-              <a href={`mailto:${contactEmail}`} className="group p-6 bg-white/[0.06] border border-white/10 rounded-2xl hover:bg-white/[0.10] hover:border-cinema-red/30 transition-all">
+              <a href={`mailto:${contactEmail}`} className="group p-6 cinematic-card border-white/20 hover:border-cinema-red/50 hover:bg-[#1F2937]/90 transition-all duration-500">
                 <Mail className="w-8 h-8 text-cinema-red-light mb-4" />
                 <h4 className="text-white font-bold mb-1">{t.emailUs}</h4>
-                <p className="text-gray-400 text-sm">{contactEmail}</p>
+                <p className="text-gray-300 text-sm">{contactEmail}</p>
               </a>
 
               {/* WhatsApp Card */}
-              <a href={`https://wa.me/${contactWhatsapp}`} target="_blank" rel="noreferrer" className="group p-6 bg-white/[0.06] border border-white/10 rounded-2xl hover:bg-white/[0.10] hover:border-green-500/30 transition-all">
+              <a href={`https://wa.me/${contactWhatsapp}`} target="_blank" rel="noreferrer" className="group p-6 cinematic-card border-white/20 hover:border-green-500/50 hover:bg-[#1F2937]/90 transition-all duration-500">
                 <MessageCircle className="w-8 h-8 text-green-500 mb-4" />
                 <h4 className="text-white font-bold mb-1">{t.whatsappUs}</h4>
-                <p className="text-gray-400 text-sm">{contactPhone}</p>
+                <p className="text-gray-300 text-sm">{contactPhone}</p>
               </a>
             </div>
 
             {/* Address & Office Hours */}
-            <div className="p-8 bg-white/[0.06] border border-white/10 rounded-3xl space-y-8">
+            <div className="p-8 cinematic-card border-white/20 space-y-8">
               <div className="flex gap-4">
                 <MapPin className="text-cinema-red-light shrink-0" size={24} />
                 <div>
                   <h4 className="text-white font-bold mb-2">{t.visitUs}</h4>
-                  <p className="text-gray-400 font-light leading-relaxed">
-                    {isRtl ? CONTACT_INFO.address.ar : CONTACT_INFO.address.en}
+                  <p className="text-gray-300 font-light leading-relaxed">
+                    {address}
                   </p>
+                  {mapUrl && (
+                    <a href={mapUrl} target="_blank" rel="noreferrer" className="text-cinema-red text-sm hover:underline mt-2 inline-block font-bold">
+                      {isRtl ? 'فتح في خرائط جوجل' : 'Open in Google Maps'}
+                    </a>
+                  )}
                 </div>
               </div>
 
@@ -123,14 +132,14 @@ export default function ContactSection({ language }: ContactSectionProps) {
                   <Clock className="text-cinema-red-light shrink-0" size={24} />
                   <h4 className="text-white font-bold">{t.officeHours}</h4>
                 </div>
-                <div className="space-y-3 text-sm font-light text-gray-400">
-                  <div className="flex justify-between items-center bg-white/[0.05] p-3 rounded-xl">
-                    <span>{t.schedule.weekdays}</span>
-                    <span className="text-fusion-teal font-medium">{t.schedule.weekdaysTime}</span>
+                <div className="space-y-3 text-sm font-light text-gray-300">
+                  <div className="flex justify-between items-center bg-white/[0.05] p-4 rounded-xl border border-white/5">
+                    <span>{schedule.weekdays}</span>
+                    <span className="text-electric-blue font-bold tracking-wider">{schedule.weekdays_time || schedule.weekdaysTime}</span>
                   </div>
-                  <div className="flex justify-between items-center bg-white/[0.05] p-3 rounded-xl">
-                    <span>{t.schedule.saturday}</span>
-                    <span className="text-fusion-teal font-medium">{t.schedule.saturdayTime}</span>
+                  <div className="flex justify-between items-center bg-white/[0.05] p-4 rounded-xl border border-white/5">
+                    <span>{schedule.saturday}</span>
+                    <span className="text-electric-blue font-bold tracking-wider">{schedule.saturday_time || schedule.saturdayTime}</span>
                   </div>
                 </div>
               </div>
@@ -142,7 +151,7 @@ export default function ContactSection({ language }: ContactSectionProps) {
              {/* Glow decorative */}
             <div className="absolute -inset-4 bg-cinema-red/10 blur-3xl opacity-20 pointer-events-none"></div>
 
-            <div className="relative bg-white/[0.05] border border-white/15 backdrop-blur-xl p-8 lg:p-12 rounded-3xl shadow-2xl">
+            <div className="relative cinematic-card border-white/20 p-8 lg:p-12 shadow-2xl">
               <form 
                 name="contact"
                 method="POST"
@@ -206,16 +215,16 @@ export default function ContactSection({ language }: ContactSectionProps) {
 
                 <div className="space-y-2">
                   <label htmlFor="message" className="text-sm font-medium text-gray-300">{t.message}</label>
-                  <textarea
-                    id="message"
-                    name="message"
-                    required
-                    rows={5}
-                    value={formData.message}
-                    onChange={handleChange}
-                    className="w-full bg-white/[0.07] border border-white/15 rounded-xl px-4 py-3 text-white placeholder:text-gray-600 focus:ring-2 focus:ring-cinema-red focus:border-cinema-red/50 outline-none transition-all resize-none"
-                    placeholder={t.messagePlaceholder}
-                  />
+                    <textarea
+                      id="message"
+                      name="message"
+                      required
+                      rows={5}
+                      value={formData.message}
+                      onChange={handleChange}
+                      className="w-full bg-[#1F2937]/50 border border-white/10 rounded-xl px-4 py-3 text-white placeholder:text-gray-500 focus:ring-2 focus:ring-cinema-red focus:border-cinema-red/50 outline-none transition-all resize-none"
+                      placeholder={t.messagePlaceholder}
+                    />
                 </div>
 
                 <button

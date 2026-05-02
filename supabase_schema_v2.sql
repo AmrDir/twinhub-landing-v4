@@ -168,7 +168,8 @@ CREATE TABLE IF NOT EXISTS public.gallery (
     media_type   TEXT    NOT NULL DEFAULT 'image',
     category     TEXT    NOT NULL DEFAULT 'all',
     alt_text     TEXT    NOT NULL DEFAULT 'Gallery Item',
-    created_at   TIMESTAMPTZ NOT NULL DEFAULT now()
+    created_at   TIMESTAMPTZ NOT NULL DEFAULT now(),
+    updated_at   TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 
 -- Sample seed — replace paths with your actual media files
@@ -278,4 +279,8 @@ CREATE OR REPLACE TRIGGER trg_services_updated_at
 
 CREATE OR REPLACE TRIGGER trg_settings_updated_at
     BEFORE UPDATE ON public.site_settings
+    FOR EACH ROW EXECUTE FUNCTION public.set_updated_at();
+
+CREATE OR REPLACE TRIGGER trg_gallery_updated_at
+    BEFORE UPDATE ON public.gallery
     FOR EACH ROW EXECUTE FUNCTION public.set_updated_at();

@@ -2,6 +2,7 @@ import { Award, Users, Clock, Target, Palette, CheckCircle2 } from 'lucide-react
 import MediaBackground from '../common/MediaBackground';
 import { ABOUT_CONTENT, SERVICES_CONTENT } from '../../config/site.config';
 import { useSiteData } from '../../context/SiteContext';
+import DigitalLibrary from './DigitalLibrary';
 
 interface AboutSectionProps {
   language: string;
@@ -18,13 +19,21 @@ export default function AboutSection({ language }: AboutSectionProps) {
   const { settings } = useSiteData();
   const t = ABOUT_CONTENT[language as keyof typeof ABOUT_CONTENT] || ABOUT_CONTENT.en;
   const s = SERVICES_CONTENT[language as keyof typeof SERVICES_CONTENT] || SERVICES_CONTENT.en;
+  const visionText = language === 'ar' ? settings?.about_vision_text_ar : settings?.about_vision_text_en;
+  const missionText = language === 'ar' ? settings?.about_mission_text_ar : settings?.about_mission_text_en;
   const isRtl = language === 'ar';
+  const bgMedia = settings?.about_bg_media || '/backgrounds/about/about-bg.jpg';
+  const bgOpacity = settings?.about_bg_opacity ?? 0.88;
   
-  const bgMedia = settings?.about_bg_media || '/backgrounds/about/about-bg.png';
-  const bgOpacity = settings?.about_bg_opacity ?? 0.75;
+  const stats = settings?.about_stats?.length ? settings.about_stats.map((s: any) => ({
+    id: s.id,
+    value: s.value,
+    icon: s.icon,
+    label: language === 'ar' ? s.label_ar : s.label_en
+  })) : t.stats;
 
   return (
-    <section id="about" className="relative py-24 bg-black overflow-hidden">
+    <section id="about" className="relative py-10 overflow-hidden">
       <MediaBackground
         backgroundImage={bgMedia}
         overlayOpacity={bgOpacity}
@@ -61,21 +70,20 @@ export default function AboutSection({ language }: AboutSectionProps) {
               <p>{t.locationText}</p>
             </div>
 
-            {/* Vision & Mission Cards */}
             <div className="grid sm:grid-cols-2 gap-6 pt-6">
-              <div className="p-6 bg-gray-50 rounded-2xl border border-gray-100 border-l-4 border-l-cinema-red/50 hover:bg-white hover:shadow-sm transition-all duration-300">
+              <div className="p-8 cinematic-card group hover:border-cinema-red/50 hover:shadow-[0_0_30px_rgba(220,38,38,0.15)] transition-all duration-700">
                  <div className="flex items-center gap-3 mb-4">
                    <Target className="text-cinema-red" size={24} />
-                   <h4 className="font-bold text-gray-900">{t.visionTitle}</h4>
+                   <h4 className="font-bold text-white uppercase tracking-widest text-sm">{t.visionTitle}</h4>
                  </div>
-                 <p className="text-sm text-gray-500 leading-relaxed font-light">{t.visionText}</p>
+                 <p className="text-sm text-gray-300 leading-relaxed font-light group-hover:text-white transition-colors">{visionText || t.visionText}</p>
               </div>
-              <div className="p-6 bg-gray-50 rounded-2xl border border-gray-100 border-l-4 border-l-electric-blue/50 hover:bg-white hover:shadow-sm transition-all duration-300">
+              <div className="p-8 cinematic-card group hover:border-electric-blue/50 hover:shadow-[0_0_30px_rgba(0,112,255,0.15)] transition-all duration-700">
                  <div className="flex items-center gap-3 mb-4">
                    <Award className="text-electric-blue" size={24} />
-                   <h4 className="font-bold text-gray-900">{t.missionTitle}</h4>
+                   <h4 className="font-bold text-white uppercase tracking-widest text-sm">{t.missionTitle}</h4>
                  </div>
-                 <p className="text-sm text-gray-500 leading-relaxed font-light">{t.missionText}</p>
+                 <p className="text-sm text-gray-300 leading-relaxed font-light group-hover:text-white transition-colors">{missionText || t.missionText}</p>
               </div>
             </div>
           </div>
@@ -83,18 +91,22 @@ export default function AboutSection({ language }: AboutSectionProps) {
           {/* Right: Visual Element & Stats */}
           <div className="relative">
             {/* Main Image with Frame */}
-            <div className="relative z-10 rounded-3xl overflow-hidden shadow-2xl border-8 border-white">
+            <div className="relative z-10 rounded-[2.5rem] overflow-hidden shadow-2xl border-4 border-white/10 group">
               <img
                 src="/backgrounds/about/about-bg.png"
                 alt="TwinHub Workspace"
-                className="w-full h-auto"
+                className="w-full h-auto transform group-hover:scale-105 transition-transform duration-1000"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#020617]/60 via-transparent to-transparent" />
               
-              {/* Floating Stat Card */}
-              <div className={`absolute bottom-8 ${isRtl ? 'left-8' : 'right-8'} bg-white p-6 rounded-2xl shadow-xl animate-pulse-slow`}>
-                <h3 className="text-4xl font-bold text-cinema-red">20+</h3>
-                <p className="text-sm text-gray-400 uppercase tracking-widest">{isRtl ? 'سنة خبرة' : 'Years of Art'}</p>
+              {/* Floating Stat - Direct on Image (Resized) */}
+              <div className="absolute bottom-10 right-10 z-30 text-right animate-fade-in pointer-events-none">
+                <h3 className="text-4xl sm:text-5xl font-bold text-cinema-red drop-shadow-[0_2px_10px_rgba(0,0,0,0.8)] tracking-tighter">
+                  {stats[0]?.value || '150+'}
+                </h3>
+                <p className="text-[10px] sm:text-xs text-white font-bold uppercase tracking-[0.3em] drop-shadow-[0_2px_5px_rgba(0,0,0,0.8)]">
+                  {stats[0]?.label || (isRtl ? 'مشروع مكتمل' : 'Projects Completed')}
+                </p>
               </div>
             </div>
             
@@ -105,25 +117,25 @@ export default function AboutSection({ language }: AboutSectionProps) {
         </div>
 
         {/* Stats Grid with Modern Aesthetic */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 py-16 border-t border-white/10">
-          {t.stats.map((stat: any, statIdx: number) => {
-            const Icon = iconMap[stat.icon as keyof typeof iconMap];
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 py-12 border-t border-white/10">
+          {stats.map((stat: any, statIdx: number) => {
+            const Icon = (iconMap[stat.icon as keyof typeof iconMap] || Award) as any;
             const statColors = [
-              { iconBg: 'bg-cinema-red/8 text-cinema-red', iconHover: 'group-hover:bg-cinema-red', value: 'text-cinema-red' },
-              { iconBg: 'bg-electric-blue/8 text-electric-blue', iconHover: 'group-hover:bg-electric-blue', value: 'text-electric-blue' },
-              { iconBg: 'bg-fusion-teal/8 text-fusion-teal', iconHover: 'group-hover:bg-fusion-teal', value: 'text-fusion-teal' },
-              { iconBg: 'bg-cinema-red/8 text-cinema-red', iconHover: 'group-hover:bg-cinema-red', value: 'text-cinema-red' },
+              { iconBg: 'bg-cinema-red/20 text-cinema-red shadow-[0_0_20px_rgba(220,38,38,0.2)]', iconHover: 'group-hover:bg-cinema-red', value: 'text-white' },
+              { iconBg: 'bg-electric-blue/20 text-electric-blue shadow-[0_0_20px_rgba(59,130,246,0.2)]', iconHover: 'group-hover:bg-electric-blue', value: 'text-white' },
+              { iconBg: 'bg-fusion-teal/20 text-fusion-teal shadow-[0_0_20px_rgba(13,148,136,0.2)]', iconHover: 'group-hover:bg-fusion-teal', value: 'text-white' },
+              { iconBg: 'bg-cinema-red/20 text-cinema-red shadow-[0_0_20px_rgba(220,38,38,0.2)]', iconHover: 'group-hover:bg-cinema-red', value: 'text-white' },
             ];
             const sc = statColors[statIdx % statColors.length];
             return (
-              <div key={stat.id} className="text-center group">
-                <div className={`inline-flex items-center justify-center w-12 h-12 mb-4 rounded-xl ${sc.iconBg} ${sc.iconHover} group-hover:text-white transition-all duration-500 shadow-sm`}>
-                  <Icon size={24} />
+              <div key={stat.id || statIdx} className="text-center group cinematic-card p-6 border-white/5 hover:border-white/20 transition-all duration-500">
+                <div className={`inline-flex items-center justify-center w-14 h-14 mb-4 rounded-2xl ${sc.iconBg} ${sc.iconHover} group-hover:text-white transition-all duration-500`}>
+                  <Icon size={28} />
                 </div>
-                <h5 className={`text-3xl sm:text-4xl font-bold ${sc.value} mb-1`}>
+                <h5 className={`text-4xl sm:text-5xl font-bold ${sc.value} mb-1 tracking-tighter`}>
                   {stat.value}
                 </h5>
-                <p className="text-sm text-gray-400 font-light uppercase tracking-wide">
+                <p className="text-xs text-gray-400 font-bold uppercase tracking-[0.2em]">
                   {stat.label}
                 </p>
               </div>
@@ -131,26 +143,8 @@ export default function AboutSection({ language }: AboutSectionProps) {
           })}
         </div>
 
-        {/* Short Summary of Services / What We Do */}
-        <div className="mt-24 text-center">
-            <div className="inline-block p-4 bg-cinema-red/10 rounded-2xl mb-6">
-              <Palette className="text-cinema-red" size={32} />
-            </div>
-            <h3 className="text-3xl font-bold text-white mb-4">{t.whatWeDoTitle}</h3>
-            <p className="text-xl text-gray-400 font-light mb-12">{t.whatWeDoSubtitle}</p>
-            
-            <div className="flex flex-wrap justify-center gap-4">
-              {s.services.map((service: any) => (
-                <div 
-                  key={service.id} 
-                  className="flex items-center gap-2 px-6 py-3 bg-gray-50 rounded-full border border-gray-100 text-gray-600 hover:bg-white hover:border-cinema-red/20 hover:shadow-md transition-all cursor-default"
-                >
-                  <CheckCircle2 color="#DC2626" size={16} />
-                  <span className="text-sm font-medium">{service.title}</span>
-                </div>
-              ))}
-            </div>
-        </div>
+        {/* TwinHub Digital Library (Replaces What We Do) */}
+        <DigitalLibrary language={language} />
       </div>
     </section>
   );
