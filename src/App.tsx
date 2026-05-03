@@ -12,6 +12,7 @@ import ContactSection from './components/sections/ContactSection';
 import Footer from './components/Footer';
 import AIAssistant from './components/common/AIAssistant';
 import StarBackground from './components/common/StarBackground';
+import DigitalLibrary from './components/sections/DigitalLibrary';
 
 // Admin Pages (To be created)
 import LoginPage from './pages/admin/LoginPage';
@@ -65,6 +66,7 @@ function App() {
               <AISection language={language} />
               <ProductsSection language={language} />
               <GallerySection language={language} />
+              <DigitalLibrary language={language} />
               <ClientsSection language={language} />
               <AboutSection language={language} />
               <ContactSection language={language} />

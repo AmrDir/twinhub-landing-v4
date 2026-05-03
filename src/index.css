@@ -122,12 +122,12 @@ html {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #dc2626;
+  background: var(--color-primary, #dc2626);
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #b91c1c;
+  filter: brightness(0.8);
 }
 
 /* Remove outline on mouse clicks only; keyboard focus-visible stays intact */
@@ -137,13 +137,13 @@ html {
 
 /* Global keyboard focus ring */
 :focus-visible {
-  outline: 2px solid #DC2626;
+  outline: 2px solid var(--color-primary, #DC2626);
   outline-offset: 2px;
 }
 
 /* Accent text (solid color only — no gradient-clip text) */
 .accent-text {
-  color: #DC2626;
+  color: var(--color-primary, #DC2626);
 }
 
 /* Loading animation */

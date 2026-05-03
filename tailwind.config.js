@@ -6,8 +6,8 @@ export default {
       colors: {
         "cinema-red": {
           DEFAULT: "var(--color-primary)",
-          hover: "var(--color-primary)",
-          light: "var(--color-primary)"
+          hover: "color-mix(in srgb, var(--color-primary), black 15%)",
+          light: "color-mix(in srgb, var(--color-primary), white 20%)"
         },
         "dark-obsidian": {
           DEFAULT: "#0A0A0A",

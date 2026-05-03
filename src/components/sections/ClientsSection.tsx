@@ -63,11 +63,11 @@ export default function ClientsSection({ language }: ClientsSectionProps) {
           <div className="flex gap-8 animate-infinite-scroll items-center">
             {[...allLogos.slice(0, 23), ...allLogos.slice(0, 23)].map((client, idx) => (
               <div key={`row1-${idx}`} className="flex-shrink-0 group relative">
-                <div className="bg-[#111827]/80 backdrop-blur-xl border border-white/20 p-6 rounded-2xl transition-all duration-500 group-hover:bg-[#1F2937]/90 group-hover:border-cinema-red/40 group-hover:scale-110 shadow-lg">
+                <div className="bg-[#111827]/80 backdrop-blur-xl border border-white/20 p-4 rounded-2xl transition-all duration-500 group-hover:bg-[#1F2937]/90 group-hover:border-cinema-red/40 group-hover:scale-110 shadow-lg">
                   <img
                     src={client.url.startsWith('http') || client.url.startsWith('/') ? client.url : `/backgrounds/clients/${client.url}`}
                     alt={client.name}
-                    className="h-10 sm:h-12 w-auto object-contain filter grayscale opacity-60 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-500"
+                    className="h-14 sm:h-20 w-auto object-contain filter grayscale opacity-60 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-500"
                   />
                 </div>
               </div>
@@ -80,11 +80,11 @@ export default function ClientsSection({ language }: ClientsSectionProps) {
           <div className="flex gap-8 animate-infinite-scroll-reverse items-center">
             {[...allLogos.slice(23), ...allLogos.slice(23)].map((client, idx) => (
               <div key={`row2-${idx}`} className="flex-shrink-0 group relative">
-                <div className="bg-[#111827]/80 backdrop-blur-xl border border-white/20 p-6 rounded-2xl transition-all duration-500 group-hover:bg-[#1F2937]/90 group-hover:border-cinema-red/40 group-hover:scale-110 shadow-lg">
+                <div className="bg-[#111827]/80 backdrop-blur-xl border border-white/20 p-4 rounded-2xl transition-all duration-500 group-hover:bg-[#1F2937]/90 group-hover:border-cinema-red/40 group-hover:scale-110 shadow-lg">
                   <img
                     src={client.url.startsWith('http') || client.url.startsWith('/') ? client.url : `/backgrounds/clients/${client.url}`}
                     alt={client.name}
-                    className="h-10 sm:h-12 w-auto object-contain filter grayscale opacity-60 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-500"
+                    className="h-14 sm:h-20 w-auto object-contain filter grayscale opacity-60 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-500"
                   />
                 </div>
               </div>

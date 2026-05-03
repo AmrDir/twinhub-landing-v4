@@ -21,6 +21,12 @@ export default function AboutSection({ language }: AboutSectionProps) {
   const s = SERVICES_CONTENT[language as keyof typeof SERVICES_CONTENT] || SERVICES_CONTENT.en;
   const visionText = language === 'ar' ? settings?.about_vision_text_ar : settings?.about_vision_text_en;
   const missionText = language === 'ar' ? settings?.about_mission_text_ar : settings?.about_mission_text_en;
+  const visionTitle = language === 'ar' ? settings?.about_vision_title_ar : settings?.about_vision_title_en;
+  const missionTitle = language === 'ar' ? settings?.about_mission_title_ar : settings?.about_mission_title_en;
+  const aboutTitle = language === 'ar' ? settings?.about_title_ar : settings?.about_title_en;
+  const description = language === 'ar' ? settings?.about_description_ar : settings?.about_description_en;
+  const aboutText = language === 'ar' ? settings?.about_text_ar : settings?.about_text_en;
+  const locationText = language === 'ar' ? settings?.about_location_ar : settings?.about_location_en;
   const isRtl = language === 'ar';
   const bgMedia = settings?.about_bg_media || '/backgrounds/about/about-bg.jpg';
   const bgOpacity = settings?.about_bg_opacity ?? 0.88;
@@ -54,34 +60,40 @@ export default function AboutSection({ language }: AboutSectionProps) {
                 className="font-bold text-white tracking-tight leading-tight"
                 style={{ fontSize: 'var(--font-size-h2)' }}
               >
-                {isRtl ? (
-                  <>عن <span className="text-cinema-red">TwinHub</span></>
+                {aboutTitle ? (
+                   aboutTitle.includes('TwinHub') ? (
+                     <>{aboutTitle.split('TwinHub')[0]} <span className="text-cinema-red">TwinHub</span> {aboutTitle.split('TwinHub')[1]}</>
+                   ) : aboutTitle
                 ) : (
-                  <>About <span className="text-cinema-red">TwinHub</span></>
+                  isRtl ? (
+                    <>عن <span className="text-cinema-red">TwinHub</span></>
+                  ) : (
+                    <>About <span className="text-cinema-red">TwinHub</span></>
+                  )
                 )}
               </h2>
               <p className="text-xl text-gray-200 font-light leading-relaxed italic bg-cinema-red/[0.06] border border-cinema-red/15 rounded-2xl px-6 py-4">
-                {t.description}
+                {description || t.description}
               </p>
             </div>
 
             <div className="space-y-6 text-lg text-gray-300 font-light leading-relaxed">
-              <p>{t.aboutText}</p>
-              <p>{t.locationText}</p>
+              <p>{aboutText || t.aboutText}</p>
+              <p>{locationText || t.locationText}</p>
             </div>
 
             <div className="grid sm:grid-cols-2 gap-6 pt-6">
               <div className="p-8 cinematic-card group hover:border-cinema-red/50 hover:shadow-[0_0_30px_rgba(220,38,38,0.15)] transition-all duration-700">
                  <div className="flex items-center gap-3 mb-4">
                    <Target className="text-cinema-red" size={24} />
-                   <h4 className="font-bold text-white uppercase tracking-widest text-sm">{t.visionTitle}</h4>
+                   <h4 className="font-bold text-white uppercase tracking-widest text-sm">{visionTitle || t.visionTitle}</h4>
                  </div>
                  <p className="text-sm text-gray-300 leading-relaxed font-light group-hover:text-white transition-colors">{visionText || t.visionText}</p>
               </div>
               <div className="p-8 cinematic-card group hover:border-electric-blue/50 hover:shadow-[0_0_30px_rgba(0,112,255,0.15)] transition-all duration-700">
                  <div className="flex items-center gap-3 mb-4">
                    <Award className="text-electric-blue" size={24} />
-                   <h4 className="font-bold text-white uppercase tracking-widest text-sm">{t.missionTitle}</h4>
+                   <h4 className="font-bold text-white uppercase tracking-widest text-sm">{missionTitle || t.missionTitle}</h4>
                  </div>
                  <p className="text-sm text-gray-300 leading-relaxed font-light group-hover:text-white transition-colors">{missionText || t.missionText}</p>
               </div>

@@ -445,14 +445,5 @@ export const CLIENTS_CONTENT = {
     subtitle: 'موثوق من قبل العلامات التجارية الرائدة عبر الصناعات',
     description: 'لقد حظينا بشرف العمل مع عملاء رائعين يثقون بنا لتحقيق رؤاهم.',
   },
-  logos: [
-    'logo-01.png', 'logo-02.png', 'logo-03.png', 'logo-04.png', 'logo-05.png',
-    'logo-06.png', 'logo-07.png', 'logo-08.png', 'logo-09.png', 'logo-10.png',
-    'logo-11.png', 'logo-12.png', 'logo-13.png', 'logo-14.png', 'logo-15.png',
-    'logo-16.png', 'logo-17.png', 'logo-18.png', 'logo-19.png', 'logo-20.png',
-    'logo-21.png', 'logo-22.png', 'logo-23.png', 'logo-24.png', 'logo-25.png',
-    'logo-26.png', 'logo-27.png', 'logo-28.png', 'logo-29.png', 'logo-30.png',
-    'logo-31.png', 'logo-32.png', 'logo-33.png', 'logo-34.png', 'logo-35.png',
-    'logo-36.png', 'logo-37.png', 'logo-38.png', 'logo-39.png', 'logo-40.png'
-  ]
+  logos: Array.from({ length: 40 }, (_, i) => `${i + 1}.png`)
 };

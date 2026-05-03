@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Menu, X, Globe } from 'lucide-react';
+import { useSiteData } from '../context/SiteContext';
 
 interface HeaderProps {
   language: string;
@@ -7,6 +8,7 @@ interface HeaderProps {
 }
 
 export default function Header({ language, onLanguageChange }: HeaderProps) {
+  const { settings } = useSiteData();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [showLangDropdown, setShowLangDropdown] = useState(false);
@@ -30,17 +32,19 @@ export default function Header({ language, onLanguageChange }: HeaderProps) {
   };
 
   const navItems = {
-    en: ['Home', 'Services', 'AI Solutions', 'Products', 'Gallery', 'Clients', 'About', 'Contact'],
-    ar: ['الرئيسية', 'الخدمات', 'حلول الذكاء الاصطناعي', 'منتجاتنا', 'المعرض', 'العملاء', 'من نحن', 'اتصل بنا']
+    en: ['Home', 'Services', 'AI Solutions', 'Products', 'Gallery', 'Library', 'Clients', 'About', 'Contact'],
+    ar: ['الرئيسية', 'الخدمات', 'حلول الذكاء الاصطناعي', 'منتجاتنا', 'المعرض', 'المكتبة', 'العملاء', 'من نحن', 'اتصل بنا']
   };
 
   const navLinks = {
-    en: ['home', 'services', 'ai', 'products', 'gallery', 'clients', 'about', 'contact'],
-    ar: ['home', 'services', 'ai', 'products', 'gallery', 'clients', 'about', 'contact']
+    en: ['home', 'services', 'ai', 'products', 'gallery', 'library', 'clients', 'about', 'contact'],
+    ar: ['home', 'services', 'ai', 'products', 'gallery', 'library', 'clients', 'about', 'contact']
   };
 
   const currentNavItems = navItems[language as keyof typeof navItems] || navItems.en;
   const currentNavLinks = navLinks[language as keyof typeof navLinks] || navLinks.en;
+
+  const siteLogo = settings?.logo_url || "/Twinhub Logo_Artboard 14-2_Artboard 14.png";
 
   return (
     <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${language === 'ar' ? 'rtl' : 'ltr'} ${
@@ -50,19 +54,11 @@ export default function Header({ language, onLanguageChange }: HeaderProps) {
         <div className="flex items-center justify-between h-20">
           {/* Logo */}
           <div className="flex-shrink-0 cursor-pointer" onClick={() => scrollToSection('hero')}>
-            {scrolled ? (
-              <img 
-                src="/Twinhub Logo_Artboard 14-2_Artboard 14.png" 
-                alt="Twinhub Logo" 
-                className="h-12 w-auto hover:scale-105 transition-transform duration-300"
-              />
-            ) : (
-              <img 
-                src="/Twinhub Logo_Artboard 21_Artboard 21 copy.png" // اللوجو الأبيض الجديد
-                alt="Twinhub Logo White" 
-                className="h-12 w-auto hover:scale-105 transition-transform duration-300"
-              />
-            )}
+            <img 
+              src={siteLogo} 
+              alt="Twinhub Logo" 
+              className={`h-12 w-auto hover:scale-105 transition-all duration-300 ${!scrolled && !settings?.logo_url ? 'brightness-0 invert' : ''}`}
+            />
           </div>
 
           {/* Desktop Navigation */}

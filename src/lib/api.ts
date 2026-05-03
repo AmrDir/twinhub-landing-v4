@@ -226,6 +226,44 @@ export const deleteClient = async (id: string) => {
   return true;
 };
 
+// Digital Library
+export const getLibrary = async () => {
+  if (!supabase) return [];
+  const { data, error } = await supabase
+    .from('library')
+    .select('*')
+    .order('created_at', { ascending: false });
+
+  if (error) {
+    console.error('Error fetching library:', error);
+    return [];
+  }
+  return data;
+};
+
+export const addLibraryItem = async (itemData: any) => {
+  if (!supabase) throw new Error('Supabase not configured');
+  const { data, error } = await supabase
+    .from('library')
+    .insert([itemData])
+    .select()
+    .single();
+
+  if (error) throw error;
+  return data;
+};
+
+export const deleteLibraryItem = async (id: string) => {
+  if (!supabase) throw new Error('Supabase not configured');
+  const { error } = await supabase
+    .from('library')
+    .delete()
+    .eq('id', id);
+
+  if (error) throw error;
+  return true;
+};
+
 // Media Upload to Supabase Storage
 export const uploadMedia = async (file: File, folder: string = 'gallery'): Promise<string> => {
   if (!supabase) throw new Error('Supabase not configured');

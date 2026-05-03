@@ -52,7 +52,7 @@ export default function AIAssistant({ language }: Props) {
 
   // Initial greeting
   useEffect(() => {
-    if (isOpen && messages.length === 0) {
+    if (isOpen && messages.length <= 1) { // Allow refreshing greeting if language changes
       const greeting = language === 'ar' 
         ? 'مرحباً بك في عالم TwinHub! أنا كيانك الذكي، موجود هنا لأحول رؤيتك السينمائية إلى واقع ملموس. كيف يمكنني إلهامك اليوم؟' 
         : 'Welcome to the world of TwinHub! I am your intelligent entity, here to transform your cinematic vision into reality. How can I inspire you today?';
@@ -77,15 +77,30 @@ export default function AIAssistant({ language }: Props) {
     setIsLoading(true);
 
     try {
-      // Logic for AI call (Groq/OpenAI proxy)
-      // For now, we simulate or call a public proxy if available
-      // In a real production, this calls a Supabase Edge Function
-      
       const provider = settings?.ai_provider || 'openai';
-      const modelOrUrl = settings?.ai_model_id || (provider === 'ollama' ? 'http://localhost:11434' : 'gpt-4o');
-      const apiKeyOrModel = settings?.ai_api_key;
+      const rawModelSetting = (settings?.ai_model_id || '').toLowerCase().trim();
+      const modelName = (rawModelSetting && rawModelSetting !== 'groq') 
+        ? settings.ai_model_id 
+        : (provider === 'ollama' ? 'llama3.2:1b' : 'gpt-4o');
+      const apiKey = settings?.ai_api_key;
+      const ollamaUrl = 'http://localhost:11434'; 
 
-      if (provider !== 'ollama' && (!apiKeyOrModel || !settings?.ai_chat_enabled)) {
+      // Master Marketing Persona Prompt (Strict & Professional)
+      const systemPrompt = language === 'ar' 
+        ? (settings?.ai_system_prompt_ar || `أنت "كيان توين هاب" الرقمي.
+          ممنوع منعاً باتاً:
+          1. لا تستخدم اللغة الإنجليزية نهائياً في ردودك.
+          2. لا تضع أي ترجمات بين أقواس (مثل: Translation: ...).
+          3. لا تستخدم لغات أخرى مثل الفارسية أو غيرها.
+          4. تحدث فقط بالعربية الفصحى البسيطة أو العامية المصرية الراقية جداً.
+          
+          أسلوبك:
+          أنت خبير تسويق سينمائي واثق. ردودك يجب أن تكون قصيرة، منسقة، ومبهرة. 
+          ركز على جذب العميل لخدمات TwinHub (الذكاء الاصطناعي والإنتاج السينمائي).
+          أظهر دائماً أننا الأفضل في دمج التكنولوجيا بالفن.`)
+        : (settings?.ai_system_prompt_en || "You are the TwinHub AI Entity. A visionary marketing expert. Speak only in English, be professional and creative.");
+
+      if (provider !== 'ollama' && (!apiKey || !settings?.ai_chat_enabled)) {
         setTimeout(() => {
           const fallbackMsg = language === 'ar'
             ? 'عذراً، نظام الدردشة تحت الصيانة حالياً. سأقوم بتحويلك لواتساب للتحدث مع فريقنا.'
@@ -104,38 +119,70 @@ export default function AIAssistant({ language }: Props) {
       let aiContent = '';
 
       if (provider === 'ollama') {
-        const response = await fetch(`${modelOrUrl}/api/chat`, {
+        const response = await fetch(`${ollamaUrl}/api/chat`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            model: apiKeyOrModel || 'llama3.2:3b',
+            model: modelName === 'groq' ? 'llama3.2:1b' : modelName,
             messages: [
-              { role: 'system', content: language === 'ar' ? settings?.ai_system_prompt_ar : settings?.ai_system_prompt_en },
-              ...messages,
+              { role: 'system', content: systemPrompt },
+              ...messages.map(m => ({ role: m.role, content: m.content })),
               { role: 'user', content: userMessage }
             ],
             stream: false
           })
         });
+        if (!response.ok) throw new Error('Ollama connection failed.');
         const data = await response.json();
         aiContent = data.message.content;
       } else {
-        const response = await fetch('https://api.openai.com/v1/chat/completions', {
+        // Groq / OpenAI logic (Unified)
+        const isGroq = provider === 'groq';
+        const baseUrl = isGroq ? 'https://api.groq.com/openai/v1' : 'https://api.openai.com/v1';
+        
+        // Ensure a valid model ID for Groq
+        const rawModel = (settings?.ai_model_id || '').toLowerCase().trim();
+        const finalModel = isGroq 
+          ? (rawModel && rawModel !== 'groq' ? settings.ai_model_id : 'llama-3.3-70b-versatile')
+          : modelName;
+
+        const response = await fetch(`${baseUrl}/chat/completions`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${apiKeyOrModel}`
+            'Authorization': `Bearer ${apiKey}`
           },
           body: JSON.stringify({
-            model: modelOrUrl,
+            model: finalModel,
+            temperature: 0.5, // Lower temperature for more stable/focused output
             messages: [
-              { role: 'system', content: language === 'ar' ? settings?.ai_system_prompt_ar : settings?.ai_system_prompt_en },
-              ...messages,
+              { 
+                role: 'system', 
+                content: `أنت "كيان توين هاب" (TwinHub Entity). مساعد ذكي لمركز متخصص في الإنتاج السينمائي والذكاء الاصطناعي.
+                
+                خدماتنا الرسمية (تحدث عنها فقط):
+                1. الإنتاج السينمائي الفاخر.
+                2. الإعلانات التجارية المبدعة.
+                3. أفلام الشركات (Corporate Films).
+                4. تجهيز وتغطية المعارض الدولية بأسلوب سينمائي.
+                5. إنتاج الموسيقى والأغاني المصورة (Music Videos) المنفذة بالذكاء الاصطناعي.
+                6. حلول الذكاء الاصطناعي المتكاملة للإعلام والإنتاج.
+
+                ممنوع منعاً باتاً ذكر هذه الخدمات (نحن لا نقدمها):
+                - تطبيقات الجوال (Mobile Apps)
+                - تطوير المواقع (Web Development)
+                - الألعاب (Games)
+                
+                أسلوبك: سينمائي، فخم، مقتضب، ومبهر.
+                قاعدة ذهبية: تحدث بالعربية فقط. ممنوع استخدام أي لغة أخرى حتى لو كانت كلمة واحدة.`
+              },
+              ...messages.map(m => ({ role: m.role, content: m.content })),
               { role: 'user', content: userMessage }
             ]
           })
         });
         const data = await response.json();
+        if (data.error) throw new Error(data.error.message);
         aiContent = data.choices[0].message.content;
       }
       
@@ -179,11 +226,15 @@ export default function AIAssistant({ language }: Props) {
           <div className="flex-1 overflow-y-auto p-6 space-y-4 custom-scrollbar">
             {messages.map((msg, idx) => (
               <div key={idx} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-                <div className={`max-w-[80%] p-4 rounded-[1.5rem] text-sm leading-relaxed ${
-                  msg.role === 'user' 
-                  ? 'bg-cinema-red text-white rounded-tr-none shadow-lg' 
-                  : 'bg-white/5 border border-white/10 text-gray-200 rounded-tl-none'
-                }`}>
+                <div 
+                  className={`max-w-[80%] p-4 rounded-[1.5rem] text-sm leading-relaxed ${
+                    msg.role === 'user' 
+                    ? 'bg-cinema-red text-white rounded-tr-none shadow-lg' 
+                    : 'bg-white/5 border border-white/10 text-gray-200 rounded-tl-none'
+                  }`}
+                  dir="auto"
+                  style={{ fontSize: '15px' }}
+                >
                   {msg.content}
                 </div>
               </div>

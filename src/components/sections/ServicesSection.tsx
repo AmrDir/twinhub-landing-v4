@@ -57,7 +57,7 @@ export default function ServicesSection({ language }: ServicesSectionProps) {
     features: language === 'ar' ? s.features_ar : s.features_en
   })) : defaultT.services;
 
-  const bgMedia = settings?.services_bg_media || '/gallery/work16.jpg';
+  const bgMedia = settings?.services_bg_media || '';
   const bgOpacity = settings?.services_bg_opacity ?? 0.85;
 
   return (

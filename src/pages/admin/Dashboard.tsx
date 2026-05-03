@@ -21,7 +21,10 @@ import {
   Play,
   MapPin,
   Mail,
-  Smartphone
+  Smartphone,
+  BookOpen,
+  Library as LibraryIcon,
+  FileText
 } from 'lucide-react';
 import { signOut } from '../../lib/supabase';
 import { useSiteData } from '../../context/SiteContext';
@@ -36,7 +39,9 @@ import {
   addClient,
   deleteClient,
   uploadMedia,
-  updateGalleryItem
+  updateGalleryItem,
+  addLibraryItem,
+  deleteLibraryItem
 } from '../../lib/api';
 
 interface DashboardProps {
@@ -48,7 +53,7 @@ export default function Dashboard({ session }: DashboardProps) {
   const [isSaving, setIsSaving] = useState(false);
   const [saveStatus, setSaveStatus] = useState<'success' | 'error' | null>(null);
   
-  const { hero, products, settings, services, gallery, clients, refreshData } = useSiteData();
+  const { hero, products, settings, services, gallery, clients, library, refreshData } = useSiteData();
 
   // Local state for editing
   const [editedHero, setEditedHero] = useState<any>(null);
@@ -59,6 +64,7 @@ export default function Dashboard({ session }: DashboardProps) {
   // Local state for additions
   const [newGalleryItem, setNewGalleryItem] = useState({ media: '', media_type: 'image', category: 'all', alt_text: 'Gallery Item', is_featured: false });
   const [newClientItem, setNewClientItem] = useState({ logo_url: '', name: '' });
+  const [newLibraryItem, setNewLibraryItem] = useState({ title_en: '', title_ar: '', file_url: '', thumbnail_url: '' });
   const [isUploading, setIsUploading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState('');
   const [dragActive, setDragActive] = useState(false);
@@ -131,6 +137,38 @@ export default function Dashboard({ session }: DashboardProps) {
     } finally {
       setIsUploading(false);
       setUploadProgress('');
+    }
+  };
+
+  const handleAddLibraryItem = async () => {
+    if (!newLibraryItem.file_url || !newLibraryItem.title_en) return;
+    setIsSaving(true);
+    try {
+      await addLibraryItem({
+        title_en: newLibraryItem.title_en,
+        title_ar: newLibraryItem.title_ar || newLibraryItem.title_en,
+        file_url: newLibraryItem.file_url,
+        thumbnail_url: newLibraryItem.thumbnail_url
+      });
+      setNewLibraryItem({ title_en: '', title_ar: '', file_url: '', thumbnail_url: '' });
+      await refreshData();
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  const handleDeleteLibraryItem = async (id: string) => {
+    if (!window.confirm('Delete this library item?')) return;
+    setIsSaving(true);
+    try {
+      await deleteLibraryItem(id);
+      await refreshData();
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsSaving(false);
     }
   };
 
@@ -265,6 +303,7 @@ export default function Dashboard({ session }: DashboardProps) {
     { id: 'ai', label: 'AI Section', icon: Brain },
     { id: 'about', label: 'About Section', icon: Info },
     { id: 'gallery', label: 'Gallery', icon: ImageIcon },
+    { id: 'library', label: 'Digital Library', icon: LibraryIcon },
     { id: 'clients', label: 'Clients', icon: Users },
     { id: 'contact', label: 'Contact Info', icon: Phone },
     { id: 'settings', label: 'General Settings', icon: Settings },
@@ -502,6 +541,33 @@ export default function Dashboard({ session }: DashboardProps) {
                               dir="rtl"
                             />
                          </div>
+                         <div className="space-y-2">
+                            <label className="text-xs font-bold text-gray-500 uppercase tracking-widest">Media Link (Image/Video URL)</label>
+                            <input type="text" value={p.media || ''} onChange={e => {
+                              const newProducts = [...editedProducts];
+                              newProducts[index].media = e.target.value;
+                              setEditedProducts(newProducts);
+                            }} className="w-full bg-black/50 border border-white/10 rounded-xl p-4 text-white focus:border-cinema-red outline-none" placeholder="e.g. https://youtube.com/... or /work1.jpg" />
+                         </div>
+                         <div className="space-y-2">
+                            <label className="text-xs font-bold text-gray-500 uppercase tracking-widest">Media Type</label>
+                            <select value={p.media_type || 'image'} onChange={e => {
+                              const newProducts = [...editedProducts];
+                              newProducts[index].media_type = e.target.value;
+                              setEditedProducts(newProducts);
+                            }} className="w-full bg-black/50 border border-white/10 rounded-xl p-4 text-white focus:border-cinema-red outline-none">
+                              <option value="image">Image</option>
+                              <option value="video">Video (YouTube/File)</option>
+                            </select>
+                         </div>
+                         <div className="space-y-2 md:col-span-2">
+                            <label className="text-xs font-bold text-gray-500 uppercase tracking-widest">External Platform Link</label>
+                            <input type="text" value={p.link || ''} onChange={e => {
+                              const newProducts = [...editedProducts];
+                              newProducts[index].link = e.target.value;
+                              setEditedProducts(newProducts);
+                            }} className="w-full bg-black/50 border border-white/10 rounded-xl p-4 text-white focus:border-cinema-red outline-none" placeholder="https://..." />
+                         </div>
                        </div>
                     </div>
                   ))}
@@ -622,27 +688,67 @@ export default function Dashboard({ session }: DashboardProps) {
                 <h3 className="text-xl font-bold border-b border-white/10 pb-4">About Section Management</h3>
                 <div className="bg-black/30 p-10 rounded-[2.5rem] border border-white/5 space-y-10">
                    <h4 className="text-cinema-red font-bold uppercase tracking-widest text-sm flex items-center gap-3">
-                     <Target size={18} /> Vision & Mission Statements
+                     <Info size={18} /> Main About Content
                    </h4>
                    <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
                      <div className="space-y-4">
-                        <label className="text-xs font-bold text-gray-500 uppercase tracking-widest">Our Vision (EN)</label>
-                        <textarea value={editedSettings.about_vision_text_en || ''} onChange={e => setEditedSettings({...editedSettings, about_vision_text_en: e.target.value})} className="w-full bg-black/50 border border-white/10 rounded-2xl p-6 text-white focus:border-cinema-red outline-none h-40" />
+                       <label className="text-xs font-bold text-gray-500 uppercase tracking-widest">Section Title (EN)</label>
+                       <input type="text" value={editedSettings.about_title_en || ''} onChange={e => setEditedSettings({...editedSettings, about_title_en: e.target.value})} className="w-full bg-black/50 border border-white/10 rounded-xl p-4 text-white focus:border-cinema-red outline-none" placeholder="About TwinHub" />
                      </div>
                      <div className="space-y-4 rtl text-right">
-                        <label className="text-xs font-bold text-gray-500 uppercase tracking-widest">رؤيتنا (AR)</label>
-                        <textarea dir="rtl" value={editedSettings.about_vision_text_ar || ''} onChange={e => setEditedSettings({...editedSettings, about_vision_text_ar: e.target.value})} className="w-full bg-black/50 border border-white/10 rounded-2xl p-6 text-white focus:border-cinema-red outline-none h-40 text-right" />
+                       <label className="text-xs font-bold text-gray-500 uppercase tracking-widest">عنوان القسم (AR)</label>
+                       <input type="text" dir="rtl" value={editedSettings.about_title_ar || ''} onChange={e => setEditedSettings({...editedSettings, about_title_ar: e.target.value})} className="w-full bg-black/50 border border-white/10 rounded-xl p-4 text-white focus:border-cinema-red outline-none text-right" placeholder="عن توين هاب" />
                      </div>
                      <div className="space-y-4">
-                        <label className="text-xs font-bold text-gray-500 uppercase tracking-widest">Our Mission (EN)</label>
-                        <textarea value={editedSettings.about_mission_text_en || ''} onChange={e => setEditedSettings({...editedSettings, about_mission_text_en: e.target.value})} className="w-full bg-black/50 border border-white/10 rounded-2xl p-6 text-white focus:border-cinema-red outline-none h-40" />
+                       <label className="text-xs font-bold text-gray-500 uppercase tracking-widest">Description (EN)</label>
+                       <textarea value={editedSettings.about_description_en || ''} onChange={e => setEditedSettings({...editedSettings, about_description_en: e.target.value})} className="w-full bg-black/50 border border-white/10 rounded-xl p-4 text-white focus:border-cinema-red outline-none h-32" />
                      </div>
                      <div className="space-y-4 rtl text-right">
-                        <label className="text-xs font-bold text-gray-500 uppercase tracking-widest">رسالتنا (AR)</label>
-                        <textarea dir="rtl" value={editedSettings.about_mission_text_ar || ''} onChange={e => setEditedSettings({...editedSettings, about_mission_text_ar: e.target.value})} className="w-full bg-black/50 border border-white/10 rounded-2xl p-6 text-white focus:border-cinema-red outline-none h-40 text-right" />
+                       <label className="text-xs font-bold text-gray-500 uppercase tracking-widest">الوصف (AR)</label>
+                       <textarea dir="rtl" value={editedSettings.about_description_ar || ''} onChange={e => setEditedSettings({...editedSettings, about_description_ar: e.target.value})} className="w-full bg-black/50 border border-white/10 rounded-xl p-4 text-white focus:border-cinema-red outline-none h-32 text-right" />
                      </div>
                    </div>
                 </div>
+
+                <div className="bg-black/30 p-10 rounded-[2.5rem] border border-white/5 space-y-10">
+                   <h4 className="text-cinema-red font-bold uppercase tracking-widest text-sm flex items-center gap-3">
+                     <Target size={18} /> Vision & Mission
+                   </h4>
+                   <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+                     <div className="space-y-4">
+                       <label className="text-xs font-bold text-gray-500 uppercase tracking-widest">Vision Title (EN)</label>
+                       <input type="text" value={editedSettings.about_vision_title_en || ''} onChange={e => setEditedSettings({...editedSettings, about_vision_title_en: e.target.value})} className="w-full bg-black/50 border border-white/10 rounded-xl p-4 text-white focus:border-cinema-red outline-none" />
+                     </div>
+                     <div className="space-y-4 rtl text-right">
+                       <label className="text-xs font-bold text-gray-500 uppercase tracking-widest">عنوان الرؤية (AR)</label>
+                       <input type="text" dir="rtl" value={editedSettings.about_vision_title_ar || ''} onChange={e => setEditedSettings({...editedSettings, about_vision_title_ar: e.target.value})} className="w-full bg-black/50 border border-white/10 rounded-xl p-4 text-white focus:border-cinema-red outline-none text-right" />
+                     </div>
+                     <div className="space-y-4">
+                       <label className="text-xs font-bold text-gray-500 uppercase tracking-widest">Vision Text (EN)</label>
+                       <textarea value={editedSettings.about_vision_text_en || ''} onChange={e => setEditedSettings({...editedSettings, about_vision_text_en: e.target.value})} className="w-full bg-black/50 border border-white/10 rounded-2xl p-6 text-white focus:border-cinema-red outline-none h-40" />
+                     </div>
+                     <div className="space-y-4 rtl text-right">
+                       <label className="text-xs font-bold text-gray-500 uppercase tracking-widest">نص الرؤية (AR)</label>
+                       <textarea dir="rtl" value={editedSettings.about_vision_text_ar || ''} onChange={e => setEditedSettings({...editedSettings, about_vision_text_ar: e.target.value})} className="w-full bg-black/50 border border-white/10 rounded-2xl p-6 text-white focus:border-cinema-red outline-none h-40 text-right" />
+                     </div>
+                     <div className="space-y-4">
+                       <label className="text-xs font-bold text-gray-500 uppercase tracking-widest">Mission Title (EN)</label>
+                       <input type="text" value={editedSettings.about_mission_title_en || ''} onChange={e => setEditedSettings({...editedSettings, about_mission_title_en: e.target.value})} className="w-full bg-black/50 border border-white/10 rounded-xl p-4 text-white focus:border-cinema-red outline-none" />
+                     </div>
+                     <div className="space-y-4 rtl text-right">
+                       <label className="text-xs font-bold text-gray-500 uppercase tracking-widest">عنوان المهمة (AR)</label>
+                       <input type="text" dir="rtl" value={editedSettings.about_mission_title_ar || ''} onChange={e => setEditedSettings({...editedSettings, about_mission_title_ar: e.target.value})} className="w-full bg-black/50 border border-white/10 rounded-xl p-4 text-white focus:border-cinema-red outline-none text-right" />
+                     </div>
+                     <div className="space-y-4">
+                       <label className="text-xs font-bold text-gray-500 uppercase tracking-widest">Mission Text (EN)</label>
+                       <textarea value={editedSettings.about_mission_text_en || ''} onChange={e => setEditedSettings({...editedSettings, about_mission_text_en: e.target.value})} className="w-full bg-black/50 border border-white/10 rounded-2xl p-6 text-white focus:border-cinema-red outline-none h-40" />
+                     </div>
+                     <div className="space-y-4 rtl text-right">
+                       <label className="text-xs font-bold text-gray-500 uppercase tracking-widest">نص المهمة (AR)</label>
+                       <textarea dir="rtl" value={editedSettings.about_mission_text_ar || ''} onChange={e => setEditedSettings({...editedSettings, about_mission_text_ar: e.target.value})} className="w-full bg-black/50 border border-white/10 rounded-2xl p-6 text-white focus:border-cinema-red outline-none h-40 text-right" />
+                     </div>
+                   </div>
+                 </div>
 
                 <div className="space-y-6">
                   <h4 className="text-xl font-bold flex items-center gap-3">
@@ -733,6 +839,80 @@ export default function Dashboard({ session }: DashboardProps) {
                             Featured
                           </div>
                         )}
+                     </div>
+                   ))}
+                </div>
+             </div>
+           )}
+
+
+           {/* LIBRARY TAB */}
+           {activeTab === 'library' && (
+             <div className="space-y-8 animate-fade-in">
+                <h3 className="text-xl font-bold border-b border-white/10 pb-4">Periodic Digital Library</h3>
+                <div className="bg-black/30 p-10 rounded-[2.5rem] border border-white/5 space-y-8">
+                   <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                      <div className="space-y-4">
+                        <label className="text-sm font-bold text-gray-400 uppercase tracking-widest">Publication Title (EN)</label>
+                        <input type="text" value={newLibraryItem.title_en} onChange={e => setNewLibraryItem({...newLibraryItem, title_en: e.target.value})} className="w-full bg-black/50 border border-white/10 rounded-2xl p-4 text-white focus:border-cinema-red outline-none" placeholder="e.g. Annual Report 2024" />
+                      </div>
+                      <div className="space-y-4 rtl text-right">
+                        <label className="text-sm font-bold text-gray-400 uppercase tracking-widest">عنوان المنشور (AR)</label>
+                        <input type="text" dir="rtl" value={newLibraryItem.title_ar} onChange={e => setNewLibraryItem({...newLibraryItem, title_ar: e.target.value})} className="w-full bg-black/50 border border-white/10 rounded-2xl p-4 text-white focus:border-cinema-red outline-none text-right" placeholder="مثال: التقرير السنوي ٢٠٢٤" />
+                      </div>
+                      <div className="md:col-span-2 space-y-4">
+                        <label className="text-sm font-bold text-gray-400 uppercase tracking-widest">PDF Document</label>
+                        <div className="flex gap-4">
+                          <div className="flex-1 bg-black/50 border border-white/10 rounded-2xl p-4 text-gray-500 truncate text-sm">
+                            {newLibraryItem.file_url || 'No PDF selected...'}
+                          </div>
+                          <button onClick={() => document.getElementById('new_library_pdf')?.click()} className="bg-white/5 hover:bg-white/10 px-6 py-4 rounded-2xl text-white font-bold transition-all flex items-center gap-2">
+                            <Upload size={18} /> Select PDF
+                          </button>
+                          <input id="new_library_pdf" type="file" className="hidden" accept=".pdf" onChange={async (e) => {
+                             const file = e.target.files?.[0];
+                             if (!file) return;
+                             setIsUploading(true);
+                             setUploadProgress(`Uploading ${file.name}...`);
+                             try {
+                               const url = await uploadMedia(file, 'library');
+                               setNewLibraryItem(prev => ({
+                                 ...prev, 
+                                 file_url: url,
+                                 title_en: prev.title_en || file.name.replace(/\.[^.]+$/, '')
+                               }));
+                               setSaveStatus('success');
+                               setTimeout(() => setSaveStatus(null), 3000);
+                             } catch (err: any) {
+                               console.error('PDF upload error:', err);
+                               setSaveStatus('error');
+                               alert(`PDF upload failed: ${err.message}`);
+                             } finally {
+                               setIsUploading(false);
+                               setUploadProgress('');
+                             }
+                          }} />
+                        </div>
+                      </div>
+                   </div>
+                   <button onClick={handleAddLibraryItem} disabled={isSaving || !newLibraryItem.file_url || !newLibraryItem.title_en} className="flex items-center gap-3 bg-white text-black px-10 py-4 rounded-2xl font-bold hover:bg-cinema-red hover:text-white transition-all disabled:opacity-50">
+                     <Plus size={20} /> Add to Digital Library
+                   </button>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-10">
+                   {library.map(item => (
+                     <div key={item.id} className="group relative bg-white/5 border border-white/5 rounded-[2rem] p-6 flex items-center gap-6 hover:border-white/20 transition-all duration-500">
+                        <div className="w-16 h-20 bg-black/40 rounded-xl flex items-center justify-center text-cinema-red group-hover:scale-110 transition-transform">
+                           <FileText size={32} />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                           <h4 className="font-bold text-white truncate text-lg mb-1">{item.title_en}</h4>
+                           <p className="text-gray-500 text-xs font-mono">{new Date(item.created_at).toLocaleDateString()}</p>
+                        </div>
+                        <button onClick={() => handleDeleteLibraryItem(item.id)} className="p-3 bg-red-600/10 text-red-500 hover:bg-red-600 hover:text-white rounded-xl transition-all opacity-0 group-hover:opacity-100">
+                          <Trash2 size={18} />
+                        </button>
                      </div>
                    ))}
                 </div>
@@ -862,6 +1042,35 @@ export default function Dashboard({ session }: DashboardProps) {
            {/* SETTINGS TAB */}
            {activeTab === 'settings' && editedSettings && (
              <div className="space-y-12 animate-fade-in">
+                <div className="bg-black/30 p-10 rounded-[2.5rem] border border-white/5 space-y-10">
+                   <h4 className="text-cinema-red font-bold uppercase tracking-widest text-sm flex items-center gap-3">
+                     <ImageIcon size={18} /> Main Brand Assets
+                   </h4>
+                   <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                      <div className="space-y-4">
+                         <label className="text-xs font-bold text-gray-400 uppercase tracking-widest">Site Logo</label>
+                         <div className="flex gap-4">
+                            <div className="flex-1 bg-black/50 border border-white/10 rounded-xl p-4 flex items-center justify-center">
+                               <img src={editedSettings.logo_url || '/logo.png'} className="h-12 object-contain" alt="Logo Preview" />
+                            </div>
+                            <button 
+                               onClick={() => document.getElementById('upload_logo_url')?.click()}
+                               className="bg-white/5 hover:bg-white/10 border border-white/10 p-4 rounded-xl text-white transition-all flex items-center justify-center"
+                            >
+                               <Upload size={18} />
+                            </button>
+                            <input 
+                               id="upload_logo_url" 
+                               type="file" 
+                               className="hidden" 
+                               accept="image/*" 
+                               onChange={(e) => handleHeroFileUpload(e, 'logo_url')} 
+                            />
+                         </div>
+                      </div>
+                   </div>
+                </div>
+
                 <h3 className="text-xl font-bold border-b border-white/10 pb-4">General System Settings</h3>
                 
                 <div className="bg-black/30 p-10 rounded-[2.5rem] border border-white/5 space-y-10">
@@ -964,25 +1173,25 @@ export default function Dashboard({ session }: DashboardProps) {
 
                       <div className="space-y-4">
                         <label className="text-xs font-bold text-gray-500 uppercase">
-                          {editedSettings.ai_provider === 'ollama' ? 'Local API URL' : 'Model ID'}
+                          Model Name / ID
                         </label>
                         <input 
                           type="text" 
                           value={editedSettings.ai_model_id || ''} 
-                          placeholder={editedSettings.ai_provider === 'ollama' ? 'http://localhost:11434' : 'e.g. llama3.2:3b or gpt-4o'}
+                          placeholder={editedSettings.ai_provider === 'ollama' ? 'e.g. llama3.2:3b' : 'e.g. gpt-4o'}
                           onChange={e => setEditedSettings({...editedSettings, ai_model_id: e.target.value})}
                           className="w-full bg-black/50 border border-white/10 rounded-xl p-4 text-white outline-none focus:border-cinema-red" 
                         />
                       </div>
 
-                      <div className="md:col-span-2 space-y-4">
+                      <div className="space-y-4">
                         <label className="text-xs font-bold text-gray-500 uppercase">
-                          {editedSettings.ai_provider === 'ollama' ? 'Local Model Name' : 'API Key (Stored Securely)'}
+                          {editedSettings.ai_provider === 'ollama' ? 'Local URL (Optional)' : 'API Key'}
                         </label>
                         <input 
                           type={editedSettings.ai_provider === 'ollama' ? 'text' : 'password'} 
                           value={editedSettings.ai_api_key || ''} 
-                          placeholder={editedSettings.ai_provider === 'ollama' ? 'e.g. llama3.2:3b' : ''}
+                          placeholder={editedSettings.ai_provider === 'ollama' ? 'Default: http://localhost:11434' : 'sk-....'}
                           onChange={e => setEditedSettings({...editedSettings, ai_api_key: e.target.value})}
                           className="w-full bg-black/50 border border-white/10 rounded-xl p-4 text-white outline-none focus:border-cinema-red" 
                         />

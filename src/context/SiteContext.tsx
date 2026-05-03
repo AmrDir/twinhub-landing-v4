@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { getHeroContent, getProducts, getSiteSettings, getServices, getGallery, getClients } from '../lib/api';
+import { getHeroContent, getProducts, getSiteSettings, getServices, getGallery, getClients, getLibrary } from '../lib/api';
 
 // Define the shape of our data
 interface HeroData {
@@ -30,6 +30,7 @@ interface ProductData {
 
 interface SiteSettings {
   id: string;
+  logo_url: string;
   primary_color: string;
   secondary_color: string;
   accent_color: string;
@@ -60,6 +61,18 @@ interface SiteSettings {
   innovation_keywords?: string[];
   
   // About Section
+  about_title_en?: string;
+  about_title_ar?: string;
+  about_description_en?: string;
+  about_description_ar?: string;
+  about_text_en?: string;
+  about_text_ar?: string;
+  about_location_en?: string;
+  about_location_ar?: string;
+  about_vision_title_en?: string;
+  about_vision_title_ar?: string;
+  about_mission_title_en?: string;
+  about_mission_title_ar?: string;
   about_vision_text_en?: string;
   about_vision_text_ar?: string;
   about_mission_text_en?: string;
@@ -115,6 +128,15 @@ interface ClientData {
   name: string;
 }
 
+interface LibraryItem {
+  id: string;
+  title_en: string;
+  title_ar: string;
+  file_url: string;
+  thumbnail_url?: string;
+  created_at: string;
+}
+
 interface SiteContextType {
   hero: HeroData | null;
   products: ProductData[];
@@ -122,6 +144,7 @@ interface SiteContextType {
   services: ServiceData[];
   gallery: GalleryData[];
   clients: ClientData[];
+  library: LibraryItem[];
   loading: boolean;
   refreshData: () => Promise<void>;
 }
@@ -133,6 +156,7 @@ const SiteContext = createContext<SiteContextType>({
   services: [],
   gallery: [],
   clients: [],
+  library: [],
   loading: true,
   refreshData: async () => {},
 });
@@ -146,18 +170,20 @@ export const SiteProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [services, setServices] = useState<ServiceData[]>([]);
   const [gallery, setGallery] = useState<GalleryData[]>([]);
   const [clients, setClients] = useState<ClientData[]>([]);
+  const [library, setLibrary] = useState<LibraryItem[]>([]);
   const [loading, setLoading] = useState(true);
 
   const fetchData = async () => {
     setLoading(true);
     try {
-      const [heroData, productsData, settingsData, servicesData, galleryData, clientsData] = await Promise.all([
+      const [heroData, productsData, settingsData, servicesData, galleryData, clientsData, libraryData] = await Promise.all([
         getHeroContent(),
         getProducts(),
         getSiteSettings(),
         getServices(),
         getGallery(),
         getClients(),
+        getLibrary(),
       ]);
       
       if (heroData) setHero(heroData as HeroData);
@@ -171,6 +197,7 @@ export const SiteProvider: React.FC<{ children: React.ReactNode }> = ({ children
       if (servicesData) setServices(servicesData as ServiceData[]);
       if (galleryData) setGallery(galleryData as GalleryData[]);
       if (clientsData) setClients(clientsData as ClientData[]);
+      if (libraryData) setLibrary(libraryData as LibraryItem[]);
     } catch (error) {
       console.error('Error fetching site data:', error);
     } finally {
@@ -183,7 +210,7 @@ export const SiteProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }, []);
 
   return (
-    <SiteContext.Provider value={{ hero, products, settings, services, gallery, clients, loading, refreshData: fetchData }}>
+    <SiteContext.Provider value={{ hero, products, settings, services, gallery, clients, library, loading, refreshData: fetchData }}>
       {children}
     </SiteContext.Provider>
   );

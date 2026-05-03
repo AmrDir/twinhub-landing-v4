@@ -15,7 +15,7 @@ export default function ProductsSection({ language }: ProductsSectionProps) {
   const { ref, isVisible } = useScrollReveal();
   const defaultT = PRODUCTS_CONTENT;
   
-  const bgMedia = settings?.products_bg_media || '/gallery/work22.jpg';
+  const bgMedia = settings?.products_bg_media || '';
   const bgOpacity = settings?.products_bg_opacity ?? 0.88;
   
   const products = dbProducts.length > 0 ? dbProducts.map(p => ({

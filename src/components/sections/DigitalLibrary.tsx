@@ -7,57 +7,30 @@ interface DigitalLibraryProps {
 }
 
 export default function DigitalLibrary({ language }: DigitalLibraryProps) {
-  const { settings } = useSiteData();
+  const { settings, library } = useSiteData();
   const isRtl = language === 'ar';
   
-  // Static Magazines Data for initial build (Will be connected to DB later)
-  const magazines = [
-    {
-      id: 'films',
-      title: { en: 'Corporate Films & Factories', ar: 'أفلام الشركات والمصانع' },
-      cover: '/backgrounds/magazines/films-cover.jpg',
-      pdf: '/docs/twinhub-films.pdf',
-      icon: Film,
-      color: 'from-cinema-red to-red-900',
-      tag: { en: 'Cinematic', ar: 'سينمائي' }
-    },
-    {
-      id: 'events',
-      title: { en: 'Exhibitions & Events', ar: 'المعارض والفعاليات والاحتفاليات' },
-      cover: '/backgrounds/magazines/events-cover.jpg',
-      pdf: '/docs/twinhub-events.pdf',
-      icon: Calendar,
-      color: 'from-blue-600 to-indigo-900',
-      tag: { en: 'Experiential', ar: 'فعاليات' }
-    },
-    {
-      id: 'ads',
-      title: { en: 'Ads & Products', ar: 'الإعلانات والمنتجات' },
-      cover: '/backgrounds/magazines/ads-cover.jpg',
-      pdf: '/docs/twinhub-ads.pdf',
-      icon: Camera,
-      color: 'from-purple-600 to-fuchsia-900',
-      tag: { en: 'Creative', ar: 'إبداعي' }
-    },
-    {
-      id: 'ai',
-      title: { en: 'AI World & Smart Solutions', ar: 'عالم الـ AI والحلول الذكية' },
-      cover: '/backgrounds/magazines/ai-cover.jpg',
-      pdf: '/docs/twinhub-ai.pdf',
-      icon: Cpu,
-      color: 'from-teal-500 to-emerald-900',
-      tag: { en: 'Future', ar: 'مستقبلي' }
-    },
-    {
-      id: 'music',
-      title: { en: 'Music & Video Clips', ar: 'الموسيقى والكليب' },
-      cover: '/backgrounds/magazines/music-cover.jpg',
-      pdf: '/docs/twinhub-music.pdf',
-      icon: Music,
-      color: 'from-amber-500 to-orange-900',
-      tag: { en: 'Artistic', ar: 'فني' }
-    }
+  // Use real data from DB, with fallback icons/colors
+  const iconOptions = [Film, Calendar, Camera, Cpu, Music, BookOpen, Layers, Sparkles];
+  const colorOptions = [
+    'from-cinema-red to-red-900',
+    'from-blue-600 to-indigo-900',
+    'from-purple-600 to-fuchsia-900',
+    'from-teal-500 to-emerald-900',
+    'from-amber-500 to-orange-900'
   ];
+
+  const magazines = library.map((item, idx) => ({
+    id: item.id,
+    title: { en: item.title_en, ar: item.title_ar },
+    cover: item.thumbnail_url || 'https://images.unsplash.com/photo-1544947950-fa07a98d237f?q=80&w=800&auto=format&fit=crop',
+    pdf: item.file_url,
+    icon: iconOptions[idx % iconOptions.length],
+    color: colorOptions[idx % colorOptions.length],
+    tag: { en: 'Publication', ar: 'منشور دوري' }
+  }));
+
+  if (magazines.length === 0) return null;
 
   return (
     <div className="mt-32 relative">
