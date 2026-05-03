@@ -175,6 +175,19 @@ export const deleteGalleryItem = async (id: string) => {
   return true;
 };
 
+export const updateGalleryItem = async (id: string, updates: any) => {
+  if (!supabase) throw new Error('Supabase not configured');
+  const { data, error } = await supabase
+    .from('gallery')
+    .update(updates)
+    .eq('id', id)
+    .select()
+    .single();
+
+  if (error) throw error;
+  return data;
+};
+
 // Clients
 export const getClients = async () => {
   if (!supabase) return [];

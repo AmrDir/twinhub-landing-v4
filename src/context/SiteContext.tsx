@@ -45,6 +45,9 @@ interface SiteSettings {
   clients_bg_opacity: number;
   about_bg_media: string;
   about_bg_opacity: number;
+  ai_bg_media?: string;
+  ai_bg_opacity?: number;
+  hero_bg_opacity?: number;
   
   // AI Section
   ai_title_en?: string;
@@ -102,6 +105,7 @@ interface GalleryData {
   media_type: string;
   category: string;
   alt_text: string;
+  is_featured?: boolean;
 }
 
 interface ClientData {

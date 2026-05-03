@@ -101,11 +101,23 @@ export default function ProductsSection({ language }: ProductsSectionProps) {
                   );
                 })()}
                 
-                <div className="absolute top-10 right-10 z-20">
+                <div className="absolute top-10 right-10 z-20 flex flex-col gap-3 items-end">
                   <div className="flex items-center gap-3 px-6 py-3 rounded-full bg-black/40 backdrop-blur-md border border-white/10 text-white font-mono tracking-widest text-xs uppercase animate-pulse">
                     <div className="w-2 h-2 rounded-full bg-cinema-red"></div>
                     <span>Featured Showcase</span>
                   </div>
+                  
+                  <a 
+                    href={settings.products_showreel_url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-3 px-6 py-3 rounded-full bg-cinema-red hover:bg-cinema-red-hover text-white transition-all duration-300 shadow-xl"
+                  >
+                    <Play size={16} fill="currentColor" />
+                    <span className="text-xs font-bold uppercase tracking-widest">
+                      {language === 'ar' ? 'مشاهدة العرض كاملاً' : 'Watch Full Showreel'}
+                    </span>
+                  </a>
                 </div>
               </div>
 

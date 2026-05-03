@@ -1,4 +1,5 @@
 import { ReactNode, useMemo } from 'react';
+import { Play } from 'lucide-react';
 import { getYoutubeVideoId } from '../../lib/utils';
 
 interface MediaBackgroundProps {
@@ -8,6 +9,9 @@ interface MediaBackgroundProps {
   overlay?: boolean;
   overlayOpacity?: number;
   className?: string;
+  showWatchButton?: boolean;
+  youtubeUrl?: string;
+  language?: string;
 }
 
 export default function MediaBackground({
@@ -16,7 +20,10 @@ export default function MediaBackground({
   backgroundVideo,
   overlay = true,
   overlayOpacity = 0.4,
-  className = ''
+  className = '',
+  showWatchButton = false,
+  youtubeUrl,
+  language = 'en'
 }: MediaBackgroundProps) {
   const isYoutubeBg = backgroundImage && getYoutubeVideoId(backgroundImage);
   const isYoutubeVideo = backgroundVideo && getYoutubeVideoId(backgroundVideo);
@@ -67,6 +74,25 @@ export default function MediaBackground({
       {/* Content */}
       <div className={`relative z-10 ${className.includes('h-full') ? 'h-full w-full' : ''}`}>
         {children}
+        
+        {/* Watch Full Video Option */}
+        {showWatchButton && youtubeUrl && (
+          <div className={`absolute bottom-10 ${language === 'ar' ? 'left-10' : 'right-10'} z-20 animate-fade-in`}>
+            <a 
+              href={youtubeUrl} 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="group flex items-center gap-3 bg-black/40 hover:bg-cinema-red backdrop-blur-md border border-white/10 px-5 py-3 rounded-full transition-all duration-500 shadow-2xl"
+            >
+              <div className="w-8 h-8 bg-white/10 rounded-full flex items-center justify-center group-hover:bg-white group-hover:text-cinema-red transition-colors">
+                <Play size={16} fill="currentColor" />
+              </div>
+              <span className="text-xs font-bold uppercase tracking-widest text-white">
+                {language === 'ar' ? 'مشاهدة الفيديو كاملاً' : 'Watch Full Video'}
+              </span>
+            </a>
+          </div>
+        )}
       </div>
     </div>
   );

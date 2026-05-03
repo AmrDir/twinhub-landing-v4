@@ -129,6 +129,7 @@ export default function GallerySection({ language }: GallerySectionProps) {
       type: g.media_type,
       category: g.category,
       alt: g.alt_text,
+      is_featured: g.is_featured,
       isDb: true
     }));
 
@@ -139,6 +140,11 @@ export default function GallerySection({ language }: GallerySectionProps) {
 
     return [...dbItems, ...staticItems];
   }, [dbGallery]);
+
+  const featuredItems = useMemo(() => {
+    const featured = activeGallery.filter(item => item.is_featured);
+    return featured.length > 0 ? featured : activeGallery.slice(0, 5);
+  }, [activeGallery]);
 
   const [activeFilter, setActiveFilter] = useState('all');
   const [visibleCount, setVisibleCount] = useState(ITEMS_PER_PAGE);
@@ -152,7 +158,6 @@ export default function GallerySection({ language }: GallerySectionProps) {
   }, [activeFilter, activeGallery]);
 
   const visibleItems = filteredItems.slice(0, visibleCount);
-  const featuredItems = activeGallery.slice(0, 5);
 
   // Auto-slide for featured
   useEffect(() => {

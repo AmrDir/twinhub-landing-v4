@@ -46,6 +46,9 @@ export default function HeroSection({ language }: HeroSectionProps) {
         backgroundVideo={t.background_media}
         overlayOpacity={settings?.hero_bg_opacity ?? 0.2}
         className="h-full w-full flex items-center justify-center"
+        showWatchButton={!!t.background_media}
+        youtubeUrl={t.background_media}
+        language={language}
       >
         {/* Dynamic Overlay for Depth */}
         <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-transparent to-black/50 z-10"></div>

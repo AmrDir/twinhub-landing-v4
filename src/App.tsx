@@ -10,7 +10,7 @@ import ClientsSection from './components/sections/ClientsSection';
 import AboutSection from './components/sections/AboutSection';
 import ContactSection from './components/sections/ContactSection';
 import Footer from './components/Footer';
-import WhatsAppButton from './components/common/WhatsAppButton';
+import AIAssistant from './components/common/AIAssistant';
 import StarBackground from './components/common/StarBackground';
 
 // Admin Pages (To be created)
@@ -70,7 +70,7 @@ function App() {
               <ContactSection language={language} />
             </main>
             <Footer language={language} />
-            <WhatsAppButton language={language} />
+            <AIAssistant language={language} />
           </>
         } />
 
